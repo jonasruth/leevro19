@@ -1,6 +1,11 @@
 <resources>
     <string name="app_name">Leevro</string>
+
+
     <string name="action_settings">Settings</string>
+    <string name="action_my_book_gallery">Minha Biblioteca</string>
+
+
     <string name="title_activity_book_add">Adicionar Livro</string>
     <string name="title_activity_book_propose">Cadastrar Livro</string>
     <string name="propose.explain">O livro correspondente a este ISBN ainda não foi cadastrado. Preencha as informações básicas e deixe o restante com a gente!</string>
@@ -9,4 +14,5 @@
     <string name="title_activity_friends">Amigos</string>
     <string name="title_activity_chat">Conversa</string>
     <string name="title_activity_public_profile">PublicProfileActivity</string>
+
 </resources>

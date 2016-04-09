@@ -1,6 +1,7 @@
 package leevro.pucpr.br.leevro19;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -29,6 +30,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class BookAddActivity extends ActionBarActivity {
 
@@ -42,6 +45,7 @@ public class BookAddActivity extends ActionBarActivity {
     //    TextView bookPhoto;
     TextView bookEdition;
     ImageView bookCover;
+    String photo;
     ScrollView bookDetailPreview;
 
     JSONObject livro;
@@ -79,6 +83,7 @@ public class BookAddActivity extends ActionBarActivity {
 //                            bookPhoto.setText(livro.getString("photo"));
                             bookEdition.setText(livro.getString("edition"));
                             bookDetailPreview.setVisibility(ScrollView.VISIBLE);
+                            photo = livro.getString("photo");
 
                             Thread thread = new Thread(new Runnable(){
                                 @Override
@@ -100,6 +105,53 @@ public class BookAddActivity extends ActionBarActivity {
                             });
 
                             thread.start();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Erro: ", error.toString());
+                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+                        toast.show();
+
+                    }
+                });
+        Volley.newRequestQueue(this).add(jsObjRequest);
+        //Volley.getInstance(this).addToRequestQueue(jsObjRequest);
+    }
+
+    public void addBook(View view) {
+
+        hideSoftKeyboard(BookAddActivity.this);
+
+        isbn = (EditText) findViewById(R.id.isbn);
+
+        String url = "http://96.126.115.143/leevrows/adicionaUmLivro.php";
+
+        Map<String, String> params = new HashMap();
+        params.put("isbn", isbn.getText().toString());
+        params.put("user_id", "1");
+        params.put("photo", photo);
+        JSONObject parameters = new JSONObject(params);
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d("Retorno: ", response.toString());
+
+                        try {
+                            JSONObject status = response.getJSONObject("status");
+                            Boolean sucesso = status.getBoolean("success");
+
+                            Intent intent = new Intent(BookAddActivity.this, BookGaleryActivity.class);
+                            startActivity(intent);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
