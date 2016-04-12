@@ -13,7 +13,9 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,7 +25,9 @@
         <activity
             android:name=".BookAddActivity"
             android:label="@string/title_activity_book_add"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="leevro.pucpr.br.leevro19.MainActivity" />
@@ -31,7 +35,9 @@
         <activity
             android:name=".BookProposeActivity"
             android:label="@string/title_activity_book_propose"
-            android:parentActivityName=".BookAddActivity">
+            android:parentActivityName=".BookAddActivity"
+            android:screenOrientation="portrait"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="leevro.pucpr.br.leevro19.BookAddActivity" />
@@ -39,7 +45,9 @@
         <activity
             android:name=".BookGaleryActivity"
             android:label="@string/title_activity_book_galery"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="leevro.pucpr.br.leevro19.MainActivity" />
@@ -47,7 +55,9 @@
         <activity
             android:name=".BookDetailActivity"
             android:label="@string/title_activity_book_detail"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="leevro.pucpr.br.leevro19.MainActivity" />
@@ -55,7 +65,9 @@
         <activity
             android:name=".FriendsActivity"
             android:label="@string/title_activity_friends"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".MainActivity"
+            android:screenOrientation="portrait"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="leevro.pucpr.br.leevro19.MainActivity" />
@@ -63,14 +75,23 @@
         <activity
             android:name=".ChatActivity"
             android:label="@string/title_activity_chat"
-            android:parentActivityName=".FriendsActivity">
+            android:parentActivityName=".FriendsActivity"
+            android:screenOrientation="portrait"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="leevro.pucpr.br.leevro19.FriendsActivity" />
         </activity>
         <activity
             android:name=".PublicProfileActivity"
-            android:label="@string/title_activity_public_profile"></activity>
+            android:label="@string/title_activity_public_profile"
+            android:screenOrientation="portrait"
+            ></activity>
+        <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

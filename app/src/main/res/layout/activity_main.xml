@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="Nome do Escritor"
-            android:id="@+id/textView11"
+            android:id="@+id/bookAuthor"
             />
 
 

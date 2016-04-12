@@ -35,6 +35,7 @@ public class MainActivity extends ActionBarActivity {
 
     private TextView bookTitle;
     private ImageView bookCover;
+    private TextView bookAuthor;
     private JSONArray listaLivros;
     private JSONObject livroAtual;
     private int bookListIndex = -1;
@@ -91,6 +92,7 @@ public class MainActivity extends ActionBarActivity {
 
         bookTitle = (TextView) findViewById(R.id.bookTitle);
         bookCover = (ImageView) findViewById(R.id.bookCover);
+        bookAuthor = (TextView) findViewById(R.id.bookAuthor);
 
         if(bookListIndex < listaLivros.length()-1) {
             ++bookListIndex;
@@ -103,6 +105,7 @@ public class MainActivity extends ActionBarActivity {
             livroAtual = listaLivros.getJSONObject(bookListIndex);
 
             bookTitle.setText(livroAtual.getString("title"));
+            bookAuthor.setText(livroAtual.getString("author"));
 
             // Retrieves an image specified by the URL, displays it in the UI.
             ImageRequest request = new ImageRequest("http://96.126.115.143/leevrows/vbook_img/"+livroAtual.getString("photo"),
