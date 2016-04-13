@@ -21,23 +21,36 @@
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="250dp"
-            android:id="@+id/imageView3"
+            android:id="@+id/bookCover"
             android:src="@mipmap/ic_launcher" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Nome do Autor"
-            android:id="@+id/textView13" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Shelock Holmes"
-            android:id="@+id/textView12" />
+            android:text="Nome do Livro"
+            android:id="@+id/bookTitle" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Nome do Autor"
+            android:id="@+id/bookAuthorName" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Nome do Gênero"
+            android:id="@+id/bookGenderName" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="ISBN"
+            android:id="@+id/isbn" />
 
 
         <ScrollView
@@ -57,7 +70,7 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:text=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc viverra aliquam odio eu mattis. Nulla elementum risus nec tincidunt consequat. Phasellus ut interdum leo. Mauris eleifend nunc eget cursus dapibus. Nulla ultricies nisi nulla, auctor consectetur erat posuere sed. Vivamus maximus turpis a lacus ornare luctus. Sed a ullamcorper orci. Donec tellus nibh, condimentum sit amet ligula ac, lacinia commodo enim. Fusce ac dolor in nibh sagittis malesuada. Vestibulum nisi magna, interdum sit amet malesuada eget, tempus ut velit. Mauris a diam non turpis consectetur bibendum at ultricies risus.  In ullamcorper felis tortor, sit amet interdum diam egestas quis. Aenean et enim sit amet dolor auctor gravida. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin auctor ligula ut risus pharetra, nec sollicitudin purus dictum. Sed at consectetur elit. Maecenas libero neque, pellentesque non nibh in, venenatis ullamcorper dui. Nulla eros augue, scelerisque vel venenatis sit amet, suscipit non libero. Nunc at risus sed nisl suscipit fermentum. "
-                    android:id="@+id/textView14"
+                    android:id="@+id/bookDescription"
                     android:layout_weight="0.44" />
             </LinearLayout>
         </ScrollView>
@@ -71,18 +84,17 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PERFIL DO DONO"
-                android:onClick="goToPublicProfile"
-                android:id="@+id/button11" />
+                android:text="NÃO"
+                android:id="@+id/button9"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NÃO"
-                android:id="@+id/button9"
-                android:layout_gravity="left"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"/>
+                android:text="PERFIL DO DONO"
+                android:onClick="goToPublicProfile"
+                android:id="@+id/button11" />
 
             <Button
                 android:layout_width="wrap_content"

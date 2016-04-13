@@ -25,28 +25,11 @@
             android:onClick="goToBookDetail"
             android:layout_weight="1" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Shelock Holmes"
-            android:id="@+id/bookTitle"
-            android:layout_alignParentStart="true"
-            />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Nome do Escritor"
-            android:id="@+id/bookAuthor"
-            />
-
-
 
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="10dp"
             >
 
             <TableRow
@@ -55,34 +38,54 @@
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingRight="15dp"
                     android:text="NÃO"
                     android:id="@+id/button7"
                     android:onClick="gotoNextBook"
                     android:layout_column="0"
                     android:layout_gravity="left"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:color="@color/red"
+                    android:background="@drawable/rounded_button_no"
+                    android:textColor="@color/white"
+                    style="?android:attr/borderlessButtonStyle"
+                    />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="INFO"
+                    android:text="i"
                     android:id="@+id/button3"
                     android:onClick="goToBookDetail"
                     android:layout_column="1"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp" />
+                    android:layout_marginRight="10dp"
+                    android:src="@android:drawable/ic_menu_info_details"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:background="@drawable/circle_button_info"
+                    android:textSize="30dp"
+                    android:textColor="@color/blue"
+                    />
 
                 <Button
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:paddingRight="15dp"
                     android:text="SIM"
                     android:id="@+id/button8"
                     android:onClick="gotoNextBook"
                     android:layout_column="2"
                     android:layout_gravity="right"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:color="@color/green"
+                    android:background="@drawable/rounded_button_yes"
+                    android:textColor="@color/white"
+                    android:width="50dp"
+                    android:height="50dp"
+                    style="?android:attr/borderlessButtonStyle"
+                    />
             </TableRow>
         </TableLayout>
 
