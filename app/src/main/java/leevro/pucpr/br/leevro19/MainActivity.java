@@ -13,9 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -26,28 +30,50 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+
+import leevro.pucpr.br.leevro19.entity.Book;
 
 public class MainActivity extends ActionBarActivity {
 
+    private TextView bookLoadInfo;
+    private LinearLayout noBooksInfo;
     private ImageView bookCover;
+    private TableLayout choiceButtonsContainer;
 //    private TextView bookTitle;
 //    private TextView bookAuthor;
     private JSONArray listaLivros;
-    private JSONObject livroAtual;
+    private Book livroAtual;
     private int bookListIndex = -1;
+    private Boolean carregando = false;
 
-    public void loadBookListForChoice() {
+
+    public void loadBooks(View view){
+        loadBookListForChoice();
+    }
+
+    private void loadBookListForChoice() {
 
         bookListIndex = -1;
+        carregando = true;
+        bookLoadInfo.setVisibility(TextView.VISIBLE);
+        bookCover.setVisibility(ImageView.GONE);
+        noBooksInfo.setVisibility(TextView.GONE);
+        choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
 
         String url = "http://96.126.115.143/leevrows/retornaListaLivrosParaEscolha.php";
+        Map<String, String> params = new HashMap();
+        params.put("user_id", "1");
+        JSONObject parameters = new JSONObject(params);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -55,9 +81,22 @@ public class MainActivity extends ActionBarActivity {
 
                         try {
                             listaLivros = response.getJSONArray("livros");
+                            if(listaLivros.length()<=0){
+                                bookLoadInfo.setVisibility(TextView.GONE);
+                                bookCover.setVisibility(ImageView.GONE);
+                                noBooksInfo.setVisibility(TextView.VISIBLE);
+                                choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
+                            }else{
+                                bookLoadInfo.setVisibility(TextView.GONE);
+                                bookCover.setVisibility(ImageView.VISIBLE);
+                                noBooksInfo.setVisibility(TextView.GONE);
+                                choiceButtonsContainer.setVisibility(TextView.VISIBLE);
+                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        carregando = false;
 
                         new VolleyCallback(){
                             @Override
@@ -76,6 +115,12 @@ public class MainActivity extends ActionBarActivity {
 
                     }
                 });
+
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
+                5000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         Volley.newRequestQueue(this).add(jsObjRequest);
     }
 
@@ -83,36 +128,133 @@ public class MainActivity extends ActionBarActivity {
         void onSuccess();
     }
 
-    public void gotoNextBook(View view){
-        nextBook();
+    public void chooseBookYes(View view){
+        chooseBook(true);
+    }
+
+    public void chooseBookNo(View view){
+        chooseBook(false);
+    }
+
+    public void zerarEscolhasDev(View view){
+
+        Map<String, String> params = new HashMap();
+        params.put("user_id", "1");
+        JSONObject parameters = new JSONObject(params);
+
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, "http://96.126.115.143/leevrows/zerarEscolhas.php", parameters, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d("Retorno: ", response.toString());
+
+                        try {
+                            JSONObject status = response.getJSONObject("status");
+                            Boolean sucesso = status.getBoolean("success");
+                            if(!sucesso){
+                                Toast toast = Toast.makeText(getApplicationContext(), "erro" + "Erro de comunicação com o servidor.", Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                            loadBookListForChoice();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Erro: ", error.toString());
+                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+                        toast.show();
+
+                    }
+                });
+        Volley.newRequestQueue(this).add(jsObjRequest);
+    }
+
+    private void chooseBook(Boolean choice){
+
+        carregando = true;
+        bookLoadInfo.setVisibility(TextView.VISIBLE);
+        bookCover.setVisibility(ImageView.GONE);
+        noBooksInfo.setVisibility(TextView.GONE);
+        choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
+
+        Map<String, String> params = new HashMap();
+        params.put("fbook_id", livroAtual.getPhysicalBookId().toString());
+        params.put("user_id", "1");
+        params.put("matched", choice ? "1" : "0");
+        JSONObject parameters = new JSONObject(params);
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, "http://96.126.115.143/leevrows/decisao.php", parameters, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                        Log.d("Retorno: ", response.toString());
+
+                        try {
+                            JSONObject status = response.getJSONObject("status");
+                            Boolean sucesso = status.getBoolean("success");
+                            if(!sucesso){
+                                Toast toast = Toast.makeText(getApplicationContext(), "erro" + "Erro de comunicação com o servidor.", Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
+                            nextBook();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Erro: ", error.toString());
+                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+                        toast.show();
+
+                    }
+                });
+        Volley.newRequestQueue(this).add(jsObjRequest);
+
     }
 
     public void nextBook()
     {
 
-        bookCover = (ImageView) findViewById(R.id.bookCover);
-//        bookTitle = (TextView) findViewById(R.id.bookTitle);
-//        bookAuthor = (TextView) findViewById(R.id.bookAuthor);
+        if(listaLivros.length()<=0) return;
 
         if(bookListIndex < listaLivros.length()-1) {
             ++bookListIndex;
         }else{
+            loadBookListForChoice();
             return;
         }
 
         try {
 
-            livroAtual = listaLivros.getJSONObject(bookListIndex);
-
-//            bookTitle.setText(livroAtual.getString("title"));
-//            bookAuthor.setText(livroAtual.getString("author"));
+            livroAtual = new Book(listaLivros.getJSONObject(bookListIndex));
 
             // Retrieves an image specified by the URL, displays it in the UI.
-            ImageRequest request = new ImageRequest("http://96.126.115.143/leevrows/vbook_img/"+livroAtual.getString("photo"),
+            ImageRequest request = new ImageRequest("http://96.126.115.143/leevrows/vbook_img/"+livroAtual.getPhoto(),
                     new Response.Listener<Bitmap>() {
                         @Override
                         public void onResponse(Bitmap bitmap) {
                             bookCover.setImageBitmap(bitmap);
+
+                            bookLoadInfo.setVisibility(TextView.GONE);
+                            bookCover.setVisibility(ImageView.VISIBLE);
+                            noBooksInfo.setVisibility(TextView.GONE);
+                            choiceButtonsContainer.setVisibility(TextView.VISIBLE);
+
+                            carregando = false;
                         }
                     }, 0, 0, null,
                     new Response.ErrorListener() {
@@ -144,12 +286,8 @@ public class MainActivity extends ActionBarActivity {
     public void goToBookDetail(View view)
     {
         Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
-        try {
-            Log.d("Livro atual", livroAtual.getString("isbn"));
-            intent.putExtra("isbn", livroAtual.getString("isbn"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Log.d("Livro atual", livroAtual.getIsbn());
+        intent.putExtra("isbn", livroAtual.getIsbn());
         startActivity(intent);
     }
 
@@ -157,6 +295,10 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        bookLoadInfo = (TextView) findViewById(R.id.bookLoadInfo);
+        noBooksInfo = (LinearLayout) findViewById(R.id.noBooksInfo);
+        bookCover = (ImageView) findViewById(R.id.bookCover);
+        choiceButtonsContainer = (TableLayout) findViewById(R.id.choiceButtonsContainer);
         loadBookListForChoice();
     }
 

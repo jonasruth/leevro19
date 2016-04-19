@@ -1,5 +1,7 @@
 package leevro.pucpr.br.leevro19.entity;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,11 +10,15 @@ import org.json.JSONObject;
  */
 public class Book {
 
+    private String physicalBookId;
+
     private String isbn;
 
     private String title;
 
     private String photo;
+
+    private String virtualBookId;
 
     private String authorName;
 
@@ -24,6 +30,8 @@ public class Book {
 
     public Book(JSONObject jbook){
         try {
+            physicalBookId = jbook.getString("fbook_id");
+            virtualBookId = jbook.getString("vbook_id");
             isbn = jbook.getString("isbn");
             title = jbook.getString("title");
             photo = jbook.getString("photo");
@@ -33,6 +41,23 @@ public class Book {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+
+    public String getPhysicalBookId() {
+        return physicalBookId;
+    }
+
+    public void setPhysicalBookId(String physicalBookId) {
+        this.physicalBookId = physicalBookId;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 
     public String getTitle() {
@@ -51,13 +76,12 @@ public class Book {
         this.photo = photo;
     }
 
-
-    public String getIsbn() {
-        return isbn;
+    public String getVirtualBookId() {
+        return virtualBookId;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setVirtualBookId(String virtualBookId) {
+        this.virtualBookId = virtualBookId;
     }
 
     public String getAuthorName() {

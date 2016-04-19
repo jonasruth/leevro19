@@ -74,8 +74,6 @@ public class BookAddActivity extends ActionBarActivity {
         bookEdition = (TextView) findViewById(R.id.bookEdition);
         bookCover = (ImageView) findViewById(R.id.bookCover);
 
-        //Toast toast = Toast.makeText(getApplicationContext(), isbn.getText(), Toast.LENGTH_SHORT);
-        //toast.show();
         String url = "http://96.126.115.143/leevrows/retornaUmLivro.php?isbn=" + isbn.getText();
         Log.d("Retorno: ", "xxadadas");
 
