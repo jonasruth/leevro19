@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:id="@+id/noBooksInfo"
             android:orientation="vertical"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_weight="1"
             android:gravity="center"
             >
@@ -74,14 +74,39 @@
         </LinearLayout>
 
 
-        <ImageView
+        <LinearLayout
+            android:id="@+id/bookCoverContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/bookCover"
-            android:src="@mipmap/ic_launcher"
-            android:onClick="goToBookDetail"
-            android:visibility="gone"
-            android:layout_weight="1" />
+            android:orientation="vertical"
+            android:visibility="visible"
+            android:layout_weight="1"
+            >
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:id="@+id/bookCover"
+                android:src="@mipmap/ic_launcher_dev"
+                android:onClick="goToBookDetail"
+                android:layout_weight="2"
+                />
+
+            <TextView
+                android:id="@+id/txtDistance"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_gravity="bottom"
+                android:text="100km"
+                android:textSize="20dp"
+                android:textColor="@color/blue"
+                android:gravity="center_horizontal|bottom"
+
+                />
+
+
+        </LinearLayout>
 
 
         <TableLayout

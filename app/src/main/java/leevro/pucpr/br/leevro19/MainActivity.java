@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.AttributeSet;
@@ -14,6 +17,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -45,6 +49,8 @@ public class MainActivity extends ActionBarActivity {
     private TextView bookLoadInfo;
     private LinearLayout noBooksInfo;
     private ImageView bookCover;
+    private TextView txtDistance;
+    private LinearLayout bookCoverContainer;
     private TableLayout choiceButtonsContainer;
 //    private TextView bookTitle;
 //    private TextView bookAuthor;
@@ -52,6 +58,7 @@ public class MainActivity extends ActionBarActivity {
     private Book livroAtual;
     private int bookListIndex = -1;
     private Boolean carregando = false;
+    Location myLocation = null;
 
 
     public void loadBooks(View view){
@@ -63,7 +70,7 @@ public class MainActivity extends ActionBarActivity {
         bookListIndex = -1;
         carregando = true;
         bookLoadInfo.setVisibility(TextView.VISIBLE);
-        bookCover.setVisibility(ImageView.GONE);
+        bookCoverContainer.setVisibility(ImageView.GONE);
         noBooksInfo.setVisibility(TextView.GONE);
         choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
 
@@ -83,12 +90,12 @@ public class MainActivity extends ActionBarActivity {
                             listaLivros = response.getJSONArray("livros");
                             if(listaLivros.length()<=0){
                                 bookLoadInfo.setVisibility(TextView.GONE);
-                                bookCover.setVisibility(ImageView.GONE);
+                                bookCoverContainer.setVisibility(ImageView.GONE);
                                 noBooksInfo.setVisibility(TextView.VISIBLE);
                                 choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
                             }else{
                                 bookLoadInfo.setVisibility(TextView.GONE);
-                                bookCover.setVisibility(ImageView.VISIBLE);
+                                bookCoverContainer.setVisibility(ImageView.VISIBLE);
                                 noBooksInfo.setVisibility(TextView.GONE);
                                 choiceButtonsContainer.setVisibility(TextView.VISIBLE);
                             }
@@ -181,7 +188,7 @@ public class MainActivity extends ActionBarActivity {
 
         carregando = true;
         bookLoadInfo.setVisibility(TextView.VISIBLE);
-        bookCover.setVisibility(ImageView.GONE);
+        bookCoverContainer.setVisibility(ImageView.GONE);
         noBooksInfo.setVisibility(TextView.GONE);
         choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
 
@@ -242,6 +249,33 @@ public class MainActivity extends ActionBarActivity {
 
             livroAtual = new Book(listaLivros.getJSONObject(bookListIndex));
 
+//            myLocation = new Location("");
+//            myLocation.setLatitude(-25.398847);
+//            myLocation.setLongitude(-49.281793);
+            // rua ebenezer, 270, curitiba
+            // -25.398847, -49.281793
+
+            Location bookLocation = new Location("");
+            bookLocation.setLatitude(-25.410937);
+            bookLocation.setLongitude(-49.272639);
+            // Rua Carlos Pioli, 133, Curitiba
+            // -25.410937, -49.272639
+
+
+            if (myLocation != null){
+                Float distance = myLocation.distanceTo(bookLocation);
+//              Toast toast = Toast.makeText(getApplicationContext(), "distancia " + distance, Toast.LENGTH_LONG);
+//              toast.show();
+
+                Log.d("lat/lng:",myLocation.getLatitude()+"/"+myLocation.getLongitude());
+
+                int distanceInt = Math.round(distance / 1000);
+
+                txtDistance.setText("Está a " + distanceInt + "km de você");
+            }else{
+                txtDistance.setText("");
+            }
+
             // Retrieves an image specified by the URL, displays it in the UI.
             ImageRequest request = new ImageRequest("http://96.126.115.143/leevrows/vbook_img/"+livroAtual.getPhoto(),
                     new Response.Listener<Bitmap>() {
@@ -250,7 +284,7 @@ public class MainActivity extends ActionBarActivity {
                             bookCover.setImageBitmap(bitmap);
 
                             bookLoadInfo.setVisibility(TextView.GONE);
-                            bookCover.setVisibility(ImageView.VISIBLE);
+                            bookCoverContainer.setVisibility(ImageView.VISIBLE);
                             noBooksInfo.setVisibility(TextView.GONE);
                             choiceButtonsContainer.setVisibility(TextView.VISIBLE);
 
@@ -297,8 +331,64 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         bookLoadInfo = (TextView) findViewById(R.id.bookLoadInfo);
         noBooksInfo = (LinearLayout) findViewById(R.id.noBooksInfo);
+        bookCoverContainer = (LinearLayout) findViewById(R.id.bookCoverContainer);
         bookCover = (ImageView) findViewById(R.id.bookCover);
+        txtDistance = (TextView) findViewById(R.id.txtDistance);
         choiceButtonsContainer = (TableLayout) findViewById(R.id.choiceButtonsContainer);
+
+        bookLoadInfo.setVisibility(TextView.GONE);
+        bookCoverContainer.setVisibility(ImageView.GONE);
+        noBooksInfo.setVisibility(TextView.GONE);
+        choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
+
+        myLocation = new Location("");
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER , new LocationListener() {
+
+            @Override
+            public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+                Toast.makeText(getApplicationContext(), "Status alterado", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onProviderEnabled(String arg0) {
+                Toast.makeText(getApplicationContext(), "Provider Habilitado", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onProviderDisabled(String arg0) {
+                Toast.makeText(getApplicationContext(), "Provider Desabilitado", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onLocationChanged(Location location) {
+
+                myLocation = new Location("");
+                myLocation.setLatitude(location.getLatitude());
+                myLocation.setLongitude(location.getLongitude());
+                Toast.makeText(getApplicationContext(), location.getLatitude()+"/"+location.getLongitude(), Toast.LENGTH_LONG).show();
+
+//                TextView latitude = (TextView) findViewById( R.id.latitude);
+//                TextView longitude = (TextView) findViewById( R.id.longitude);
+//                TextView time = (TextView) findViewById( R.id.time);
+//                TextView acuracy = (TextView) findViewById( R.id.Acuracy);
+//                TextView provider = (TextView) findViewById( R.id.provider);
+//
+//                if( location != null ){
+//                    latitude.setText( "Latitude: "+location.getLatitude() );
+//                    longitude.setText( "Longitude: "+location.getLongitude() );
+//                    acuracy.setText( "Precisão: "+location.getAccuracy()+"" );
+//
+//                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//                    time.setText( "Data:"+sdf.format( location.getTime() ) );
+//
+//                    provider.setText( location.getProvider());
+//                }
+
+            }
+        }, null );
+
         loadBookListForChoice();
     }
 
