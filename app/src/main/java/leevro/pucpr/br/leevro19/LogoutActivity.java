@@ -40,7 +40,8 @@ public class LogoutActivity extends Activity {
             protected Void doInBackground(Void... params) {
                 URL imageURL = null;
                 try {
-                    imageURL = new URL("https://graph.facebook.com/" + "1435767690067161" + "/picture?type=large");
+                    //imageURL = new URL("https://graph.facebook.com/" + "1435767690067161" + "/picture?type=large");
+                    imageURL = new URL("http://96.126.115.143/leevrows/user_img/" + PrefUtils.getCurrentUser(getApplicationContext()).facebookID.toString()+".jpg");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }

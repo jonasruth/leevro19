@@ -8,11 +8,31 @@ public class AppUser {
 
     public String name;
 
+    public String firstName;
+
+    public String lastName;
+
+    public String birthday;
+
     public String email;
 
     public String facebookID;
 
     public String gender;
+
+    public String locationId;
+
+    public String locationName;
+
+    public String locale;
+
+    public int timezone;
+
+    public String link;
+
+    public String updatedTime;
+
+    public Boolean verified;
 
     private static AppUser ourInstance = new AppUser();
 

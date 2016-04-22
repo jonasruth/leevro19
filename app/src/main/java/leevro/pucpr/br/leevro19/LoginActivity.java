@@ -10,6 +10,11 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -21,6 +26,9 @@ import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import leevro.pucpr.br.leevro19.entity.AppUser;
 
@@ -59,7 +67,7 @@ public class LoginActivity extends Activity {
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
 
-        loginButton.setReadPermissions("public_profile", "email", "user_friends");
+        loginButton.setReadPermissions("public_profile", "email", "user_friends", "user_birthday", "user_location");
 
         btnLogin = (TextView) findViewById(R.id.btnLogin);
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -110,16 +118,34 @@ public class LoginActivity extends Activity {
 
                             Log.e("response: ", response + "");
                             try {
+                                Log.d("xxxxx",object.toString());
                                 user = new AppUser();
                                 user.facebookID = object.getString("id").toString();
                                 user.email = object.getString("email").toString();
                                 user.name = object.getString("name").toString();
                                 user.gender = object.getString("gender").toString();
+                                user.link = object.getString("link").toString();
+
+                                Log.d("facebook: ",object.toString());
+
+                                if(object.has("location") && object.getJSONObject("location").has("id")) {
+                                    user.locationId = object.getJSONObject("location").getString("id").toString();
+                                }
+                                if(object.has("location") && object.getJSONObject("location").has("name")) {
+                                    user.locationName = object.getJSONObject("location").getString("name").toString();
+                                }
+                                user.timezone = object.getInt("timezone");
+                                user.updatedTime = object.getString("updated_time").toString();
+                                user.verified = object.getBoolean("verified");
+
                                 PrefUtils.setCurrentUser(user, LoginActivity.this);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+
+                            salvarDados(user);
+
                             Toast.makeText(LoginActivity.this, "welcome " + user.name, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -130,7 +156,7 @@ public class LoginActivity extends Activity {
                     });
 
             Bundle parameters = new Bundle();
-            parameters.putString("fields", "id,name,email,gender, birthday");
+            parameters.putString("fields", "id,birthday,first_name,last_name,name,email,gender,link,location,locale,timezone,updated_time,verified");
             request.setParameters(parameters);
             request.executeAsync();
         }
@@ -145,5 +171,32 @@ public class LoginActivity extends Activity {
             progressDialog.dismiss();
         }
     };
+
+    private void salvarDados(AppUser user){
+        Log.d("user.facebookID",user.facebookID);
+
+        Map<String, String> params = new HashMap();
+        params.put("user_facebookID", user.facebookID);
+        JSONObject parameters = new JSONObject(params);
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, "http://96.126.115.143/leevrows/adicionaUsuario.php", parameters, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("Retorno: ", response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Erro: ", error.toString());
+                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+                        toast.show();
+
+                    }
+                });
+        Volley.newRequestQueue(this).add(jsObjRequest);
+    }
 
 }

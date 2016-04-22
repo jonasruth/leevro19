@@ -113,35 +113,11 @@ public class BookAdapter extends BaseAdapter {
         Book book = books.get(position);
 
         holder.img = (NetworkImageView) rowView.findViewById(R.id.imageView1);
-//        holder.img = (ImageView) rowView.findViewById(R.id.imageView1);
         holder.tv = (TextView) rowView.findViewById(R.id.textView1);
-
-//        holder.img.setre("http://96.126.115.143/leevrows/vbook_img/" + book.getPhoto(), Vol);
-        //loadImage(rowView.getContext(), holder.img, book);
         holder.img.setImageUrl("http://96.126.115.143/leevrows/vbook_img/tiny_" + book.getPhoto(),mImageLoader);
         holder.tv.setText(book.getTitle());
 
         return rowView;
     }
-/*
-    private void loadImage(Context context, final ImageView imageView, Book book) {
-        ImageRequest request = new ImageRequest("http://96.126.115.143/leevrows/vbook_img/tiny_" + book.getPhoto(),
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        imageView.setImageBitmap(bitmap);
-                    }
-                }, 0, 0, null, Bitmap.Config.RGB_565,
-                new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError error) {
-                        //bookCover.setImageResource(R.drawable.image_load_error);
-                    }
-                });
-// Access the RequestQueue through your singleton class.
-        Volley.newRequestQueue(context).add(request);
-
-    }*/
-
-
 
 }
