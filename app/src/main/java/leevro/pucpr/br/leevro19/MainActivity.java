@@ -313,6 +313,12 @@ public class MainActivity extends ActionBarActivity {
         startActivity(intent);
     }
 
+    public void goToLogout()
+    {
+        Intent intent = new Intent(MainActivity.this, LogoutActivity.class);
+        startActivity(intent);
+    }
+
     public void goToBookDetail(View view)
     {
         Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
@@ -325,6 +331,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toast.makeText(getApplicationContext(),PrefUtils.getCurrentUser(this).email,Toast.LENGTH_SHORT).show();
+
         bookLoadInfo = (TextView) findViewById(R.id.bookLoadInfo);
         noBooksInfo = (LinearLayout) findViewById(R.id.noBooksInfo);
         bookCoverContainer = (LinearLayout) findViewById(R.id.bookCoverContainer);
@@ -413,6 +422,10 @@ public class MainActivity extends ActionBarActivity {
             case R.id.action_my_book_gallery:
                 // About option clicked.
                 goToMyProfile();
+                return true;
+            case R.id.action_logout:
+                // About option clicked.
+                goToLogout();
                 return true;
             case R.id.action_settings:
                 // Settings option clicked.

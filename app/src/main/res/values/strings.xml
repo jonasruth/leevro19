@@ -3,6 +3,7 @@
 
 
     <string name="action_settings">Settings</string>
+    <string name="action_logout">Sair</string>
     <string name="action_my_book_gallery">Minha Biblioteca</string>
     <string name="action_confirm">Confirmar</string>
     <string name="action_book_add">Adicionar Livro</string>
@@ -15,5 +16,8 @@
     <string name="title_activity_friends">Amigos</string>
     <string name="title_activity_chat">Conversa</string>
     <string name="title_activity_public_profile">Perfil</string>
+
+    <string name="facebook_app_id">1507945116179784</string>
+    <string name="title_activity_logout">LogoutActivity</string>
 
 </resources>
