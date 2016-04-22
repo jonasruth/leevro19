@@ -38,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:text="Find"
                 android:onClick="goToBookPropose"
-                android:id="@+id/button2" />
+                android:id="@+id/button2"
+                />
         </LinearLayout>
 
         <ScrollView
@@ -80,6 +81,15 @@
                     android:textColor="@color/blue"
                     android:textStyle="bold"
                     android:textSize="14dp"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/blue"
+                    android:layout_marginBottom="5dp"
+
                     />
 
                 <TableLayout
@@ -98,7 +108,7 @@
                             android:layout_column="0"
                             android:layout_marginRight="5dp"
                             android:textColor="@color/blue"
-                            android:textSize="16dp"
+                            android:textSize="14dp"
                             />
 
                         <TextView
@@ -108,7 +118,7 @@
                             android:id="@+id/bookGenderName"
                             android:layout_column="1"
                             android:textColor="@color/blue"
-                            android:textSize="16dp"/>
+                            android:textSize="14dp"/>
 
                     </TableRow>
 
@@ -124,7 +134,7 @@
                             android:layout_column="0"
                             android:layout_marginRight="5dp"
                             android:textColor="@color/blue"
-                            android:textSize="16dp"
+                            android:textSize="14dp"
                             />
 
                         <TextView
@@ -134,7 +144,7 @@
                             android:id="@+id/bookAuthorName"
                             android:layout_column="1"
                             android:textColor="@color/blue"
-                            android:textSize="16dp"
+                            android:textSize="14dp"
                             />
                     </TableRow>
 
@@ -150,7 +160,7 @@
                             android:layout_column="0"
                             android:layout_marginRight="5dp"
                             android:textColor="@color/blue"
-                            android:textSize="16dp"
+                            android:textSize="14dp"
                             />
 
                         <TextView
@@ -160,10 +170,11 @@
                             android:id="@+id/bookEdition"
                             android:layout_column="1"
                             android:textColor="@color/blue"
-                            android:textSize="16dp"
+                            android:textSize="14dp"
                             />
                     </TableRow>
                 </TableLayout>
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -173,16 +184,25 @@
                     android:textColor="@color/blue"
                     android:textStyle="bold"
                     android:textSize="14dp"
+                    android:layout_marginTop="10dp"
                     />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/blue"
+                    android:layout_marginBottom="10dp"
+
+                    />
+
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet "
                     android:id="@+id/bookDescription"
-                    android:layout_marginTop="10dp"
                     android:textColor="@color/blue"
-                    android:textSize="16dp"
+                    android:textSize="14dp"
                     />
 
 

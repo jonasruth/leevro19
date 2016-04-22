@@ -37,111 +37,11 @@ import leevro.pucpr.br.leevro19.entity.Book;
 
 public class BookGaleryActivity extends ActionBarActivity {
 
-    private JSONArray livros;
-    ListView listView;
-
-
-
-    public void goToBookAdd(View view)
-    {
-        goToBookAdd();
-    }
-
-    private void goToBookAdd()
-    {
-        Intent intent = new Intent(BookGaleryActivity.this, BookAddActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_galery);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-
-
-        String url = "http://96.126.115.143/leevrows/retornaMeusLivros.php";
-
-        Map<String, String> params = new HashMap();
-        params.put("user_id", "1");
-        JSONObject parameters = new JSONObject(params);
-
-        listView = (ListView) findViewById(R.id.listView);
-
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        Log.d("Retorno: ", response.toString());
-                        try {
-                            livros = response.getJSONArray("livros");
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        new VolleyCallback(){
-                            @Override
-                            public void onSuccess() {
-                                createListView();
-                            }
-                        }.onSuccess();
-
-                    }
-                }, new Response.ErrorListener() {
-
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Erro: ", error.toString());
-                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
-                        toast.show();
-
-                    }
-                });
-        Volley.newRequestQueue(this).add(jsObjRequest);
-    }
-
-    private void createListView(){
-        listView.setAdapter(new BookAdapter(this, livros));
-    }
-
-    public interface VolleyCallback{
-        void onSuccess();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_book_galery, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        switch (item.getItemId()) {
-            case R.id.action_book_add:
-                // About option clicked.
-                goToBookAdd();
-                return true;
-//            case R.id.action_settings:
-//                // Settings option clicked.
-//                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-//        return super.onOptionsItemSelected(item);
     }
 
 }

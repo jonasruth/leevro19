@@ -17,94 +17,49 @@
         android:orientation="vertical"
         android:weightSum="1">
 
-        <TextView
-            android:id="@+id/textView17"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Biblioteca de Fulano da Silva"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@mipmap/ic_launcher_dev"
+            android:layout_gravity="center_horizontal"
 
-
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.01">
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/imageView5"
-                        android:layout_width="130dp"
-                        android:layout_height="130dp"
-                        android:layout_weight="0.01"
-                        android:src="@mipmap/ic_launcher"
-                        android:layout_gravity="left" />
-
-                    <ImageView
-                        android:id="@+id/imageView8"
-                        android:layout_width="130dp"
-                        android:layout_height="130dp"
-                        android:layout_weight="0.01"
-                        android:src="@mipmap/ic_launcher"
-                        android:layout_gravity="left"
-                        android:layout_column="1" />
-
-                    <ImageView
-                        android:id="@+id/imageView6"
-                        android:layout_width="130dp"
-                        android:layout_height="130dp"
-                        android:layout_weight="0.01"
-                        android:src="@mipmap/ic_launcher"
-                        android:layout_gravity="left"
-                        android:layout_column="2" />
-
-                    <ImageView
-                        android:id="@+id/imageView7"
-                        android:layout_width="130dp"
-                        android:layout_height="130dp"
-                        android:layout_weight="0.01"
-                        android:src="@mipmap/ic_launcher"
-                        android:layout_gravity="left"
-                        android:layout_column="3" />
-                </TableRow>
-
-            </TableLayout>
-
-
-
-        </HorizontalScrollView>
-
+            />
 
         <TextView
-            android:id="@+id/textView18"
+            android:id="@+id/txtUserName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Livros"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:text="Fulano da Silva"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Fulano da Silva não possui livros cadastrados no momento. Aproveite para emprestá-lo um!"
-            android:id="@+id/textView19" />
+            android:textColor="@color/blue"
+            android:layout_gravity="center_horizontal"/>
 
-        <ScrollView
-            android:id="@+id/scrollView5"
+        <TextView
+            android:id="@+id/strInfos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Livros"
+            android:textColor="@color/blue"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="1dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/blue"
 
-            <ListView
-                android:id="@+id/listView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </ScrollView>
+            />
+
+        <fragment
+            android:id="@+id/bookGaleryFrag"
+            android:name="leevro.pucpr.br.leevro19.BookGaleryFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            tools:layout="@layout/fragment_book_galery" />
+
 
     </LinearLayout>
 </RelativeLayout>

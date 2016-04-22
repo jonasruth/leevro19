@@ -1,111 +1,192 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="leevro.pucpr.br.leevro19.BookDetailActivityFragment">
 
-
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:weightSum="1"
-        android:id="@+id/linearLayout">
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="250dp"
-            android:id="@+id/bookCover"
-            android:src="@mipmap/ic_launcher" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Nome do Livro"
-            android:id="@+id/bookTitle" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Nome do Autor"
-            android:id="@+id/bookAuthorName" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Nome do Gênero"
-            android:id="@+id/bookGenderName" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="ISBN"
-            android:id="@+id/isbn" />
-
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:id="@+id/scrollView2"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="0.69" >
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:weightSum="1">
-
-                <TextView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text=" Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc viverra aliquam odio eu mattis. Nulla elementum risus nec tincidunt consequat. Phasellus ut interdum leo. Mauris eleifend nunc eget cursus dapibus. Nulla ultricies nisi nulla, auctor consectetur erat posuere sed. Vivamus maximus turpis a lacus ornare luctus. Sed a ullamcorper orci. Donec tellus nibh, condimentum sit amet ligula ac, lacinia commodo enim. Fusce ac dolor in nibh sagittis malesuada. Vestibulum nisi magna, interdum sit amet malesuada eget, tempus ut velit. Mauris a diam non turpis consectetur bibendum at ultricies risus.  In ullamcorper felis tortor, sit amet interdum diam egestas quis. Aenean et enim sit amet dolor auctor gravida. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Proin auctor ligula ut risus pharetra, nec sollicitudin purus dictum. Sed at consectetur elit. Maecenas libero neque, pellentesque non nibh in, venenatis ullamcorper dui. Nulla eros augue, scelerisque vel venenatis sit amet, suscipit non libero. Nunc at risus sed nisl suscipit fermentum. "
-                    android:id="@+id/bookDescription"
-                    android:layout_weight="0.44" />
-            </LinearLayout>
-        </ScrollView>
+        android:layout_height="150dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.69">
 
         <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <Button
-                android:layout_width="wrap_content"
+            <ScrollView
+                android:id="@+id/bookDetailPreview"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="NÃO"
-                android:id="@+id/button9"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"/>
+                android:visibility="visible">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="PERFIL DO DONO"
-                android:onClick="goToPublicProfile"
-                android:id="@+id/button11" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp"
+                    >
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="SIM"
-                android:id="@+id/button10"
-                android:layout_alignParentEnd="true" />
+                    <TextView
+                        android:id="@+id/bookTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:gravity="center_horizontal"
+                        android:text="Título"
+                        android:textColor="@color/blue"
+                        android:textSize="22dp"
+                        android:textStyle="bold" />
+
+                    <ImageView
+                        android:id="@+id/bookCover"
+                        android:layout_width="match_parent"
+                        android:layout_height="300dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
+                        android:src="@mipmap/ic_launcher" />
+
+                    <TextView
+                        android:id="@+id/strInfos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Informações"
+                        android:textColor="@color/blue"
+                        android:textSize="14dp"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="10dp"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="5dp"
+                        android:background="@color/blue"
+                        />
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        >
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/textView"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="0"
+                                android:layout_marginRight="5dp"
+                                android:text="Gênero:"
+                                android:textColor="@color/blue"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/bookGenderName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="1"
+                                android:text="---"
+                                android:textColor="@color/blue"
+                                android:textSize="14dp" />
+
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/textView2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="0"
+                                android:layout_marginRight="5dp"
+                                android:text="Autor:"
+                                android:textColor="@color/blue"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/bookAuthorName"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="1"
+                                android:text="---"
+                                android:textColor="@color/blue"
+                                android:textSize="14dp" />
+                        </TableRow>
+
+                        <TableRow
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/textView4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="0"
+                                android:layout_marginRight="5dp"
+                                android:text="Edição:"
+                                android:textColor="@color/blue"
+                                android:textSize="14dp" />
+
+                            <TextView
+                                android:id="@+id/bookEdition"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_column="1"
+                                android:text="---"
+                                android:textColor="@color/blue"
+                                android:textSize="14dp" />
+                        </TableRow>
+                    </TableLayout>
+
+
+                    <TextView
+                        android:id="@+id/strSinopse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Sinopse"
+                        android:textColor="@color/blue"
+                        android:textSize="14dp"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="10dp"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginBottom="10dp"
+                        android:background="@color/blue"
+                        />
+
+
+                    <TextView
+                        android:id="@+id/bookDescription"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet "
+                        android:textColor="@color/blue"
+                        android:textSize="14dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        />
+
+
+                </LinearLayout>
+            </ScrollView>
+
         </LinearLayout>
+    </ScrollView>
 
-
-
-    </LinearLayout>
-
-</RelativeLayout>
+</LinearLayout>

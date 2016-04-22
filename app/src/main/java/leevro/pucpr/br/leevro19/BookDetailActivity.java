@@ -4,12 +4,16 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
+import android.widget.TabHost;
+import android.widget.TabHost.TabSpec;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,20 +35,6 @@ import leevro.pucpr.br.leevro19.entity.Book;
 
 public class BookDetailActivity extends ActionBarActivity {
 
-    TextView isbn;
-    TextView bookTitle;
-    TextView bookAuthorName;
-    TextView bookGenderName;
-    TextView bookDescription;
-    ImageView bookCover;
-    String photo;
-    Book livro;
-
-    public void goToPublicProfile(View view) {
-        Intent intent = new Intent(BookDetailActivity.this, PublicProfileActivity.class);
-        startActivity(intent);
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,82 +42,31 @@ public class BookDetailActivity extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Bundle extras = getIntent().getExtras();
-        String p_isbn = null;
+        String p_fbook_id = null;
+        String p_user_id = null;
+
         if (extras != null) {
-            p_isbn = extras.getString("isbn");
+            p_fbook_id = extras.getString("p_fbook_id");
+            p_user_id = extras.getString("p_user_id");
         }
 
-        // começa a parada
-        isbn = (TextView) findViewById(R.id.isbn);
-        bookTitle = (TextView) findViewById(R.id.bookTitle);
-        bookAuthorName = (TextView) findViewById(R.id.bookAuthorName);
-        bookGenderName = (TextView) findViewById(R.id.bookGenderName);
-        bookDescription = (TextView) findViewById(R.id.bookDescription);
-        bookCover = (ImageView) findViewById(R.id.bookCover);
+        // tabs
+        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
+        tabHost.setup();
 
-        String url = "http://96.126.115.143/leevrows/retornaUmLivro.php?isbn=" + p_isbn;
-
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Retorno: ", response.toString());
-
-                        try {
-                            livro = new Book(response.getJSONObject("livro"));
-                            isbn.setText(livro.getIsbn());
-                            bookTitle.setText(livro.getTitle());
-                            bookAuthorName.setText(livro.getAuthorName());
-                            bookGenderName.setText(livro.getGenderName());
-                            bookDescription.setText(livro.getDescription());
-//                            bookPhoto.setText(livro.getString("photo"));
-                            photo = livro.getPhoto();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        new VolleyCallback() {
-                            @Override
-                            public void onSuccess() {
-                                loadCover();
-                            }
-                        }.onSuccess();
-                    }
+        TabSpec spec1=tabHost.newTabSpec("TAB 1");
+        spec1.setContent(R.id.tab1);
+        spec1.setIndicator("Livro");
 
 
-                }, new Response.ErrorListener() {
+        TabSpec spec2=tabHost.newTabSpec("TAB 2");
+        spec2.setContent(R.id.tab2);
+        spec2.setIndicator("Usuário");
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Erro: ", error.toString());
-                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
-                        toast.show();
 
-                    }
-                });
-        Volley.newRequestQueue(this).add(jsObjRequest);
-    }
+        tabHost.addTab(spec1);
+        tabHost.addTab(spec2);
 
-    public interface VolleyCallback {
-        void onSuccess();
-    }
-
-    private void loadCover() {
-        ImageRequest request = new ImageRequest("http://96.126.115.143/leevrows/vbook_img/" + livro.getPhoto(),
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        bookCover.setImageBitmap(bitmap);
-                    }
-                }, 0, 0, null,
-                new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError error) {
-                        //bookCover.setImageResource(R.drawable.image_load_error);
-                    }
-                });
-// Access the RequestQueue through your singleton class.
-        Volley.newRequestQueue(this).add(request);
     }
 
 }

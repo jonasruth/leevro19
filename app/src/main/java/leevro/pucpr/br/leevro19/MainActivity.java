@@ -305,23 +305,19 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void goToBookAdd(View view)
+    public void goToMyProfile()
     {
-        Intent intent = new Intent(MainActivity.this, BookAddActivity.class);
-        startActivity(intent);
-    }
-
-    public void goToBookGalery()
-    {
-        Intent intent = new Intent(MainActivity.this, BookGaleryActivity.class);
+        Intent intent = new Intent(MainActivity.this, PublicProfileActivity.class);
+        intent.putExtra("p_user_id", "1");
+//        intent.putExtra("camefrom", "MainActivity");
         startActivity(intent);
     }
 
     public void goToBookDetail(View view)
     {
         Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
-        Log.d("Livro atual", livroAtual.getIsbn());
-        intent.putExtra("isbn", livroAtual.getIsbn());
+        intent.putExtra("p_fbook_id", livroAtual.getPhysicalBookId());
+        intent.putExtra("p_user_id", livroAtual.getOwnerUserId());
         startActivity(intent);
     }
 
@@ -416,7 +412,7 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.action_my_book_gallery:
                 // About option clicked.
-                goToBookGalery();
+                goToMyProfile();
                 return true;
             case R.id.action_settings:
                 // Settings option clicked.

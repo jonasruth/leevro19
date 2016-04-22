@@ -27,12 +27,12 @@
         <activity
             android:name=".BookAddActivity"
             android:label="@string/title_activity_book_add"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".PublicProfileActivity"
             android:screenOrientation="portrait"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="leevro.pucpr.br.leevro19.MainActivity" />
+                android:value="leevro.pucpr.br.leevro19.PublicProfileActivity" />
         </activity>
         <activity
             android:name=".BookProposeActivity"
@@ -88,7 +88,13 @@
             android:name=".PublicProfileActivity"
             android:label="@string/title_activity_public_profile"
             android:screenOrientation="portrait"
-            ></activity>
+            android:parentActivityName=".MainActivity"
+            >
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="leevro.pucpr.br.leevro19.MainActivity" />
+        </activity>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
