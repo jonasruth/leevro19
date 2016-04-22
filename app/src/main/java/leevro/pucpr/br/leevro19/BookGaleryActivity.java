@@ -28,7 +28,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import leevro.pucpr.br.leevro19.adapter.BookAdapter;
 import leevro.pucpr.br.leevro19.entity.Book;
@@ -59,11 +61,16 @@ public class BookGaleryActivity extends ActionBarActivity {
 
 
 
-        String url = "http://96.126.115.143/leevrows/retornaListaLivrosParaEscolha.php";
+        String url = "http://96.126.115.143/leevrows/retornaMeusLivros.php";
+
+        Map<String, String> params = new HashMap();
+        params.put("user_id", "1");
+        JSONObject parameters = new JSONObject(params);
+
         listView = (ListView) findViewById(R.id.listView);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {

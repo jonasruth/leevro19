@@ -85,42 +85,57 @@ public class BookAddActivity extends ActionBarActivity {
                         Log.d("Retorno: ", response.toString());
 
                         try {
-                            livro = response.getJSONObject("livro");
-                            bookTitle.setText(livro.getString("title"));
-                            bookAuthorName.setText(livro.getString("author_name"));
-                            bookGenderName.setText(livro.getString("gender_name"));
-                            bookDescription.setText(livro.getString("description"));
+
+                            Boolean status = response.getBoolean("status");
+                            if (status) {
+                                livro = response.getJSONObject("livro");
+                                bookTitle.setText(livro.getString("title"));
+                                bookAuthorName.setText(livro.getString("author_name"));
+                                bookGenderName.setText(livro.getString("gender_name"));
+                                bookDescription.setText(livro.getString("description"));
 //                            bookPhoto.setText(livro.getString("photo"));
-                            bookEdition.setText(livro.getString("edition"));
-                            bookDetailPreview.setVisibility(ScrollView.VISIBLE);
-                            photo = livro.getString("photo");
+                                bookEdition.setText(livro.getString("edition"));
+                                bookDetailPreview.setVisibility(ScrollView.VISIBLE);
+                                photo = livro.getString("photo");
 
-                            Thread thread = new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    URL url = null;
-                                    try {
-                                        url = new URL("http://96.126.115.143/leevrows/vbook_img/" + livro.getString("photo"));
-                                        Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                        bookCover.setImageBitmap(bmp);
+                                Thread thread = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        URL url = null;
+                                        try {
+                                            url = new URL("http://96.126.115.143/leevrows/vbook_img/" + livro.getString("photo"));
+                                            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                                            bookCover.setImageBitmap(bmp);
 
-                                    } catch (MalformedURLException e) {
-                                        e.printStackTrace();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
+                                        } catch (MalformedURLException e) {
+                                            e.printStackTrace();
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
                                     }
-                                }
-                            });
+                                });
 
-                            thread.start();
+                                thread.start();
+                            }else{
+                                Toast toast = Toast.makeText(getApplicationContext(), "Erro: Não foi possível retornar livro pesquisado.", Toast.LENGTH_SHORT);
+                                toast.show();
+                            }
 
-                        } catch (JSONException e) {
+                        } catch (
+                                JSONException e
+                                )
+
+                        {
                             e.printStackTrace();
                         }
                     }
-                }, new Response.ErrorListener() {
+                }
+
+                        , new Response.ErrorListener()
+
+                {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
@@ -129,8 +144,12 @@ public class BookAddActivity extends ActionBarActivity {
                         toast.show();
 
                     }
-                });
-        Volley.newRequestQueue(this).add(jsObjRequest);
+                }
+
+                );
+        Volley.newRequestQueue(this).
+
+                add(jsObjRequest);
         //Volley.getInstance(this).addToRequestQueue(jsObjRequest);
     }
 

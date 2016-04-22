@@ -344,7 +344,7 @@ public class MainActivity extends ActionBarActivity {
         myLocation = new Location("");
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER , new LocationListener() {
+        locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER , new LocationListener() {
 
             @Override
             public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
@@ -364,10 +364,12 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onLocationChanged(Location location) {
 
-                myLocation = new Location("");
-                myLocation.setLatitude(location.getLatitude());
-                myLocation.setLongitude(location.getLongitude());
-                Toast.makeText(getApplicationContext(), location.getLatitude()+"/"+location.getLongitude(), Toast.LENGTH_LONG).show();
+                myLocation = location;
+//                myLocation.setLatitude(location.getLatitude());
+//                myLocation.setLongitude(location.getLongitude());
+//                myLocation.setAccuracy(location.getAccuracy());
+//                location
+                Toast.makeText(getApplicationContext(), myLocation.getLatitude()+"/"+myLocation.getLongitude()+"/precisao:"+myLocation.getAccuracy()+"m", Toast.LENGTH_LONG).show();
 
 //                TextView latitude = (TextView) findViewById( R.id.latitude);
 //                TextView longitude = (TextView) findViewById( R.id.longitude);

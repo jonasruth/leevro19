@@ -55,9 +55,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:text="Título"
-                    android:id="@+id/bookTitle" />
+                    android:id="@+id/bookTitle"
+                    android:textColor="@color/blue"
+                    android:textStyle="bold"
+                    android:textSize="22dp"
+                    android:gravity="center_horizontal"
+                    android:layout_gravity="center_horizontal"
+                    />
 
                 <ImageView
                     android:layout_width="match_parent"
@@ -66,6 +71,16 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
                     android:src="@mipmap/ic_launcher" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Informações"
+                    android:id="@+id/strInfos"
+                    android:textColor="@color/blue"
+                    android:textStyle="bold"
+                    android:textSize="14dp"
+                    />
 
                 <TableLayout
                     android:layout_width="match_parent"
@@ -78,19 +93,22 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Gênero:"
                             android:id="@+id/textView"
                             android:layout_column="0"
-                            android:layout_marginRight="5dp" />
+                            android:layout_marginRight="5dp"
+                            android:textColor="@color/blue"
+                            android:textSize="16dp"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="---"
                             android:id="@+id/bookGenderName"
-                            android:layout_column="1" />
+                            android:layout_column="1"
+                            android:textColor="@color/blue"
+                            android:textSize="16dp"/>
 
                     </TableRow>
 
@@ -101,19 +119,23 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Autor:"
                             android:id="@+id/textView2"
                             android:layout_column="0"
-                            android:layout_marginRight="5dp" />
+                            android:layout_marginRight="5dp"
+                            android:textColor="@color/blue"
+                            android:textSize="16dp"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="---"
                             android:id="@+id/bookAuthorName"
-                            android:layout_column="1" />
+                            android:layout_column="1"
+                            android:textColor="@color/blue"
+                            android:textSize="16dp"
+                            />
                     </TableRow>
 
                     <TableRow
@@ -123,29 +145,45 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="Edição:"
                             android:id="@+id/textView4"
                             android:layout_column="0"
-                            android:layout_marginRight="5dp" />
+                            android:layout_marginRight="5dp"
+                            android:textColor="@color/blue"
+                            android:textSize="16dp"
+                            />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:text="---"
                             android:id="@+id/bookEdition"
-                            android:layout_column="1" />
+                            android:layout_column="1"
+                            android:textColor="@color/blue"
+                            android:textSize="16dp"
+                            />
                     </TableRow>
                 </TableLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Sinopse"
+                    android:id="@+id/strSinopse"
+                    android:textColor="@color/blue"
+                    android:textStyle="bold"
+                    android:textSize="14dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:text="Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet "
                     android:id="@+id/bookDescription"
-                    android:layout_marginTop="5dp" />
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/blue"
+                    android:textSize="16dp"
+                    />
 
 
             </LinearLayout>
