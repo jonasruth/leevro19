@@ -37,6 +37,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import leevro.pucpr.br.leevro19.utils.PrefUtils;
+
 public class BookAddActivity extends ActionBarActivity {
 
     EditText isbn;
@@ -164,7 +166,7 @@ public class BookAddActivity extends ActionBarActivity {
 
         Map<String, String> params = new HashMap();
         params.put("isbn", isbn.getText().toString());
-        params.put("user_id", "1");
+        params.put("user_id", PrefUtils.getCurrentUser(getApplicationContext()).userId);
         params.put("photo", photo);
         JSONObject parameters = new JSONObject(params);
 

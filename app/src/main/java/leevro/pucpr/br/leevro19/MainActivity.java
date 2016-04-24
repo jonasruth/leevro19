@@ -68,7 +68,7 @@ public class MainActivity extends ActionBarActivity {
         choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
 
         Map<String, String> params = new HashMap();
-        params.put("user_id", "1");
+        params.put("user_id", PrefUtils.getCurrentUser(getApplicationContext()).userId);
         JSONObject parameters = new JSONObject(params);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest

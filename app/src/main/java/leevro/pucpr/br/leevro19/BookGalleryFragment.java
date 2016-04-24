@@ -54,7 +54,7 @@ public class BookGalleryFragment extends Fragment {
         // inicio meu codigo
 
         Map<String, String> params = new HashMap();
-        params.put("user_id", PrefUtils.getCurrentBook(getActivity().getApplicationContext()).getOwnerUserId());
+        params.put("user_id", PrefUtils.getCurrentUser(getActivity().getApplicationContext()).userId);
         JSONObject parameters = new JSONObject(params);
 
         listView = (ListView) view.findViewById(R.id.listView);

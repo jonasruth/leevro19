@@ -23,6 +23,7 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -120,7 +121,7 @@ public class LoginActivity extends Activity {
                             try {
                                 Log.d("xxxxx", object.toString());
                                 user = new AppUser();
-                                user.userId = "1";
+                                //user.userId = "1";
                                 user.facebookID = object.getString("id").toString();
                                 user.email = object.getString("email").toString();
                                 user.name = object.getString("name").toString();
@@ -149,7 +150,7 @@ public class LoginActivity extends Activity {
                                 e.printStackTrace();
                             }
 
-                            salvarDados(user);
+                            salvarDadosUsuario();
 
                             Toast.makeText(LoginActivity.this, "welcome " + user.name, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -177,7 +178,7 @@ public class LoginActivity extends Activity {
         }
     };
 
-    private void salvarDados(AppUser user) {
+    private void salvarDadosUsuario() {
         Log.d("user.facebookID", user.facebookID);
 
         Map<String, String> params = new HashMap();
@@ -192,6 +193,16 @@ public class LoginActivity extends Activity {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Retorno salvar dados: ", response.toString());
+
+                        try {
+                            user.userId = response.getJSONObject("user").getString("id");
+                            Log.d("USER ID <<<< ", user.userId);
+                            PrefUtils.setCurrentUser(user,getApplicationContext());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+
                     }
                 }, new Response.ErrorListener() {
 
