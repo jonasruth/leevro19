@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
  */
 public class AppUser {
 
+    public String userId;
+
     public String name;
 
     public String firstName;

@@ -41,15 +41,6 @@ public class BookDetailActivity extends ActionBarActivity {
         setContentView(R.layout.activity_book_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Bundle extras = getIntent().getExtras();
-        String p_fbook_id = null;
-        String p_user_id = null;
-
-        if (extras != null) {
-            p_fbook_id = extras.getString("p_fbook_id");
-            p_user_id = extras.getString("p_user_id");
-        }
-
         // tabs
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
         tabHost.setup();

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.util.LruCache;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
-import org.w3c.dom.Text;
+import leevro.pucpr.br.leevro19.utils.AppUtils;
+import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -37,18 +37,8 @@ public class PublicProfileActivityFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_public_profile, container, false);
 
-//        Log.d("xxxx",this.getArguments().toString());
-
         // Inicio do meu código
 
-        Bundle extras = getActivity().getIntent().getExtras();
-        String p_fbook_id = null;
-        String p_user_id = null;
-
-        if (extras != null) {
-            p_fbook_id = extras.getString("p_fbook_id");
-            p_user_id = extras.getString("p_user_id");
-        }
         Context ctx = getActivity().getApplicationContext();
         mRequestQueue = Volley.newRequestQueue(ctx);
         mImageLoader = new ImageLoader(mRequestQueue, new ImageLoader.ImageCache() {
@@ -62,8 +52,8 @@ public class PublicProfileActivityFragment extends Fragment {
         });
 
         NetworkImageView niv = (NetworkImageView) view.findViewById(R.id.profileImage);
-        niv.setImageUrl("http://96.126.115.143/leevrows/user_img/" + PrefUtils.getCurrentUser(ctx).facebookID.toString()+".jpg",mImageLoader);
-        Log.d("profile image >>>", "http://96.126.115.143/leevrows/user_img/" + PrefUtils.getCurrentUser(ctx).facebookID.toString()+".jpg");
+        niv.setImageUrl( AppUtils.APP_PATH_USER_PIC_PATH + PrefUtils.getCurrentUser(ctx).facebookID.toString()+".jpg",mImageLoader);
+        Log.d("profile image >>>", AppUtils.APP_PATH_USER_PIC_PATH + PrefUtils.getCurrentUser(ctx).facebookID.toString()+".jpg");
         TextView txtUserName = (TextView) view.findViewById(R.id.txtUserName);
         txtUserName.setText(PrefUtils.getCurrentUser(getActivity().getApplicationContext()).name);
 //         Fim do meu código

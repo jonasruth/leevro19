@@ -35,7 +35,7 @@ import java.util.Map;
 import leevro.pucpr.br.leevro19.adapter.BookAdapter;
 import leevro.pucpr.br.leevro19.entity.Book;
 
-public class BookGaleryActivity extends ActionBarActivity {
+public class BookGalleryActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

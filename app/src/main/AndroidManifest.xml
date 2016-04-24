@@ -63,7 +63,7 @@
                 android:value="leevro.pucpr.br.leevro19.BookAddActivity" />
         </activity>
         <activity
-            android:name=".BookGaleryActivity"
+            android:name=".BookGalleryActivity"
             android:label="@string/title_activity_book_galery"
             android:parentActivityName=".MainActivity"
             android:screenOrientation="portrait">

@@ -55,7 +55,7 @@
 
         <fragment
             android:id="@+id/bookGaleryFrag"
-            android:name="leevro.pucpr.br.leevro19.BookGaleryFragment"
+            android:name="leevro.pucpr.br.leevro19.BookGalleryFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"

@@ -3,22 +3,17 @@ package leevro.pucpr.br.leevro19;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,18 +26,18 @@ import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import leevro.pucpr.br.leevro19.entity.AppUser;
 import leevro.pucpr.br.leevro19.entity.Book;
+import leevro.pucpr.br.leevro19.entity.BookCollection;
+import leevro.pucpr.br.leevro19.entity.BookFeeder;
+import leevro.pucpr.br.leevro19.utils.AppUtils;
+import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -52,16 +47,14 @@ public class MainActivity extends ActionBarActivity {
     private TextView txtDistance;
     private LinearLayout bookCoverContainer;
     private TableLayout choiceButtonsContainer;
-//    private TextView bookTitle;
-//    private TextView bookAuthor;
-    private JSONArray listaLivros;
+    private BookCollection listaLivros;
     private Book livroAtual;
     private int bookListIndex = -1;
     private Boolean carregando = false;
     Location myLocation = null;
 
 
-    public void loadBooks(View view){
+    public void loadBooks(View view) {
         loadBookListForChoice();
     }
 
@@ -74,26 +67,27 @@ public class MainActivity extends ActionBarActivity {
         noBooksInfo.setVisibility(TextView.GONE);
         choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
 
-        String url = "http://96.126.115.143/leevrows/retornaListaLivrosParaEscolha.php";
         Map<String, String> params = new HashMap();
         params.put("user_id", "1");
         JSONObject parameters = new JSONObject(params);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, AppUtils.APP_URL_WS_BOOKS_FOR_CHOICE, parameters, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("Retorno: ", response.toString());
 
                         try {
-                            listaLivros = response.getJSONArray("livros");
-                            if(listaLivros.length()<=0){
+//                            listaLivros = response.getJSONArray("livros");
+                            listaLivros = BookFeeder.booksFromJSONArray(response.getJSONArray("livros"));
+
+                            if (listaLivros.size() <= 0) {
                                 bookLoadInfo.setVisibility(TextView.GONE);
                                 bookCoverContainer.setVisibility(ImageView.GONE);
                                 noBooksInfo.setVisibility(TextView.VISIBLE);
                                 choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
-                            }else{
+                            } else {
                                 bookLoadInfo.setVisibility(TextView.GONE);
                                 bookCoverContainer.setVisibility(ImageView.VISIBLE);
                                 noBooksInfo.setVisibility(TextView.GONE);
@@ -105,7 +99,7 @@ public class MainActivity extends ActionBarActivity {
 
                         carregando = false;
 
-                        new VolleyCallback(){
+                        new VolleyCallback() {
                             @Override
                             public void onSuccess() {
                                 nextBook();
@@ -131,27 +125,28 @@ public class MainActivity extends ActionBarActivity {
         Volley.newRequestQueue(this).add(jsObjRequest);
     }
 
-    public interface VolleyCallback{
+    public interface VolleyCallback {
         void onSuccess();
     }
 
-    public void chooseBookYes(View view){
+    public void chooseBookYes(View view) {
         chooseBook(true);
     }
 
-    public void chooseBookNo(View view){
+    public void chooseBookNo(View view) {
         chooseBook(false);
     }
 
-    public void zerarEscolhasDev(View view){
+    public void zerarEscolhasDev(View view) {
 
         Map<String, String> params = new HashMap();
-        params.put("user_id", "1");
+        params.put("user_id", PrefUtils.getCurrentUser(getApplicationContext()).userId);
+        Log.d("ZERAR > user_id:",PrefUtils.getCurrentUser(getApplicationContext()).userId);
         JSONObject parameters = new JSONObject(params);
 
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.POST, "http://96.126.115.143/leevrows/zerarEscolhas.php", parameters, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, AppUtils.APP_URL_WS_CLEAN_CHOICES, parameters, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -161,7 +156,7 @@ public class MainActivity extends ActionBarActivity {
                         try {
                             JSONObject status = response.getJSONObject("status");
                             Boolean sucesso = status.getBoolean("success");
-                            if(!sucesso){
+                            if (!sucesso) {
                                 Toast toast = Toast.makeText(getApplicationContext(), "erro" + "Erro de comunicação com o servidor.", Toast.LENGTH_SHORT);
                                 toast.show();
                             }
@@ -184,7 +179,7 @@ public class MainActivity extends ActionBarActivity {
         Volley.newRequestQueue(this).add(jsObjRequest);
     }
 
-    private void chooseBook(Boolean choice){
+    private void chooseBook(Boolean choice) {
 
         carregando = true;
         bookLoadInfo.setVisibility(TextView.VISIBLE);
@@ -199,7 +194,7 @@ public class MainActivity extends ActionBarActivity {
         JSONObject parameters = new JSONObject(params);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.POST, "http://96.126.115.143/leevrows/decisao.php", parameters, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, AppUtils.APP_URL_WS_COMMIT_CHOICE, parameters, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
@@ -209,7 +204,7 @@ public class MainActivity extends ActionBarActivity {
                         try {
                             JSONObject status = response.getJSONObject("status");
                             Boolean sucesso = status.getBoolean("success");
-                            if(!sucesso){
+                            if (!sucesso) {
                                 Toast toast = Toast.makeText(getApplicationContext(), "erro" + "Erro de comunicação com o servidor.", Toast.LENGTH_SHORT);
                                 toast.show();
                             }
@@ -233,97 +228,95 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
-    public void nextBook()
-    {
+    public void nextBook() {
 
-        if(listaLivros.length()<=0) return;
+        if (listaLivros.size() <= 0) return;
 
-        if(bookListIndex < listaLivros.length()-1) {
+        if (bookListIndex < listaLivros.size() - 1) {
             ++bookListIndex;
-        }else{
+        } else {
             loadBookListForChoice();
             return;
         }
 
-        try {
 
-            livroAtual = new Book(listaLivros.getJSONObject(bookListIndex));
-
+        livroAtual = listaLivros.get(bookListIndex);
 //            myLocation = new Location("");
 //            myLocation.setLatitude(-25.398847);
 //            myLocation.setLongitude(-49.281793);
-            // rua ebenezer, 270, curitiba
-            // -25.398847, -49.281793
+        // rua ebenezer, 270, curitiba
+        // -25.398847, -49.281793
 
-            Location bookLocation = new Location("");
-            bookLocation.setLatitude(-25.410937);
-            bookLocation.setLongitude(-49.272639);
-            // Rua Carlos Pioli, 133, Curitiba
-            // -25.410937, -49.272639
+        Location bookLocation = new Location("");
+        bookLocation.setLatitude(-25.410937);
+        bookLocation.setLongitude(-49.272639);
+        // Rua Carlos Pioli, 133, Curitiba
+        // -25.410937, -49.272639
 
 
-            if (myLocation != null){
-                Float distance = myLocation.distanceTo(bookLocation);
+        if (myLocation != null) {
+            Float distance = myLocation.distanceTo(bookLocation);
 //              Toast toast = Toast.makeText(getApplicationContext(), "distancia " + distance, Toast.LENGTH_LONG);
 //              toast.show();
 
-                Log.d("lat/lng:",myLocation.getLatitude()+"/"+myLocation.getLongitude());
+            Log.d("lat/lng:", myLocation.getLatitude() + "/" + myLocation.getLongitude());
 
-                int distanceInt = Math.round(distance / 1000);
+            int distanceInt = Math.round(distance / 1000);
 
-                txtDistance.setText("Está a " + distanceInt + "km de você");
-            }else{
-                txtDistance.setText("");
-            }
-
-            // Retrieves an image specified by the URL, displays it in the UI.
-            ImageRequest request = new ImageRequest("http://96.126.115.143/leevrows/vbook_img/"+livroAtual.getPhoto(),
-                    new Response.Listener<Bitmap>() {
-                        @Override
-                        public void onResponse(Bitmap bitmap) {
-                            bookCover.setImageBitmap(bitmap);
-
-                            bookLoadInfo.setVisibility(TextView.GONE);
-                            bookCoverContainer.setVisibility(ImageView.VISIBLE);
-                            noBooksInfo.setVisibility(TextView.GONE);
-                            choiceButtonsContainer.setVisibility(TextView.VISIBLE);
-
-                            carregando = false;
-                        }
-                    }, 0, 0, null,
-                    new Response.ErrorListener() {
-                        public void onErrorResponse(VolleyError error) {
-                            //bookCover.setImageResource(R.drawable.image_load_error);
-                        }
-                    });
-// Access the RequestQueue through your singleton class.
-            Volley.newRequestQueue(this).add(request);
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+            txtDistance.setText("Está a " + distanceInt + "km de você");
+        } else {
+            txtDistance.setText("");
         }
+
+        // Retrieves an image specified by the URL, displays it in the UI.
+        ImageRequest request = new ImageRequest(AppUtils.APP_PATH_VIRTUAL_BOOK_COVER_PATH + livroAtual.getPhoto(),
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        bookCover.setImageBitmap(bitmap);
+
+                        bookLoadInfo.setVisibility(TextView.GONE);
+                        bookCoverContainer.setVisibility(ImageView.VISIBLE);
+                        noBooksInfo.setVisibility(TextView.GONE);
+                        choiceButtonsContainer.setVisibility(TextView.VISIBLE);
+
+                        carregando = false;
+                    }
+                }, 0, 0, null,
+                new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+                        //bookCover.setImageResource(R.drawable.image_load_error);
+                    }
+                });
+// Access the RequestQueue through your singleton class.
+        Volley.newRequestQueue(this).add(request);
 
     }
 
-    public void goToMyProfile()
-    {
+    public void goToMyProfile() {
         Intent intent = new Intent(MainActivity.this, PublicProfileActivity.class);
         intent.putExtra("p_user_id", "1");
 //        intent.putExtra("camefrom", "MainActivity");
         startActivity(intent);
     }
 
-    public void goToLogout()
-    {
+    public void goToLogout() {
         Intent intent = new Intent(MainActivity.this, LogoutActivity.class);
         startActivity(intent);
     }
 
-    public void goToBookDetail(View view)
-    {
+    public void goToBookDetail(View view) {
+
+        PrefUtils.setCurrentBook(livroAtual, getApplicationContext());
+
+        AppUser u = new AppUser();
+        u.userId = livroAtual.getOwnerUserId();
+
+        PrefUtils.setCurrentPublicProfile(u, getApplicationContext());
+
         Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
-        intent.putExtra("p_fbook_id", livroAtual.getPhysicalBookId());
-        intent.putExtra("p_user_id", livroAtual.getOwnerUserId());
+//        intent.putExtra("p_fbook_id", livroAtual.getPhysicalBookId());
+//        intent.putExtra("p_user_id", livroAtual.getOwnerUserId());
         startActivity(intent);
     }
 
@@ -332,7 +325,7 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toast.makeText(getApplicationContext(),PrefUtils.getCurrentUser(this).email,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), PrefUtils.getCurrentUser(this).email, Toast.LENGTH_SHORT).show();
 
         bookLoadInfo = (TextView) findViewById(R.id.bookLoadInfo);
         noBooksInfo = (LinearLayout) findViewById(R.id.noBooksInfo);
@@ -349,7 +342,7 @@ public class MainActivity extends ActionBarActivity {
         myLocation = new Location("");
 
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER , new LocationListener() {
+        locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, new LocationListener() {
 
             @Override
             public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
@@ -374,7 +367,7 @@ public class MainActivity extends ActionBarActivity {
 //                myLocation.setLongitude(location.getLongitude());
 //                myLocation.setAccuracy(location.getAccuracy());
 //                location
-                Toast.makeText(getApplicationContext(), myLocation.getLatitude()+"/"+myLocation.getLongitude()+"/precisao:"+myLocation.getAccuracy()+"m", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), myLocation.getLatitude() + "/" + myLocation.getLongitude() + "/precisao:" + myLocation.getAccuracy() + "m", Toast.LENGTH_LONG).show();
 
 //                TextView latitude = (TextView) findViewById( R.id.latitude);
 //                TextView longitude = (TextView) findViewById( R.id.longitude);
@@ -394,7 +387,7 @@ public class MainActivity extends ActionBarActivity {
 //                }
 
             }
-        }, null );
+        }, null);
 
         loadBookListForChoice();
     }

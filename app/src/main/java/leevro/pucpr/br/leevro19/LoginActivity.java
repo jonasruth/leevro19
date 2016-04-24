@@ -18,19 +18,19 @@ import com.android.volley.toolbox.Volley;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import leevro.pucpr.br.leevro19.entity.AppUser;
+import leevro.pucpr.br.leevro19.utils.AppUtils;
+import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 public class LoginActivity extends Activity {
     private CallbackManager callbackManager;
@@ -118,22 +118,27 @@ public class LoginActivity extends Activity {
 
                             Log.e("response: ", response + "");
                             try {
-                                Log.d("xxxxx",object.toString());
+                                Log.d("xxxxx", object.toString());
                                 user = new AppUser();
+                                user.userId = "1";
                                 user.facebookID = object.getString("id").toString();
                                 user.email = object.getString("email").toString();
                                 user.name = object.getString("name").toString();
+                                user.firstName = object.getString("first_name").toString();
+                                user.lastName = object.getString("last_name").toString();
+                                user.birthday = object.getString("birthday").toString();
                                 user.gender = object.getString("gender").toString();
                                 user.link = object.getString("link").toString();
 
-                                Log.d("facebook: ",object.toString());
+                                Log.d("facebook: ", object.toString());
 
-                                if(object.has("location") && object.getJSONObject("location").has("id")) {
+                                if (object.has("location") && object.getJSONObject("location").has("id")) {
                                     user.locationId = object.getJSONObject("location").getString("id").toString();
                                 }
-                                if(object.has("location") && object.getJSONObject("location").has("name")) {
+                                if (object.has("location") && object.getJSONObject("location").has("name")) {
                                     user.locationName = object.getJSONObject("location").getString("name").toString();
                                 }
+                                user.locale = object.getString("locale");
                                 user.timezone = object.getInt("timezone");
                                 user.updatedTime = object.getString("updated_time").toString();
                                 user.verified = object.getBoolean("verified");
@@ -172,25 +177,27 @@ public class LoginActivity extends Activity {
         }
     };
 
-    private void salvarDados(AppUser user){
-        Log.d("user.facebookID",user.facebookID);
+    private void salvarDados(AppUser user) {
+        Log.d("user.facebookID", user.facebookID);
 
         Map<String, String> params = new HashMap();
+        params.put("user_id", user.userId);
         params.put("user_facebookID", user.facebookID);
+        params.put("user_email", user.email);
         JSONObject parameters = new JSONObject(params);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.POST, "http://96.126.115.143/leevrows/adicionaUsuario.php", parameters, new Response.Listener<JSONObject>() {
+                (Request.Method.POST, AppUtils.APP_URL_WS_KEEP_USER, parameters, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("Retorno: ", response.toString());
+                        Log.d("Retorno salvar dados: ", response.toString());
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.d("Erro: ", error.toString());
+                        Log.d("Erro salvar dados: ", error.toString());
                         Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
                         toast.show();
 

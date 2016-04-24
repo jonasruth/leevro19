@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -16,8 +15,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -183,7 +180,7 @@ public class BookAddActivity extends ActionBarActivity {
                             JSONObject status = response.getJSONObject("status");
                             Boolean sucesso = status.getBoolean("success");
 
-                            Intent intent = new Intent(BookAddActivity.this, BookGaleryActivity.class);
+                            Intent intent = new Intent(BookAddActivity.this, BookGalleryActivity.class);
                             startActivity(intent);
 
                         } catch (JSONException e) {

@@ -16,22 +16,6 @@ public class Book extends VirtualBook {
     public Book() {
     }
 
-    public Book(JSONObject jbook) {
-        try {
-            physicalBookId = jbook.getString("fbook_id");
-            virtualBookId = jbook.getString("vbook_id");
-            ownerUserId = jbook.getString("user_id");
-            isbn = jbook.getString("isbn");
-            title = jbook.getString("title");
-            photo = jbook.getString("photo");
-            authorName = jbook.getString("author_name");
-            genderName = jbook.getString("gender_name");
-            description = jbook.getString("description");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     public String getPhysicalBookId() {
         return physicalBookId;
     }
