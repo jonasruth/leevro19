@@ -36,48 +36,6 @@
             android:textColor="@color/blue"
             android:layout_gravity="center_horizontal"/>
 
-
-        <View
-            android:id="@+id/btnAdicionarLivroSeparator"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"
-            android:background="@color/blue"
-
-            />
-
-        <TextView
-            android:id="@+id/btnAdicionarLivro"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:background="@color/blue"
-            android:padding="16dp"
-            android:textStyle="bold"
-            android:text="Adicionar Livro"
-            android:textColor="#fff"
-            android:onClick="goToBookAdd"/>
-
-        <TextView
-            android:id="@+id/strInfos"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Livros"
-            android:textColor="@color/blue"
-            android:textSize="14dp"
-            android:textStyle="bold" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="5dp"
-            android:background="@color/blue"
-
-            />
-
         <fragment
             android:id="@+id/bookGaleryFrag"
             android:name="leevro.pucpr.br.leevro19.BookGalleryFragment"

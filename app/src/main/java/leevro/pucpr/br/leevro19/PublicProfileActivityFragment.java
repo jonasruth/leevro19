@@ -24,7 +24,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +39,7 @@ public class PublicProfileActivityFragment extends Fragment {
 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
-    private AppUser usuario;
+    private AppUser targetUser;
     private AppUser loggedUser;
 
 
@@ -62,24 +61,11 @@ public class PublicProfileActivityFragment extends Fragment {
         txtUserName = (TextView) view.findViewById(R.id.txtUserName);
         niv = (NetworkImageView) view.findViewById(R.id.profileImage);
 
-
-        usuario = PrefUtils.getCurrentPublicProfile(getActivity().getApplicationContext());
-        loggedUser = PrefUtils.getCurrentUser(getActivity().getApplicationContext());
-
-        Log.d("XXXX",usuario.userId);
-        Log.d("YYYY",PrefUtils.getCurrentUser(getActivity().getApplicationContext()).userId);
-        if(usuario.userId.equals(PrefUtils.getCurrentUser(getActivity().getApplicationContext()).userId)){
-
-            view.findViewById(R.id.btnAdicionarLivroSeparator).setVisibility(View.VISIBLE);
-            view.findViewById(R.id.btnAdicionarLivro).setVisibility(View.VISIBLE);
-        }else{
-
-            view.findViewById(R.id.btnAdicionarLivroSeparator).setVisibility(View.GONE);
-            view.findViewById(R.id.btnAdicionarLivro).setVisibility(View.GONE);
-        }
+        targetUser = PrefUtils.getTargetUser(getActivity().getApplicationContext());
+        loggedUser = PrefUtils.getLoggedUser(getActivity().getApplicationContext());
 
         Map<String, String> params = new HashMap();
-        params.put("user_id", usuario.userId);
+        params.put("user_id", targetUser.userId);
         JSONObject parameters = new JSONObject(params);
         Log.d("Request: ", parameters.toString());
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -92,16 +78,16 @@ public class PublicProfileActivityFragment extends Fragment {
                         try {
 //                            listaLivros = response.getJSONArray("livros");
                             JSONObject juser = response.getJSONObject("user");
-                            usuario.userId = juser.getString("id");
-                            usuario.facebookID = juser.getString("fb_facebook_id");
+                            targetUser.userId = juser.getString("id");
+                            targetUser.facebookID = juser.getString("fb_facebook_id");
 
-                            if(!usuario.userId.equals(loggedUser.userId)) {
-                                usuario.name = juser.getString("fb_first_name");
+                            if(targetUser ==null || targetUser.userId.equals(loggedUser.userId)) {
+                                targetUser.name = juser.getString("fb_name");
                             }else{
-                                usuario.name = juser.getString("fb_name");
+                                targetUser.name = juser.getString("fb_first_name");
                             }
 
-                            PrefUtils.setCurrentPublicProfile(usuario,getActivity().getApplicationContext() );
+                            PrefUtils.setTargerUser(targetUser,getActivity().getApplicationContext() );
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -154,8 +140,10 @@ public class PublicProfileActivityFragment extends Fragment {
             }
         });
 
-        niv.setImageUrl( AppUtils.APP_PATH_USER_PIC_PATH + usuario.facebookID.toString()+".jpg",mImageLoader);
-        Log.d("profile image >>>", AppUtils.APP_PATH_USER_PIC_PATH + usuario.facebookID.toString()+".jpg");
-        txtUserName.setText(usuario.name);
+        niv.setImageUrl( AppUtils.APP_PATH_USER_PIC_PATH + targetUser.facebookID.toString()+".jpg",mImageLoader);
+        Log.d("profile image >>>", AppUtils.APP_PATH_USER_PIC_PATH + targetUser.facebookID.toString()+".jpg");
+        txtUserName.setText(targetUser.name);
     }
+
+
 }

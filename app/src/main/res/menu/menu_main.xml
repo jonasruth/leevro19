@@ -4,31 +4,34 @@
     tools:context="leevro.pucpr.br.leevro19.MainActivity">
 
     <item
-        android:id="@+id/action_my_book_gallery"
+        android:id="@+id/action_profile"
         android:orderInCategory="1"
+        android:title="@string/action_profile"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_my_book_gallery"
+        android:orderInCategory="2"
         android:title="@string/action_my_book_gallery"
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_book_transactions"
+        android:orderInCategory="3"
+        android:title="@string/action_book_transactions"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_settings"
-        android:orderInCategory="2"
+        android:orderInCategory="99"
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_logout"
-        android:orderInCategory="3"
-        android:title="@string/action_logout"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_book_offer"
-        android:orderInCategory="4"
+        android:orderInCategory="10"
         android:title="@string/action_book_offer"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_book_transactions"
-        android:orderInCategory="5"
-        android:title="@string/action_book_transactions"
-        app:showAsAction="never" />
+
 </menu>

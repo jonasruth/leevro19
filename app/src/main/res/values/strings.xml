@@ -1,11 +1,10 @@
 <resources>
     <string name="app_name">Leevro</string>
 
-
     <string name="action_settings">Settings</string>
-    <string name="action_logout">Sair</string>
     <string name="action_book_offer">Oferecer Livros</string>
-    <string name="action_book_transactions">Negocioações de Livros</string>
+    <string name="action_book_transactions">Negociações de Livros</string>
+    <string name="action_profile">Meu Perfil</string>
     <string name="action_my_book_gallery">Minha Biblioteca</string>
     <string name="action_confirm">Confirmar</string>
     <string name="action_book_add">Adicionar Livro</string>
@@ -13,7 +12,7 @@
     <string name="title_activity_book_add">Adicionar Livro</string>
     <string name="title_activity_book_propose">Cadastrar Livro</string>
     <string name="propose.explain">O livro correspondente a este ISBN ainda não foi cadastrado. Preencha as informações básicas e deixe o restante com a gente!</string>
-    <string name="title_activity_book_galery">Biblioteca</string>
+    <string name="title_activity_book_galery">Minha Biblioteca</string>
     <string name="title_activity_book_detail">Detalhes do Livro</string>
     <string name="title_activity_friends">Amigos</string>
     <string name="title_activity_chat">Conversa</string>
@@ -27,5 +26,6 @@
     <string name="title_activity_book_and_profile">Detalhes do Livro</string>
     <string name="title_activity_book_offer">BookOfferActivity</string>
     <string name="title_activity_book_transaction">Negociações de Livros</string>
+    <string name="title_activity_my_profile">MyProfile</string>
 
 </resources>

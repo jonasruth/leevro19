@@ -1,4 +1,4 @@
-package leevro.pucpr.br.leevro19; /**
+package leevro.pucpr.br.leevro19.app; /**
  * Created by Jonas on 22/04/2016.
  */
 

@@ -1,6 +1,8 @@
 package leevro.pucpr.br.leevro19.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.view.inputmethod.InputMethodManager;
 
 import leevro.pucpr.br.leevro19.entity.AppUser;
 import leevro.pucpr.br.leevro19.entity.Book;
@@ -23,5 +25,15 @@ public class AppUtils {
     public static final String APP_URL_WS_GET_USER = "http://96.126.115.143/leevrows/retornaUmUsuario.php";
 
     public static final String APP_URL_WS_GET_MY_TRANSACTIONS = "http://96.126.115.143/leevrows/retornaMinhasTransacoes.php";
+
+
+    /**
+     * ESCONDER TECLADO IMEDIATAMENTE
+     * @param activity
+     */
+    public static void esconderTecladoVirtual(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
+    }
 
 }

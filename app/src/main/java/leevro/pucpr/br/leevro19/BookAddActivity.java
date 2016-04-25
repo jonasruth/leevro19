@@ -1,6 +1,5 @@
 package leevro.pucpr.br.leevro19;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -37,6 +35,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import leevro.pucpr.br.leevro19.utils.AppUtils;
 import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 public class BookAddActivity extends ActionBarActivity {
@@ -63,7 +62,7 @@ public class BookAddActivity extends ActionBarActivity {
 
     public void goToBookPropose(View view) {
 
-        hideSoftKeyboard(BookAddActivity.this);
+        AppUtils.esconderTecladoVirtual(this);
 
         isbn = (EditText) findViewById(R.id.isbn);
         bookTitle = (TextView) findViewById(R.id.bookTitle);
@@ -158,7 +157,7 @@ public class BookAddActivity extends ActionBarActivity {
 
     public void addBook() {
 
-        hideSoftKeyboard(BookAddActivity.this);
+        AppUtils.esconderTecladoVirtual(this);
 
         isbn = (EditText) findViewById(R.id.isbn);
 
@@ -166,7 +165,7 @@ public class BookAddActivity extends ActionBarActivity {
 
         Map<String, String> params = new HashMap();
         params.put("isbn", isbn.getText().toString());
-        params.put("user_id", PrefUtils.getCurrentUser(getApplicationContext()).userId);
+        params.put("user_id", PrefUtils.getLoggedUser(getApplicationContext()).userId);
         params.put("photo", photo);
         JSONObject parameters = new JSONObject(params);
 
@@ -247,11 +246,6 @@ public class BookAddActivity extends ActionBarActivity {
         }
 
 //        return super.onOptionsItemSelected(item);
-    }
-
-    public static void hideSoftKeyboard(Activity activity) {
-        InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
     @Override

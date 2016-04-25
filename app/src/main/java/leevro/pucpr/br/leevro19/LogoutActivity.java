@@ -1,5 +1,4 @@
 package leevro.pucpr.br.leevro19;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -31,7 +30,7 @@ public class LogoutActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logout);
         getActionBar().setDisplayHomeAsUpEnabled(true);
-        user= PrefUtils.getCurrentUser(LogoutActivity.this);
+        user= PrefUtils.getLoggedUser(LogoutActivity.this);
         profileImage= (ImageView) findViewById(R.id.profileImage);
 
         // fetching facebook's profile picture
@@ -41,7 +40,7 @@ public class LogoutActivity extends ActionBarActivity {
                 URL imageURL = null;
                 try {
                     //imageURL = new URL("https://graph.facebook.com/" + "1435767690067161" + "/picture?type=large");
-                    imageURL = new URL("http://96.126.115.143/leevrows/user_img/" + PrefUtils.getCurrentUser(getApplicationContext()).facebookID.toString()+".jpg");
+                    imageURL = new URL("http://96.126.115.143/leevrows/user_img/" + PrefUtils.getLoggedUser(getApplicationContext()).facebookID.toString()+".jpg");
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
@@ -66,7 +65,7 @@ public class LogoutActivity extends ActionBarActivity {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PrefUtils.clearCurrentUser(LogoutActivity.this);
+                PrefUtils.clearLoggedUser(LogoutActivity.this);
 
 
                 // We can logout from facebook by calling following method
@@ -81,7 +80,7 @@ public class LogoutActivity extends ActionBarActivity {
     }
 
     public void cancelarLogout(View view){
-        Intent intent = new Intent(LogoutActivity.this, MainActivity.class);
+        Intent intent = new Intent(LogoutActivity.this, MyProfile.class);
         startActivity(intent);
     }
 }

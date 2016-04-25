@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -22,7 +21,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import leevro.pucpr.br.leevro19.adapter.BookAdapter;
 import leevro.pucpr.br.leevro19.adapter.BookSelectAdapter;
 import leevro.pucpr.br.leevro19.entity.BookCollection;
 import leevro.pucpr.br.leevro19.entity.BookFeeder;
@@ -41,7 +39,7 @@ public class BookOfferActivity extends Activity {
         setContentView(R.layout.activity_book_offer);
 
         Map<String, String> params = new HashMap();
-        params.put("user_id", PrefUtils.getCurrentUser(getApplicationContext()).userId);
+        params.put("user_id", PrefUtils.getLoggedUser(getApplicationContext()).userId);
         JSONObject parameters = new JSONObject(params);
 
         listView = (ListView) findViewById(R.id.listView);

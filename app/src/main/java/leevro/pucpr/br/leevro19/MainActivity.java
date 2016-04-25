@@ -1,12 +1,18 @@
 package leevro.pucpr.br.leevro19;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -36,10 +42,14 @@ import leevro.pucpr.br.leevro19.entity.AppUser;
 import leevro.pucpr.br.leevro19.entity.Book;
 import leevro.pucpr.br.leevro19.entity.BookCollection;
 import leevro.pucpr.br.leevro19.entity.BookFeeder;
+import leevro.pucpr.br.leevro19.service.ServiceGPS;
 import leevro.pucpr.br.leevro19.utils.AppUtils;
 import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 public class MainActivity extends ActionBarActivity {
+
+    boolean mBounded;
+    ServiceGPS mServer;
 
     private AppUser loggedUser;
     private TextView txtQuestion;
@@ -61,12 +71,12 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        loggedUser = PrefUtils.getCurrentUser(getApplicationContext());
+        loggedUser = PrefUtils.getLoggedUser(getApplicationContext());
 
         txtQuestion = (TextView) findViewById(R.id.question);
         txtQuestion.setText(loggedUser.firstName + ", gostaria de ler este livro?");
 
-        Toast.makeText(getApplicationContext(), PrefUtils.getCurrentUser(this).email, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), PrefUtils.getLoggedUser(this).email, Toast.LENGTH_SHORT).show();
 
         bookLoadInfo = (TextView) findViewById(R.id.bookLoadInfo);
         noBooksInfo = (LinearLayout) findViewById(R.id.noBooksInfo);
@@ -80,9 +90,22 @@ public class MainActivity extends ActionBarActivity {
         noBooksInfo.setVisibility(TextView.GONE);
         choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
 
-        myLocation = new Location("");
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mMessageReceiver, new IntentFilter("GPSLocationUpdates"));
 
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+//        Intent serviceIntent = new Intent();
+//        serviceIntent.setAction(".service.ServiceGPS");
+        startService(new Intent(MainActivity.this, ServiceGPS.class));
+
+//        myLocation = new Location("");
+//
+//        Intent mIntent = new Intent(this, ServiceGPS.class);
+//        bindService(mIntent, mConnection, BIND_AUTO_CREATE);
+//
+//        Toast.makeText(getApplicationContext(), myLocation.getLatitude() + "/" + myLocation.getLongitude() + "/precisao:" + myLocation.getAccuracy() + "m", Toast.LENGTH_LONG).show();
+
+/*        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, new LocationListener() {
 
             @Override
@@ -128,10 +151,78 @@ public class MainActivity extends ActionBarActivity {
 //                }
 
             }
-        }, null);
+        }, null);*/
 
         loadBookListForChoice();
     }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Get extra data included in the Intent
+            String message = intent.getStringExtra("Status");
+            Bundle b = intent.getBundleExtra("Location");
+            myLocation = (Location) b.getParcelable("Location");
+            if (myLocation != null) {
+                Location bookLocation = new Location("");
+                bookLocation.setLatitude(-25.510937);
+                bookLocation.setLongitude(-49.272639);
+
+                Float distance = myLocation.distanceTo(bookLocation);
+//              Toast toast = Toast.makeText(getApplicationContext(), "distancia " + distance, Toast.LENGTH_LONG);
+//              toast.show();
+
+                Log.d("lat/lng:", myLocation.getLatitude() + "/" + myLocation.getLongitude());
+
+                int distanceInt = Math.round(distance / 1000);
+
+                txtDistance.setText("Está a " + distanceInt + "km de você");
+
+
+//                txtDistance.setText(myLocation.toString());
+
+
+
+//                Toast.makeText(context,)
+
+//                tvLatitude.setText(String.valueOf(myLocation.getLatitude()));
+//                tvLongitude
+//                        .setText(String.valueOf(myLocation.getLongitude()));
+//                tvAccuracy.setText(String.valueOf(myLocation.getAccuracy()));
+//                tvTimestamp.setText((new Date(myLocation.getTime())
+//                        .toString()));
+//                tvProvider.setText(myLocation.getProvider());
+            }
+//            tvStatus.setText(message);
+//            T
+//             Toast.makeText(context, "fooooda-se" + myLocation.toString(),Toast.LENGTH_LONG).show();
+        }
+    };
+
+//    ServiceConnection mConnection = new ServiceConnection() {
+//
+//        public void onServiceDisconnected(ComponentName name) {
+//            Toast.makeText(MainActivity.this, "Service is disconnected", Toast.LENGTH_SHORT).show();
+//            mBounded = false;
+//            mServer = null;
+//        }
+//
+//        public void onServiceConnected(ComponentName name, IBinder service) {
+//            Toast.makeText(MainActivity.this, "Service is connected", Toast.LENGTH_SHORT).show();
+//            mBounded = true;
+//            LocalBinder mLocalBinder = (LocalBinder) service;
+//            mServer = mLocalBinder.getServerInstance();
+//        }
+//    };
+//
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        if (mBounded) {
+//            unbindService(mConnection);
+//            mBounded = false;
+//        }
+//    }
 
     public void loadBooks(View view) {
         loadBookListForChoice();
@@ -147,7 +238,7 @@ public class MainActivity extends ActionBarActivity {
         choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
 
         Map<String, String> params = new HashMap();
-        params.put("user_id", PrefUtils.getCurrentUser(getApplicationContext()).userId);
+        params.put("user_id", PrefUtils.getLoggedUser(getApplicationContext()).userId);
         JSONObject parameters = new JSONObject(params);
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -204,9 +295,10 @@ public class MainActivity extends ActionBarActivity {
         Volley.newRequestQueue(this).add(jsObjRequest);
     }
 
-    public interface VolleyCallback {
-        void onSuccess();
-    }
+public interface VolleyCallback {
+    void onSuccess();
+
+}
 
     public void chooseBookYes(View view) {
         chooseBook(true);
@@ -219,8 +311,8 @@ public class MainActivity extends ActionBarActivity {
     public void zerarEscolhasDev(View view) {
 
         Map<String, String> params = new HashMap();
-        params.put("user_id", PrefUtils.getCurrentUser(getApplicationContext()).userId);
-        Log.d("ZERAR > user_id:", PrefUtils.getCurrentUser(getApplicationContext()).userId);
+        params.put("user_id", PrefUtils.getLoggedUser(getApplicationContext()).userId);
+        Log.d("ZERAR > user_id:", PrefUtils.getLoggedUser(getApplicationContext()).userId);
         JSONObject parameters = new JSONObject(params);
 
 
@@ -268,7 +360,7 @@ public class MainActivity extends ActionBarActivity {
 
         Map<String, String> params = new HashMap();
         params.put("fbook_id", livroAtual.getPhysicalBookId().toString());
-        params.put("user_id", PrefUtils.getCurrentUser(getApplicationContext()).userId);
+        params.put("user_id", PrefUtils.getLoggedUser(getApplicationContext()).userId);
         params.put("matched", choice ? "1" : "0");
         JSONObject parameters = new JSONObject(params);
 
@@ -373,12 +465,16 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public void goToMyProfile() {
-        Intent intent = new Intent(MainActivity.this, PublicProfileActivity.class);
+
+        Intent intent = new Intent(MainActivity.this, MyProfile.class);
         startActivity(intent);
     }
 
-    public void goToLogout() {
-        Intent intent = new Intent(MainActivity.this, LogoutActivity.class);
+    public void goToMyBookGallery() {
+
+        PrefUtils.setTargerUser(PrefUtils.getLoggedUser(getApplicationContext()), getApplicationContext());
+
+        Intent intent = new Intent(MainActivity.this, BookGalleryActivity.class);
         startActivity(intent);
     }
 
@@ -394,10 +490,6 @@ public class MainActivity extends ActionBarActivity {
 
     public void goToSettings() {
 
-        Toast.makeText(getApplicationContext(),"Abrir CHAT",Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-        startActivity(intent);
     }
 
     public void goToBookDetail(View view) {
@@ -407,7 +499,7 @@ public class MainActivity extends ActionBarActivity {
         AppUser u = new AppUser();
         u.userId = livroAtual.getOwnerUserId();
 
-        PrefUtils.setCurrentPublicProfile(u, getApplicationContext());
+        PrefUtils.setTargerUser(u, getApplicationContext());
 
         Intent intent = new Intent(MainActivity.this, BookAndProfileActivity.class);
         startActivity(intent);
@@ -433,14 +525,13 @@ public class MainActivity extends ActionBarActivity {
         }
 
         switch (item.getItemId()) {
-            case R.id.action_my_book_gallery:
+            case R.id.action_profile:
                 // About option clicked.
                 goToMyProfile();
                 return true;
-            case R.id.action_logout:
+            case R.id.action_my_book_gallery:
                 // About option clicked.
-//                goToSettings();
-                goToLogout();
+                goToMyBookGallery();
                 return true;
             case R.id.action_book_offer:
                 // About option clicked.
@@ -453,9 +544,6 @@ public class MainActivity extends ActionBarActivity {
                 goToBookTransactions();
                 return true;
             case R.id.action_settings:
-                // Settings option clicked.
-//                Log.d("xxx","CHATTTTT");
-//                goToSettings();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

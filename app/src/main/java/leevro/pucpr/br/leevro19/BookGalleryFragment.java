@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -17,7 +18,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import leevro.pucpr.br.leevro19.adapter.BookAdapter;
+import leevro.pucpr.br.leevro19.entity.AppUser;
 import leevro.pucpr.br.leevro19.entity.Book;
 import leevro.pucpr.br.leevro19.entity.BookCollection;
 import leevro.pucpr.br.leevro19.entity.BookFeeder;
@@ -41,6 +42,9 @@ public class BookGalleryFragment extends Fragment {
 
     ListView listView;
 
+    private AppUser targetUser;
+    private AppUser loggedUser;
+
 //    String p_fbook_id = null;
 //    String p_user_id = null;
 
@@ -54,7 +58,7 @@ public class BookGalleryFragment extends Fragment {
         // inicio meu codigo
 
         Map<String, String> params = new HashMap();
-        params.put("user_id", PrefUtils.getCurrentUser(getActivity().getApplicationContext()).userId);
+        params.put("user_id", PrefUtils.getLoggedUser(getActivity().getApplicationContext()).userId);
         JSONObject parameters = new JSONObject(params);
 
         listView = (ListView) view.findViewById(R.id.listView);
@@ -91,6 +95,27 @@ public class BookGalleryFragment extends Fragment {
                 });
         Volley.newRequestQueue(getActivity()).add(jsObjRequest);
 
+        targetUser = PrefUtils.getTargetUser(getActivity().getApplicationContext());
+        loggedUser = PrefUtils.getLoggedUser(getActivity().getApplicationContext());
+
+        Log.d("XXXX", targetUser.userId);
+        Log.d("YYYY", PrefUtils.getLoggedUser(getActivity().getApplicationContext()).userId);
+        if (targetUser == null || targetUser.userId.equals(PrefUtils.getLoggedUser(getActivity().getApplicationContext()).userId)) {
+            view.findViewById(R.id.btnAdicionarLivro).setVisibility(View.VISIBLE);
+        } else {
+            view.findViewById(R.id.btnAdicionarLivro).setVisibility(View.GONE);
+        }
+
+
+        TextView button = (TextView) view.findViewById(R.id.btnAdicionarLivro);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                Toast.makeText(getActivity().getApplicationContext(),"Adição de Livros",Toast.LENGTH_SHORT).show();
+                goToBookAdd();
+            }
+        });
+
         //fim meu codigo
 
         return view;
@@ -117,7 +142,12 @@ public class BookGalleryFragment extends Fragment {
     public void goToBookDetail(View view, Book book) {
         Intent intent = new Intent(getActivity().getApplicationContext(), BookDetailActivity.class);
 //        intent.putExtra("p_fbook_id", fbook_id);
-        PrefUtils.setCurrentBook(book,getActivity().getApplicationContext());
+        PrefUtils.setCurrentBook(book, getActivity().getApplicationContext());
+        startActivity(intent);
+    }
+
+    public void goToBookAdd() {
+        Intent intent = new Intent(getActivity(), BookAddActivity.class);
         startActivity(intent);
     }
 

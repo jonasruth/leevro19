@@ -4,6 +4,7 @@
     <color name="white">#FFFFFF</color>
     <color name="red">#E53D3D</color>
     <color name="black">#000000</color>
+    <color name="greyDark">#333</color>
     <color name="blue">#0874C0</color>
     <color name="blueLight">#ceebff</color>
     <color name="overlayBackgroundDark">#80000000</color>

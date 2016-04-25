@@ -1,4 +1,4 @@
-package leevro.pucpr.br.leevro19;
+package leevro.pucpr.br.leevro19.app;
 import android.content.Context;
 import android.content.SharedPreferences;
 

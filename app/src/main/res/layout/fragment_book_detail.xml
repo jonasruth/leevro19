@@ -73,7 +73,7 @@
                         android:layout_column="0"
                         android:layout_marginRight="5dp"
                         android:text="Gênero:"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/greyDark"
                         android:textSize="14dp" />
 
                     <TextView
@@ -82,7 +82,7 @@
                         android:layout_height="wrap_content"
                         android:layout_column="1"
                         android:text="---"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/greyDark"
                         android:textSize="14dp" />
 
                 </TableRow>
@@ -98,7 +98,7 @@
                         android:layout_column="0"
                         android:layout_marginRight="5dp"
                         android:text="Autor:"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/greyDark"
                         android:textSize="14dp" />
 
                     <TextView
@@ -107,7 +107,7 @@
                         android:layout_height="wrap_content"
                         android:layout_column="1"
                         android:text="---"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/greyDark"
                         android:textSize="14dp" />
                 </TableRow>
 
@@ -122,7 +122,7 @@
                         android:layout_column="0"
                         android:layout_marginRight="5dp"
                         android:text="Edição:"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/greyDark"
                         android:textSize="14dp" />
 
                     <TextView
@@ -131,7 +131,7 @@
                         android:layout_height="wrap_content"
                         android:layout_column="1"
                         android:text="---"
-                        android:textColor="@color/blue"
+                        android:textColor="@color/greyDark"
                         android:textSize="14dp" />
                 </TableRow>
             </TableLayout>
@@ -171,7 +171,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:text="Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet "
-                android:textColor="@color/blue"
+                android:textColor="@color/greyDark"
                 android:textSize="14dp" />
 
         </ScrollView>

@@ -15,15 +15,11 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import leevro.pucpr.br.leevro19.R;
 import leevro.pucpr.br.leevro19.entity.AppUser;
-import leevro.pucpr.br.leevro19.entity.Book;
-import leevro.pucpr.br.leevro19.entity.BookCollection;
 import leevro.pucpr.br.leevro19.entity.Trade;
 import leevro.pucpr.br.leevro19.entity.TradeCollection;
-import leevro.pucpr.br.leevro19.utils.AppUtils;
 import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 /**
@@ -34,14 +30,14 @@ public class TradeAdapter extends BaseAdapter {
     private Context context;
     private final TradeCollection trades;
     private static LayoutInflater inflater = null;
-    private AppUser user;
+    private AppUser targetUser;
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
     public TradeAdapter(Context context, TradeCollection trades) {
         super();
         this.context = context;
-        user = PrefUtils.getCurrentPublicProfile(context.getApplicationContext());
+        targetUser = PrefUtils.getTargetUser(context.getApplicationContext());
         inflater = (LayoutInflater) context.
                 getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.trades = trades;
@@ -125,10 +121,10 @@ public class TradeAdapter extends BaseAdapter {
 //        holder.img = (NetworkImageView) rowView.findViewById(R.id.imageView1);
 //        holder.tv = (TextView) rowView.findViewById(R.id.textView1);
 
-//        AppUser loggedUser = PrefUtils.getCurrentUser(context.getApplicationContext());
+//        AppUser loggedUser = PrefUtils.getLoggedUser(context.getApplicationContext());
 
         /*
-        if(!user.userId.equals(loggedUser.userId) || trade.getRequests()<1) {
+        if(!targetUser.userId.equals(loggedUser.userId) || trade.getRequests()<1) {
             holder.requests.setVisibility(TextView.GONE);
             holder.txtRequests.setVisibility(TextView.GONE);
         }

@@ -49,7 +49,7 @@ public class LoginActivity extends Activity {
 
         setContentView(R.layout.activity_login);
 
-        if (PrefUtils.getCurrentUser(LoginActivity.this) != null) {
+        if (PrefUtils.getLoggedUser(LoginActivity.this) != null) {
 
             Intent homeIntent = new Intent(LoginActivity.this, MainActivity.class);
 
@@ -144,7 +144,7 @@ public class LoginActivity extends Activity {
                                 user.updatedTime = object.getString("updated_time").toString();
                                 user.verified = object.getString("verified");
 
-                                PrefUtils.setCurrentUser(user, LoginActivity.this);
+                                PrefUtils.setLoggedUser(user, LoginActivity.this);
 
                             } catch (Exception e) {
                                 e.printStackTrace();
@@ -213,7 +213,7 @@ public class LoginActivity extends Activity {
                         try {
                             user.userId = response.getJSONObject("user").getString("id");
                             Log.d("USER ID <<<< ", user.userId);
-                            PrefUtils.setCurrentUser(user,getApplicationContext());
+                            PrefUtils.setLoggedUser(user,getApplicationContext());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

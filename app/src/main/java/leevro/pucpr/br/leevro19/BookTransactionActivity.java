@@ -1,6 +1,5 @@
 package leevro.pucpr.br.leevro19;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
@@ -21,11 +20,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import leevro.pucpr.br.leevro19.adapter.BookAdapter;
 import leevro.pucpr.br.leevro19.adapter.TradeAdapter;
-import leevro.pucpr.br.leevro19.entity.Book;
-import leevro.pucpr.br.leevro19.entity.BookCollection;
-import leevro.pucpr.br.leevro19.entity.BookFeeder;
 import leevro.pucpr.br.leevro19.entity.Trade;
 import leevro.pucpr.br.leevro19.entity.TradeCollection;
 import leevro.pucpr.br.leevro19.entity.TradeFeeder;
@@ -44,7 +39,7 @@ public class BookTransactionActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
         Map<String, String> params = new HashMap();
-        params.put("user_id", PrefUtils.getCurrentUser(this.getApplicationContext()).userId);
+        params.put("user_id", PrefUtils.getLoggedUser(this.getApplicationContext()).userId);
         JSONObject parameters = new JSONObject(params);
 
         listView = (ListView) findViewById(R.id.listView2);
