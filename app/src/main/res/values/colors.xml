@@ -5,6 +5,7 @@
     <color name="red">#E53D3D</color>
     <color name="black">#000000</color>
     <color name="blue">#0874C0</color>
+    <color name="blueLight">#ceebff</color>
     <color name="overlayBackgroundDark">#80000000</color>
     <color name="overlayBackgroundLight">#80FFFFFF</color>
     <color name="divisores">#CCCCCC</color>

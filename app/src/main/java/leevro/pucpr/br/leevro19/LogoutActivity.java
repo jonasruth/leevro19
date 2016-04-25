@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import leevro.pucpr.br.leevro19.entity.AppUser;
 import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 
-public class LogoutActivity extends Activity {
+public class LogoutActivity extends ActionBarActivity {
 
     private TextView btnLogout;
     private AppUser user;
@@ -29,6 +30,7 @@ public class LogoutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logout);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
         user= PrefUtils.getCurrentUser(LogoutActivity.this);
         profileImage= (ImageView) findViewById(R.id.profileImage);
 
@@ -76,5 +78,10 @@ public class LogoutActivity extends Activity {
                 finish();
             }
         });
+    }
+
+    public void cancelarLogout(View view){
+        Intent intent = new Intent(LogoutActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 }

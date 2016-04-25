@@ -12,6 +12,8 @@ public class Book extends VirtualBook {
 
     private String physicalBookId;
     private String ownerUserId;
+    private Integer requests;
+    private String availability;
 
     public Book() {
     }
@@ -30,5 +32,21 @@ public class Book extends VirtualBook {
 
     public void setOwnerUserId(String ownerUserId) {
         this.ownerUserId = ownerUserId;
+    }
+
+    public Integer getRequests() {
+        return requests;
+    }
+
+    public void setRequests(Integer requests) {
+        this.requests = requests;
+    }
+
+    public String getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(String availability) {
+        this.availability = availability;
     }
 }

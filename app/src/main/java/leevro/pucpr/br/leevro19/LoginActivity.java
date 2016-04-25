@@ -140,9 +140,9 @@ public class LoginActivity extends Activity {
                                     user.locationName = object.getJSONObject("location").getString("name").toString();
                                 }
                                 user.locale = object.getString("locale");
-                                user.timezone = object.getInt("timezone");
+                                user.timezone = object.getString("timezone");
                                 user.updatedTime = object.getString("updated_time").toString();
-                                user.verified = object.getBoolean("verified");
+                                user.verified = object.getString("verified");
 
                                 PrefUtils.setCurrentUser(user, LoginActivity.this);
 
@@ -183,9 +183,25 @@ public class LoginActivity extends Activity {
 
         Map<String, String> params = new HashMap();
         params.put("user_id", user.userId);
-        params.put("user_facebookID", user.facebookID);
-        params.put("user_email", user.email);
+        params.put("user_fb_facebook_id", user.facebookID);
+        params.put("user_fb_email", user.email);
+        params.put("user_fb_name",user.name);
+        params.put("user_fb_first_name",user.firstName);
+        params.put("user_fb_last_name",user.lastName);
+        params.put("user_fb_birthday",user.birthday);
+        params.put("user_fb_gender",user.gender);
+        params.put("user_fb_link",user.link);
+        params.put("user_fb_location_id",user.locationId);
+        params.put("user_fb_location_name",user.locationName);
+        params.put("user_fb_locale",user.locale);
+        params.put("user_fb_timezone",user.timezone);
+        params.put("user_fb_updated_time",user.updatedTime);
+        params.put("user_fb_verified",user.verified);
+
         JSONObject parameters = new JSONObject(params);
+
+        Log.d("SALVAR:",parameters.toString());
+
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, AppUtils.APP_URL_WS_KEEP_USER, parameters, new Response.Listener<JSONObject>() {

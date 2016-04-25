@@ -182,7 +182,7 @@ public class BookAddActivity extends ActionBarActivity {
                             JSONObject status = response.getJSONObject("status");
                             Boolean sucesso = status.getBoolean("success");
 
-                            Intent intent = new Intent(BookAddActivity.this, BookGalleryActivity.class);
+                            Intent intent = new Intent(BookAddActivity.this, PublicProfileActivity.class);
                             startActivity(intent);
 
                         } catch (JSONException e) {

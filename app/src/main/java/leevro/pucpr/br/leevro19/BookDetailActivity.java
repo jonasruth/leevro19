@@ -40,24 +40,6 @@ public class BookDetailActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_detail);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        // tabs
-        TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
-        tabHost.setup();
-
-        TabSpec spec1=tabHost.newTabSpec("TAB 1");
-        spec1.setContent(R.id.tab1);
-        spec1.setIndicator("Livro");
-
-
-        TabSpec spec2=tabHost.newTabSpec("TAB 2");
-        spec2.setContent(R.id.tab2);
-        spec2.setIndicator("Usuário");
-
-
-        tabHost.addTab(spec1);
-        tabHost.addTab(spec2);
-
     }
 
 }

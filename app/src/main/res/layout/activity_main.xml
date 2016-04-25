@@ -1,178 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="leevro.pucpr.br.leevro19.MainActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <TextView
+        android:id="@+id/bookLoadInfo"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="CARREGANDO..."
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/noBooksInfo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <TextView
-            android:id="@+id/bookLoadInfo"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="CARREGANDO..."
-            android:gravity="center"
-            android:visibility="gone"
-            />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/noBooksInfo"
-            android:orientation="vertical"
-            android:visibility="gone"
-            android:layout_weight="1"
-            android:gravity="center"
-            >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:text="NÃO HÁ MAIS LIVROS NA DISTÂNCIA ESCOLHIDA"
-                android:paddingRight="20dp"
-                android:paddingLeft="20dp"
-                android:gravity="center" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="loadBooks"
-                android:background="@null"
-                android:text="Tentar novamente"
-                android:textColor="@color/blue"
-                android:gravity="center"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible"
-                android:text="ou"
-                android:paddingRight="20dp"
-                android:paddingLeft="20dp"
-                android:gravity="center" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="zerarEscolhasDev"
-                android:background="@null"
-                android:text="Altere as configurações de pesquisa"
-                android:textColor="@color/blue"
-                android:gravity="center"
-                />
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/bookCoverContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="visible"
-            android:layout_weight="1"
-            >
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:id="@+id/bookCover"
-                android:src="@mipmap/ic_launcher_dev"
-                android:onClick="goToBookDetail"
-                android:layout_weight="2"
-                />
-
-            <TextView
-                android:id="@+id/txtDistance"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_gravity="bottom"
-                android:text="100km"
-                android:textSize="20dp"
-                android:textColor="@color/blue"
-                android:gravity="center_horizontal|bottom"
-
-                />
-
-
-        </LinearLayout>
-
-
-        <TableLayout
-            android:id="@+id/choiceButtonsContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="10dp"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="NÃO HÁ MAIS LIVROS NA DISTÂNCIA ESCOLHIDA"
+            android:visibility="visible" />
 
-            >
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:gravity="center"
+            android:onClick="loadBooks"
+            android:text="Tentar novamente"
+            android:textColor="@color/blue" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="15dp"
-                    android:text="NÃO"
-                    android:id="@+id/button7"
-                    android:onClick="chooseBookNo"
-                    android:layout_column="0"
-                    android:layout_gravity="left"
-                    android:layout_weight="1"
-                    android:color="@color/red"
-                    android:background="@drawable/rounded_button_no"
-                    android:textColor="@color/white"
-                    style="?android:attr/borderlessButtonStyle"
-                    />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="ou"
+            android:visibility="visible" />
 
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="i"
-                    android:id="@+id/button3"
-                    android:onClick="goToBookDetail"
-                    android:layout_column="1"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@android:drawable/ic_menu_info_details"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:background="@drawable/circle_button_info"
-                    android:textSize="30dp"
-                    android:textColor="@color/blue"
-                    />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="15dp"
-                    android:text="SIM"
-                    android:id="@+id/button8"
-                    android:onClick="chooseBookYes"
-                    android:layout_column="2"
-                    android:layout_gravity="right"
-                    android:layout_weight="1"
-                    android:color="@color/green"
-                    android:background="@drawable/rounded_button_yes"
-                    android:textColor="@color/white"
-                    android:width="50dp"
-                    android:height="50dp"
-                    style="?android:attr/borderlessButtonStyle"
-                    />
-            </TableRow>
-        </TableLayout>
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:gravity="center"
+            android:onClick="zerarEscolhasDev"
+            android:text="Altere as configurações de pesquisa"
+            android:textColor="@color/blue" />
 
     </LinearLayout>
-</RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/bookCoverContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Gostaria de ler este livro?"
+            android:id="@+id/question"
+            android:textColor="@color/blue"
+            android:layout_gravity="center_horizontal"/>
+
+        <ImageView
+            android:id="@+id/bookCover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:onClick="goToBookDetail"
+            android:src="@mipmap/ic_launcher_dev"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:id="@+id/txtDistance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center_horizontal|bottom"
+            android:text="100km"
+            android:textColor="@color/blue"
+            android:textSize="20dp"
+            />
+
+    </LinearLayout>
+
+    <TableLayout
+        android:id="@+id/choiceButtonsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+
+        >
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/button7"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="0"
+                android:layout_gravity="left"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_button_no"
+                android:color="@color/red"
+                android:onClick="chooseBookNo"
+                android:paddingRight="15dp"
+                android:text="NÃO"
+                android:textColor="@color/white" />
+
+            <Button
+                android:id="@+id/button3"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="1"
+                android:layout_gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/circle_button_info"
+                android:onClick="goToBookDetail"
+                android:src="@android:drawable/ic_menu_info_details"
+                android:text="i"
+                android:textColor="@color/blue"
+                android:textSize="30dp" />
+
+            <Button
+                android:id="@+id/button8"
+                style="?android:attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_column="2"
+                android:layout_gravity="right"
+                android:layout_weight="1"
+                android:width="50dp"
+                android:height="50dp"
+                android:background="@drawable/rounded_button_yes"
+                android:color="@color/green"
+                android:onClick="chooseBookYes"
+                android:paddingRight="15dp"
+                android:text="SIM"
+                android:textColor="@color/white" />
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

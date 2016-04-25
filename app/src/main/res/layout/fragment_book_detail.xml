@@ -6,7 +6,181 @@
     android:orientation="vertical"
     tools:context="leevro.pucpr.br.leevro19.BookDetailActivityFragment">
 
-    <ScrollView
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/bookCover"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:src="@mipmap/ic_launcher_dev"
+            android:layout_weight="2"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            >
+
+            <TextView
+                android:id="@+id/bookTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
+                android:text="Título"
+                android:textColor="@color/blue"
+                android:textSize="22dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/strInfos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Informações"
+                android:textColor="@color/blue"
+                android:textSize="14dp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/blue" />
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginRight="5dp"
+                        android:text="Gênero:"
+                        android:textColor="@color/blue"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/bookGenderName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:text="---"
+                        android:textColor="@color/blue"
+                        android:textSize="14dp" />
+
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginRight="5dp"
+                        android:text="Autor:"
+                        android:textColor="@color/blue"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/bookAuthorName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:text="---"
+                        android:textColor="@color/blue"
+                        android:textSize="14dp" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textView4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="0"
+                        android:layout_marginRight="5dp"
+                        android:text="Edição:"
+                        android:textColor="@color/blue"
+                        android:textSize="14dp" />
+
+                    <TextView
+                        android:id="@+id/bookEdition"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_column="1"
+                        android:text="---"
+                        android:textColor="@color/blue"
+                        android:textSize="14dp" />
+                </TableRow>
+            </TableLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/strSinopse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:text="Sinopse"
+            android:textColor="@color/blue"
+            android:textSize="14dp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="@color/blue" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/bookDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:text="Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet "
+                android:textColor="@color/blue"
+                android:textSize="14dp" />
+
+        </ScrollView>
+
+
+    </LinearLayout>
+
+
+    <!--<ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -24,169 +198,10 @@
                 android:layout_height="wrap_content"
                 android:visibility="visible">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:padding="10dp"
-                    >
 
-                    <TextView
-                        android:id="@+id/bookTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal"
-                        android:text="Título"
-                        android:textColor="@color/blue"
-                        android:textSize="22dp"
-                        android:textStyle="bold" />
-
-                    <ImageView
-                        android:id="@+id/bookCover"
-                        android:layout_width="match_parent"
-                        android:layout_height="300dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_marginTop="5dp"
-                        android:src="@mipmap/ic_launcher_dev" />
-
-                    <TextView
-                        android:id="@+id/strInfos"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Informações"
-                        android:textColor="@color/blue"
-                        android:textSize="14dp"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@color/blue"
-                        />
-
-                    <TableLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        >
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/textView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="0"
-                                android:layout_marginRight="5dp"
-                                android:text="Gênero:"
-                                android:textColor="@color/blue"
-                                android:textSize="14dp" />
-
-                            <TextView
-                                android:id="@+id/bookGenderName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="1"
-                                android:text="---"
-                                android:textColor="@color/blue"
-                                android:textSize="14dp" />
-
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/textView2"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="0"
-                                android:layout_marginRight="5dp"
-                                android:text="Autor:"
-                                android:textColor="@color/blue"
-                                android:textSize="14dp" />
-
-                            <TextView
-                                android:id="@+id/bookAuthorName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="1"
-                                android:text="---"
-                                android:textColor="@color/blue"
-                                android:textSize="14dp" />
-                        </TableRow>
-
-                        <TableRow
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent">
-
-                            <TextView
-                                android:id="@+id/textView4"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="0"
-                                android:layout_marginRight="5dp"
-                                android:text="Edição:"
-                                android:textColor="@color/blue"
-                                android:textSize="14dp" />
-
-                            <TextView
-                                android:id="@+id/bookEdition"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_column="1"
-                                android:text="---"
-                                android:textColor="@color/blue"
-                                android:textSize="14dp" />
-                        </TableRow>
-                    </TableLayout>
-
-
-                    <TextView
-                        android:id="@+id/strSinopse"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="Sinopse"
-                        android:textColor="@color/blue"
-                        android:textSize="14dp"
-                        android:textStyle="bold"
-                        android:layout_marginLeft="10dp"
-                        />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginBottom="10dp"
-                        android:background="@color/blue"
-                        />
-
-
-                    <TextView
-                        android:id="@+id/bookDescription"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet "
-                        android:textColor="@color/blue"
-                        android:textSize="14dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
-                        />
-
-
-                </LinearLayout>
             </ScrollView>
 
         </LinearLayout>
-    </ScrollView>
+    </ScrollView>-->
 
 </LinearLayout>

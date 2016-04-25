@@ -20,4 +20,15 @@
         android:orderInCategory="3"
         android:title="@string/action_logout"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_book_offer"
+        android:orderInCategory="4"
+        android:title="@string/action_book_offer"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_book_transactions"
+        android:orderInCategory="5"
+        android:title="@string/action_book_transactions"
+        app:showAsAction="never" />
 </menu>

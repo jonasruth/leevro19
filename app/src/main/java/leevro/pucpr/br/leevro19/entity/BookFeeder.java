@@ -22,6 +22,8 @@ public class BookFeeder {
             book.setAuthorName(jBook.getString("author_name"));
             book.setGenderName(jBook.getString("gender_name"));
             book.setDescription(jBook.getString("description"));
+            book.setRequests(jBook.getInt("requests"));
+            book.setAvailability(jBook.getString("availability"));
 
         } catch (JSONException e) {
             e.printStackTrace();

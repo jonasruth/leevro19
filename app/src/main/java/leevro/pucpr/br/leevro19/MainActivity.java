@@ -41,6 +41,8 @@ import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 public class MainActivity extends ActionBarActivity {
 
+    private AppUser loggedUser;
+    private TextView txtQuestion;
     private TextView bookLoadInfo;
     private LinearLayout noBooksInfo;
     private ImageView bookCover;
@@ -53,6 +55,83 @@ public class MainActivity extends ActionBarActivity {
     private Boolean carregando = false;
     Location myLocation = null;
 
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        loggedUser = PrefUtils.getCurrentUser(getApplicationContext());
+
+        txtQuestion = (TextView) findViewById(R.id.question);
+        txtQuestion.setText(loggedUser.firstName + ", gostaria de ler este livro?");
+
+        Toast.makeText(getApplicationContext(), PrefUtils.getCurrentUser(this).email, Toast.LENGTH_SHORT).show();
+
+        bookLoadInfo = (TextView) findViewById(R.id.bookLoadInfo);
+        noBooksInfo = (LinearLayout) findViewById(R.id.noBooksInfo);
+        bookCoverContainer = (LinearLayout) findViewById(R.id.bookCoverContainer);
+        bookCover = (ImageView) findViewById(R.id.bookCover);
+        txtDistance = (TextView) findViewById(R.id.txtDistance);
+        choiceButtonsContainer = (TableLayout) findViewById(R.id.choiceButtonsContainer);
+
+        bookLoadInfo.setVisibility(TextView.GONE);
+        bookCoverContainer.setVisibility(ImageView.GONE);
+        noBooksInfo.setVisibility(TextView.GONE);
+        choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
+
+        myLocation = new Location("");
+
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, new LocationListener() {
+
+            @Override
+            public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
+                Toast.makeText(getApplicationContext(), "Status alterado", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onProviderEnabled(String arg0) {
+                Toast.makeText(getApplicationContext(), "Provider Habilitado", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onProviderDisabled(String arg0) {
+                Toast.makeText(getApplicationContext(), "Provider Desabilitado", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onLocationChanged(Location location) {
+
+                myLocation = location;
+//                myLocation.setLatitude(location.getLatitude());
+//                myLocation.setLongitude(location.getLongitude());
+//                myLocation.setAccuracy(location.getAccuracy());
+//                location
+                Toast.makeText(getApplicationContext(), myLocation.getLatitude() + "/" + myLocation.getLongitude() + "/precisao:" + myLocation.getAccuracy() + "m", Toast.LENGTH_LONG).show();
+
+//                TextView latitude = (TextView) findViewById( R.id.latitude);
+//                TextView longitude = (TextView) findViewById( R.id.longitude);
+//                TextView time = (TextView) findViewById( R.id.time);
+//                TextView acuracy = (TextView) findViewById( R.id.Acuracy);
+//                TextView provider = (TextView) findViewById( R.id.provider);
+//
+//                if( location != null ){
+//                    latitude.setText( "Latitude: "+location.getLatitude() );
+//                    longitude.setText( "Longitude: "+location.getLongitude() );
+//                    acuracy.setText( "Precisão: "+location.getAccuracy()+"" );
+//
+//                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//                    time.setText( "Data:"+sdf.format( location.getTime() ) );
+//
+//                    provider.setText( location.getProvider());
+//                }
+
+            }
+        }, null);
+
+        loadBookListForChoice();
+    }
 
     public void loadBooks(View view) {
         loadBookListForChoice();
@@ -141,7 +220,7 @@ public class MainActivity extends ActionBarActivity {
 
         Map<String, String> params = new HashMap();
         params.put("user_id", PrefUtils.getCurrentUser(getApplicationContext()).userId);
-        Log.d("ZERAR > user_id:",PrefUtils.getCurrentUser(getApplicationContext()).userId);
+        Log.d("ZERAR > user_id:", PrefUtils.getCurrentUser(getApplicationContext()).userId);
         JSONObject parameters = new JSONObject(params);
 
 
@@ -189,7 +268,7 @@ public class MainActivity extends ActionBarActivity {
 
         Map<String, String> params = new HashMap();
         params.put("fbook_id", livroAtual.getPhysicalBookId().toString());
-        params.put("user_id", "1");
+        params.put("user_id", PrefUtils.getCurrentUser(getApplicationContext()).userId);
         params.put("matched", choice ? "1" : "0");
         JSONObject parameters = new JSONObject(params);
 
@@ -295,13 +374,29 @@ public class MainActivity extends ActionBarActivity {
 
     public void goToMyProfile() {
         Intent intent = new Intent(MainActivity.this, PublicProfileActivity.class);
-        intent.putExtra("p_user_id", "1");
-//        intent.putExtra("camefrom", "MainActivity");
         startActivity(intent);
     }
 
     public void goToLogout() {
         Intent intent = new Intent(MainActivity.this, LogoutActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToBookOffer() {
+        Intent intent = new Intent(MainActivity.this, BookOfferActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToBookTransactions() {
+        Intent intent = new Intent(MainActivity.this, BookTransactionActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToSettings() {
+
+        Toast.makeText(getApplicationContext(),"Abrir CHAT",Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
         startActivity(intent);
     }
 
@@ -314,82 +409,8 @@ public class MainActivity extends ActionBarActivity {
 
         PrefUtils.setCurrentPublicProfile(u, getApplicationContext());
 
-        Intent intent = new Intent(MainActivity.this, BookDetailActivity.class);
-//        intent.putExtra("p_fbook_id", livroAtual.getPhysicalBookId());
-//        intent.putExtra("p_user_id", livroAtual.getOwnerUserId());
+        Intent intent = new Intent(MainActivity.this, BookAndProfileActivity.class);
         startActivity(intent);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        Toast.makeText(getApplicationContext(), PrefUtils.getCurrentUser(this).email, Toast.LENGTH_SHORT).show();
-
-        bookLoadInfo = (TextView) findViewById(R.id.bookLoadInfo);
-        noBooksInfo = (LinearLayout) findViewById(R.id.noBooksInfo);
-        bookCoverContainer = (LinearLayout) findViewById(R.id.bookCoverContainer);
-        bookCover = (ImageView) findViewById(R.id.bookCover);
-        txtDistance = (TextView) findViewById(R.id.txtDistance);
-        choiceButtonsContainer = (TableLayout) findViewById(R.id.choiceButtonsContainer);
-
-        bookLoadInfo.setVisibility(TextView.GONE);
-        bookCoverContainer.setVisibility(ImageView.GONE);
-        noBooksInfo.setVisibility(TextView.GONE);
-        choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
-
-        myLocation = new Location("");
-
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, new LocationListener() {
-
-            @Override
-            public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-                Toast.makeText(getApplicationContext(), "Status alterado", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onProviderEnabled(String arg0) {
-                Toast.makeText(getApplicationContext(), "Provider Habilitado", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onProviderDisabled(String arg0) {
-                Toast.makeText(getApplicationContext(), "Provider Desabilitado", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onLocationChanged(Location location) {
-
-                myLocation = location;
-//                myLocation.setLatitude(location.getLatitude());
-//                myLocation.setLongitude(location.getLongitude());
-//                myLocation.setAccuracy(location.getAccuracy());
-//                location
-                Toast.makeText(getApplicationContext(), myLocation.getLatitude() + "/" + myLocation.getLongitude() + "/precisao:" + myLocation.getAccuracy() + "m", Toast.LENGTH_LONG).show();
-
-//                TextView latitude = (TextView) findViewById( R.id.latitude);
-//                TextView longitude = (TextView) findViewById( R.id.longitude);
-//                TextView time = (TextView) findViewById( R.id.time);
-//                TextView acuracy = (TextView) findViewById( R.id.Acuracy);
-//                TextView provider = (TextView) findViewById( R.id.provider);
-//
-//                if( location != null ){
-//                    latitude.setText( "Latitude: "+location.getLatitude() );
-//                    longitude.setText( "Longitude: "+location.getLongitude() );
-//                    acuracy.setText( "Precisão: "+location.getAccuracy()+"" );
-//
-//                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-//                    time.setText( "Data:"+sdf.format( location.getTime() ) );
-//
-//                    provider.setText( location.getProvider());
-//                }
-
-            }
-        }, null);
-
-        loadBookListForChoice();
     }
 
     @Override
@@ -418,10 +439,23 @@ public class MainActivity extends ActionBarActivity {
                 return true;
             case R.id.action_logout:
                 // About option clicked.
+//                goToSettings();
                 goToLogout();
+                return true;
+            case R.id.action_book_offer:
+                // About option clicked.
+//                goToSettings();
+                goToBookOffer();
+                return true;
+            case R.id.action_book_transactions:
+                // About option clicked.
+//                goToSettings();
+                goToBookTransactions();
                 return true;
             case R.id.action_settings:
                 // Settings option clicked.
+//                Log.d("xxx","CHATTTTT");
+//                goToSettings();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
