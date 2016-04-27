@@ -1,17 +1,12 @@
 package leevro.pucpr.br.leevro19;
 
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -464,6 +459,12 @@ public interface VolleyCallback {
 
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+    }
+
     public void goToMyProfile() {
 
         Intent intent = new Intent(MainActivity.this, MyProfile.class);
@@ -478,8 +479,8 @@ public interface VolleyCallback {
         startActivity(intent);
     }
 
-    public void goToBookOffer() {
-        Intent intent = new Intent(MainActivity.this, BookOfferActivity.class);
+    public void goToBarcodeScanner() {
+        Intent intent = new Intent(MainActivity.this, BarcodeScannerActivity.class);
         startActivity(intent);
     }
 
@@ -533,10 +534,10 @@ public interface VolleyCallback {
                 // About option clicked.
                 goToMyBookGallery();
                 return true;
-            case R.id.action_book_offer:
+            case R.id.action_barcode_scanner:
                 // About option clicked.
 //                goToSettings();
-                goToBookOffer();
+                goToBarcodeScanner();
                 return true;
             case R.id.action_book_transactions:
                 // About option clicked.
@@ -548,6 +549,8 @@ public interface VolleyCallback {
             default:
                 return super.onOptionsItemSelected(item);
         }
+
+
 
 //        return super.onOptionsItemSelected(item);
     }

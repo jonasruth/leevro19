@@ -2,7 +2,7 @@
     <string name="app_name">Leevro</string>
 
     <string name="action_settings">Settings</string>
-    <string name="action_book_offer">Oferecer Livros</string>
+    <string name="action_barcode_scanner">Leitor de Código de Barras</string>
     <string name="action_book_transactions">Negociações de Livros</string>
     <string name="action_profile">Meu Perfil</string>
     <string name="action_my_book_gallery">Minha Biblioteca</string>
@@ -27,5 +27,6 @@
     <string name="title_activity_book_offer">BookOfferActivity</string>
     <string name="title_activity_book_transaction">Negociações de Livros</string>
     <string name="title_activity_my_profile">MyProfile</string>
+    <string name="title_activity_barcode_scanner">BarcodeScannerActivity</string>
 
 </resources>

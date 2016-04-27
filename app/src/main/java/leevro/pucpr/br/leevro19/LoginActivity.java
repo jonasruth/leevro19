@@ -45,7 +45,7 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getActionBar().hide();
+        //getActionBar().hide();
 
         setContentView(R.layout.activity_login);
 
