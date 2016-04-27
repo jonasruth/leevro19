@@ -8,6 +8,24 @@ import leevro.pucpr.br.leevro19.entity.Book;
 
 public class PrefUtils {
 
+    public static void setCurrentISBN(String isbn, Context ctx) {
+        ComplexPreferences complexPreferences = ComplexPreferences.getComplexPreferences(ctx, "isbn_prefs", 0);
+        complexPreferences.putObject("current_isbn_value", isbn);
+        complexPreferences.commit();
+    }
+
+    public static String getCurrentISBN(Context ctx) {
+        ComplexPreferences complexPreferences = ComplexPreferences.getComplexPreferences(ctx, "isbn_prefs", 0);
+        String isbn = complexPreferences.getObject("current_isbn_value", String.class);
+        return isbn;
+    }
+
+    public static void clearCurrentISBN(Context ctx) {
+        ComplexPreferences complexPreferences = ComplexPreferences.getComplexPreferences(ctx, "isbn_prefs", 0);
+        complexPreferences.clearObject();
+        complexPreferences.commit();
+    }
+
     public static void setCurrentBook(Book currentBook, Context ctx) {
         ComplexPreferences complexPreferences = ComplexPreferences.getComplexPreferences(ctx, "book_prefs", 0);
         complexPreferences.putObject("current_book_value", currentBook);

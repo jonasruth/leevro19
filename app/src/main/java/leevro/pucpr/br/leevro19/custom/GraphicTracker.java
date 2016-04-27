@@ -17,6 +17,7 @@ package leevro.pucpr.br.leevro19.custom;
 
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.Tracker;
+import com.google.android.gms.vision.barcode.Barcode;
 
 import leevro.pucpr.br.leevro19.customview.GraphicOverlay;
 
@@ -26,13 +27,20 @@ import leevro.pucpr.br.leevro19.customview.GraphicOverlay;
  * to an overlay, update the graphics as the item changes, and remove the graphics when the item
  * goes away.
  */
-class GraphicTracker<T> extends Tracker<T> {
+public class GraphicTracker<T> extends Tracker<T> {
     private GraphicOverlay mOverlay;
     private TrackedGraphic<T> mGraphic;
+    private Callback mCallback;
 
-    GraphicTracker(GraphicOverlay overlay, TrackedGraphic<T> graphic) {
+    public GraphicTracker(GraphicOverlay overlay, TrackedGraphic<T> graphic, Callback callback) {
         mOverlay = overlay;
         mGraphic = graphic;
+        mCallback = callback;
+    }
+
+
+    public interface Callback {
+        void onFound(String barcodeValue);
     }
 
     /**
@@ -48,8 +56,10 @@ class GraphicTracker<T> extends Tracker<T> {
      */
     @Override
     public void onUpdate(Detector.Detections<T> detectionResults, T item) {
+        mCallback.onFound(((Barcode) item).rawValue);
         mOverlay.add(mGraphic);
         mGraphic.updateItem(item);
+
     }
 
     /**

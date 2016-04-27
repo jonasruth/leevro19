@@ -32,15 +32,17 @@ import leevro.pucpr.br.leevro19.customview.GraphicOverlay;
  */
 public class BarcodeTrackerFactory implements MultiProcessor.Factory<Barcode> {
     private GraphicOverlay mGraphicOverlay;
+    private GraphicTracker.Callback mCallback;
 
-    public BarcodeTrackerFactory(GraphicOverlay graphicOverlay) {
+    public BarcodeTrackerFactory(GraphicOverlay graphicOverlay,GraphicTracker.Callback callback) {
         mGraphicOverlay = graphicOverlay;
+        mCallback = callback;
     }
 
     @Override
     public Tracker<Barcode> create(Barcode barcode) {
         BarcodeGraphic graphic = new BarcodeGraphic(mGraphicOverlay);
-        return new GraphicTracker<>(mGraphicOverlay, graphic);
+        return new GraphicTracker<>(mGraphicOverlay, graphic, mCallback);
     }
 }
 

@@ -1,5 +1,6 @@
 package leevro.pucpr.br.leevro19;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -23,9 +24,11 @@ import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import java.io.IOException;
 
+import leevro.pucpr.br.leevro19.custom.GraphicTracker;
 import leevro.pucpr.br.leevro19.customview.CameraSourcePreview;
 import leevro.pucpr.br.leevro19.customview.GraphicOverlay;
 import leevro.pucpr.br.leevro19.custom.BarcodeTrackerFactory;
+import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 
 public class BarcodeScannerActivity extends AppCompatActivity {
@@ -41,29 +44,38 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         mPreview = (CameraSourcePreview) findViewById(R.id.preview);
         mGraphicOverlay = (GraphicOverlay) findViewById(R.id.overlay);
 
-        BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(
+        final BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(
                 getApplicationContext()).setBarcodeFormats(Barcode.ALL_FORMATS).build();
-        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay);
+        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay,new GraphicTracker.Callback(){
+            @Override
+            public void onFound(String barcodeValue) {
+                PrefUtils.setCurrentISBN(barcodeValue,getApplicationContext());
+                Intent i = new Intent(BarcodeScannerActivity.this,BookAddActivity.class);
+                startActivity(i);
+                //Log.d("CÓDIGO DE BARRAS", barcodeValue);
+//                Toast.makeText(getApplicationContext(),barcodeValue,Toast.LENGTH_SHORT).show();
+            }
+        });
         barcodeDetector.setProcessor(new MultiProcessor.Builder<>(barcodeFactory).build());
 
 
         mCameraSource = new CameraSource.Builder(getApplicationContext(), barcodeDetector)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
-                .setRequestedPreviewSize(1600, 1024)
+                .setRequestedPreviewSize(1600, 1080)
                 .build();
 
 

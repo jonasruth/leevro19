@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="Pesquisar"
                 android:onClick="goToBookPropose"
-                android:id="@+id/button2"
+                android:id="@+id/find"
                 android:textColor="@color/white"
                 android:background="@drawable/rounded_button"
                 android:paddingLeft="10dp"

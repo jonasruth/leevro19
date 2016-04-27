@@ -28,6 +28,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -39,6 +40,8 @@ import leevro.pucpr.br.leevro19.utils.AppUtils;
 import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 public class BookAddActivity extends ActionBarActivity {
+
+    TextView find;
 
     EditText isbn;
     TextView bookTitle;
@@ -64,7 +67,6 @@ public class BookAddActivity extends ActionBarActivity {
 
         AppUtils.esconderTecladoVirtual(this);
 
-        isbn = (EditText) findViewById(R.id.isbn);
         bookTitle = (TextView) findViewById(R.id.bookTitle);
         bookAuthorName = (TextView) findViewById(R.id.bookAuthorName);
         bookGenderName = (TextView) findViewById(R.id.bookGenderName);
@@ -159,8 +161,6 @@ public class BookAddActivity extends ActionBarActivity {
 
         AppUtils.esconderTecladoVirtual(this);
 
-        isbn = (EditText) findViewById(R.id.isbn);
-
         String url = "http://96.126.115.143/leevrows/adicionaUmLivro.php";
 
         Map<String, String> params = new HashMap();
@@ -212,6 +212,20 @@ public class BookAddActivity extends ActionBarActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        isbn = (EditText) findViewById(R.id.isbn);
+        find = (TextView) findViewById(R.id.find);
+
+        String barcodeScanISBN = PrefUtils.getCurrentISBN(getApplicationContext());
+        if(barcodeScanISBN!=null&&!barcodeScanISBN.isEmpty()) {
+            Log.d("BookAddActivity 1",barcodeScanISBN);
+            //goToBookPropose(barcodeScanISBN);
+            isbn.setText(barcodeScanISBN);
+//            goToBookPropose(find);
+            //find.callOnClick();
+        }
+        Log.d("BookAddActivity 2",barcodeScanISBN);
+        PrefUtils.clearCurrentISBN(getApplicationContext());
     }
 
     @Override
