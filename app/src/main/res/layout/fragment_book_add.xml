@@ -1,104 +1,137 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bookAddScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="leevro.pucpr.br.leevro19.BookAddActivityFragment"
-    android:id="@+id/bookAddScreen">
+    tools:context="leevro.pucpr.br.leevro19.BookAddActivityFragment">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="wrap_content"
+        android:visibility="visible">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusableInTouchMode="true"
-            android:focusable="true"
-            android:id="@+id/linearLayoutFocus">
-
-            <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="number"
-                android:ems="10"
-                android:id="@+id/isbn"
-                android:hint="ISBN"
-                android:layout_weight="1" />
-
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pesquisar"
-                android:onClick="goToBookPropose"
-                android:id="@+id/find"
-                android:textColor="@color/white"
-                android:background="@drawable/rounded_button"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:textSize="16dp"
-
-
-                />
-        </LinearLayout>
-
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/bookDetailPreview"
-            android:visibility="visible">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
             <LinearLayout
-                android:orientation="vertical"
+                android:id="@+id/linearLayoutFocus"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/isbn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Pesquisa por ISBN"
+                    android:inputType="number"
+                    android:textSize="30dp"
+                    android:textStyle="bold|italic" />
+
 
                 <TextView
+                    android:id="@+id/find"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Título"
-                    android:id="@+id/bookTitle"
-                    android:textColor="@color/blue"
-                    android:textStyle="bold"
-                    android:textSize="22dp"
-                    android:gravity="center_horizontal"
-                    android:layout_gravity="center_horizontal"
+                    android:layout_gravity="right"
+                    android:background="@drawable/rounded_button"
+                    android:gravity="right"
+                    android:onClick="goToBookPropose"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp"
+                    android:text="Pesquisar"
+                    android:textColor="@color/white"
+                    android:textSize="16dp"
+
+
                     />
 
+                <TextView
+                    android:id="@+id/txtScan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="20dp"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:text="ou"
+                    android:textColor="@color/greyDark"
+                    android:textSize="18dp"
+                    android:onClick="lerCodigoDeBarras"
+                    />
+
+                <TextView
+                    android:id="@+id/txtScan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:text="Ler código de barras"
+                    android:textSize="22dp"
+                    android:onClick="lerCodigoDeBarras"
+                    />
+                <TextView
+                    android:id="@+id/btnScan"
+                    android:layout_width="200dp"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@color/black"
+                    android:gravity="center_horizontal" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/bookDetailPreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/bookTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:text="Título"
+                    android:textColor="@color/blue"
+                    android:textSize="22dp"
+                    android:textStyle="bold" />
+
                 <ImageView
+                    android:id="@+id/bookCover"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:id="@+id/bookCover"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:src="@mipmap/ic_launcher" />
 
                 <TextView
+                    android:id="@+id/strInfos"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Informações"
-                    android:id="@+id/strInfos"
-                    android:textColor="@color/blue"
-                    android:textStyle="bold"
-                    android:textSize="14dp"
                     android:layout_marginTop="10dp"
-                    />
+                    android:text="Informações"
+                    android:textColor="@color/blue"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/blue"
                     android:layout_marginBottom="5dp"
+                    android:background="@color/blue"
 
                     />
 
@@ -111,24 +144,23 @@
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Gênero:"
                             android:id="@+id/textView"
-                            android:layout_column="0"
-                            android:layout_marginRight="5dp"
-                            android:textColor="@color/blue"
-                            android:textSize="14dp"
-                            />
-
-                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="---"
+                            android:layout_column="0"
+                            android:layout_marginRight="5dp"
+                            android:text="Gênero:"
+                            android:textColor="@color/blue"
+                            android:textSize="14dp" />
+
+                        <TextView
                             android:id="@+id/bookGenderName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_column="1"
+                            android:text="---"
                             android:textColor="@color/blue"
-                            android:textSize="14dp"/>
+                            android:textSize="14dp" />
 
                     </TableRow>
 
@@ -137,25 +169,23 @@
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Autor:"
                             android:id="@+id/textView2"
-                            android:layout_column="0"
-                            android:layout_marginRight="5dp"
-                            android:textColor="@color/blue"
-                            android:textSize="14dp"
-                            />
-
-                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="---"
-                            android:id="@+id/bookAuthorName"
-                            android:layout_column="1"
+                            android:layout_column="0"
+                            android:layout_marginRight="5dp"
+                            android:text="Autor:"
                             android:textColor="@color/blue"
-                            android:textSize="14dp"
-                            />
+                            android:textSize="14dp" />
+
+                        <TextView
+                            android:id="@+id/bookAuthorName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_column="1"
+                            android:text="---"
+                            android:textColor="@color/blue"
+                            android:textSize="14dp" />
                     </TableRow>
 
                     <TableRow
@@ -163,61 +193,57 @@
                         android:layout_height="match_parent">
 
                         <TextView
+                            android:id="@+id/textView4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Edição:"
-                            android:id="@+id/textView4"
                             android:layout_column="0"
                             android:layout_marginRight="5dp"
+                            android:text="Edição:"
                             android:textColor="@color/blue"
-                            android:textSize="14dp"
-                            />
+                            android:textSize="14dp" />
 
                         <TextView
+                            android:id="@+id/bookEdition"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="---"
-                            android:id="@+id/bookEdition"
                             android:layout_column="1"
+                            android:text="---"
                             android:textColor="@color/blue"
-                            android:textSize="14dp"
-                            />
+                            android:textSize="14dp" />
                     </TableRow>
                 </TableLayout>
 
 
                 <TextView
+                    android:id="@+id/strSinopse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sinopse"
-                    android:id="@+id/strSinopse"
-                    android:textColor="@color/blue"
-                    android:textStyle="bold"
-                    android:textSize="14dp"
                     android:layout_marginTop="10dp"
-                    />
+                    android:text="Sinopse"
+                    android:textColor="@color/blue"
+                    android:textSize="14dp"
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/blue"
                     android:layout_marginBottom="10dp"
+                    android:background="@color/blue"
 
                     />
 
 
                 <TextView
+                    android:id="@+id/bookDescription"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Descrição: Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet  Lorem Ipsum Dolor Sit Amet "
-                    android:id="@+id/bookDescription"
                     android:textColor="@color/blue"
-                    android:textSize="14dp"
-                    />
+                    android:textSize="14dp" />
 
 
             </LinearLayout>
-        </ScrollView>
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </RelativeLayout>

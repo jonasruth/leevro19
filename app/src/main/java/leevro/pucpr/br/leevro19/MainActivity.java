@@ -48,7 +48,7 @@ public class MainActivity extends ActionBarActivity {
 
     private AppUser loggedUser;
     private TextView txtQuestion;
-    private TextView bookLoadInfo;
+    private LinearLayout bookLoadInfo;
     private LinearLayout noBooksInfo;
     private ImageView bookCover;
     private TextView txtDistance;
@@ -73,7 +73,7 @@ public class MainActivity extends ActionBarActivity {
 
         Toast.makeText(getApplicationContext(), PrefUtils.getLoggedUser(this).email, Toast.LENGTH_SHORT).show();
 
-        bookLoadInfo = (TextView) findViewById(R.id.bookLoadInfo);
+        bookLoadInfo = (LinearLayout) findViewById(R.id.bookLoadInfo);
         noBooksInfo = (LinearLayout) findViewById(R.id.noBooksInfo);
         bookCoverContainer = (LinearLayout) findViewById(R.id.bookCoverContainer);
         bookCover = (ImageView) findViewById(R.id.bookCover);

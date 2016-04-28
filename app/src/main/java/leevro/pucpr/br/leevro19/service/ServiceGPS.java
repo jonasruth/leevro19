@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 //import android.widget.Toast;
@@ -52,6 +53,7 @@ public class ServiceGPS extends Service {
         @Override
         public void onProviderDisabled(String provider) {
             Log.e(TAG, "onProviderDisabled: " + provider);
+//                        .setAction("Action", null).show();
 //            Toast.makeText(getApplicationContext(),"onProviderDisabled: " + provider,Toast.LENGTH_SHORT).show();
         }
 

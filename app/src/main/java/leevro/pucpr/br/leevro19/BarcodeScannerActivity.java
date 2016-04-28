@@ -2,6 +2,7 @@ package leevro.pucpr.br.leevro19;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -9,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.util.SparseArray;
+import android.view.Display;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -41,8 +44,6 @@ public class BarcodeScannerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_scanner);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -72,10 +73,16 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         });
         barcodeDetector.setProcessor(new MultiProcessor.Builder<>(barcodeFactory).build());
 
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        Integer width = size.x;
+        Integer height = size.y;
+        Log.d("screenX x screenY",width.toString()+'x'+height.toString());
 
         mCameraSource = new CameraSource.Builder(getApplicationContext(), barcodeDetector)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
-                .setRequestedPreviewSize(1600, 1080)
+                .setRequestedPreviewSize(width, height)
                 .build();
 
 

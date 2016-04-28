@@ -2,20 +2,48 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-    </style>
-
-    <!--    <style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
-        <item name="android:background" tools:ignore="NewApi">@color/green</item>
-        <item name="background">@color/green</item>
-    </style>
-
-    <style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light">
-        <item name="android:actionBarStyle" tools:ignore="NewApi">@style/MyActionBar</item>
-        <item name="actionBarStyle">@style/MyActionBar</item>
+        <item name="actionBarStyle">@style/Widget.AppTheme.ActionBar</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.AppTheme.ActionBar</item>
 
         <item name="android:windowBackground">@color/white</item>
-    </style>-->
+        <!--<item name="android:textColorPrimary">...</item>-->
+        <!--<item name="android:textColorSecondary">...</item>-->
+    </style>
+
+    <style name="Widget.AppTheme.ActionBar" parent="Widget.AppCompat.ActionBar.Solid">
+        <!-- action bar background -->
+        <item name="background">@color/blue</item>
+        <!-- action bar elevation -->
+        <item name="elevation">20dp</item>
+    </style>
+
+    <style name="ThemeOverlay.AppTheme.ActionBar" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <!-- title text color -->
+        <item name="android:textColorPrimary">@color/blueLight</item>
+        <!-- subtitle text color -->
+        <item name="android:textColorSecondary">?android:textColorPrimary</item>
+        <!-- action menu item text color -->
+        <item name="actionMenuTextColor">?android:textColorPrimary</item>
+        <!-- action menu item icon color - only applies to appcompat-v7 icons :( -->
+        <item name="colorControlNormal">?android:textColorPrimary</item>
+    </style>
+
+    <!--<style name="MyActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">-->
+    <!--<item name="android:background" tools:ignore="NewApi">@color/blue</item>-->
+    <!--<item name="background">@color/blue</item>-->
+    <!--</style>-->
+
+    <!--<style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light">-->
+    <!--<item name="android:actionBarStyle" tools:ignore="NewApi">@style/MyActionBar</item>-->
+    <!--<item name="actionBarStyle">@style/MyActionBar</item>-->
+    <!--<item name="android:windowBackground">@color/white</item>-->
+    <!--<item name="android:titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>-->
+    <!--</style>-->
+
+    <!--<style name="MyTheme.ActionBarStyle" parent="@style/Theme.AppCompat.Light.DarkActionBar">-->
+    <!--<item name="android:titleTextStyle">@style/FullscreenActionBarStyle</item>-->
+    <!--</style>-->
+
 
     <style name="FullscreenTheme" parent="AppTheme">
         <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
@@ -29,7 +57,15 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
-    <style name="AppTheme.NoActionBar">
+    <style name="AppThemeNoBar" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="AppThemeBar" parent="AppTheme">
+        <item name="android:windowNoTitle">false</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>

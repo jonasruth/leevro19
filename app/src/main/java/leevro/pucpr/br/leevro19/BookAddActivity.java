@@ -13,10 +13,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -54,7 +56,7 @@ public class BookAddActivity extends ActionBarActivity {
     TextView bookEdition;
     ImageView bookCover;
     String photo;
-    ScrollView bookDetailPreview;
+    LinearLayout bookDetailPreview;
 
     JSONObject livro;
     /**
@@ -62,6 +64,11 @@ public class BookAddActivity extends ActionBarActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+
+    public void lerCodigoDeBarras(View view) {
+        Intent intent = new Intent(BookAddActivity.this, BarcodeScannerActivity.class);
+        startActivity(intent);
+    }
 
     public void goToBookPropose(View view) {
 
@@ -95,7 +102,7 @@ public class BookAddActivity extends ActionBarActivity {
                                 bookDescription.setText(livro.getString("description"));
 //                            bookPhoto.setText(livro.getString("photo"));
                                 bookEdition.setText(livro.getString("edition"));
-                                bookDetailPreview.setVisibility(ScrollView.VISIBLE);
+                                bookDetailPreview.setVisibility(LinearLayout.VISIBLE);
                                 photo = livro.getString("photo");
 
                                 Thread thread = new Thread(new Runnable() {
@@ -118,7 +125,7 @@ public class BookAddActivity extends ActionBarActivity {
                                 });
 
                                 thread.start();
-                            }else{
+                            } else {
                                 Toast toast = Toast.makeText(getApplicationContext(), "Erro: Não foi possível retornar livro pesquisado.", Toast.LENGTH_SHORT);
                                 toast.show();
                             }
@@ -147,9 +154,12 @@ public class BookAddActivity extends ActionBarActivity {
                 }
 
                 );
-        Volley.newRequestQueue(this).
+        Volley.newRequestQueue(this).add(jsObjRequest);
 
-                add(jsObjRequest);
+        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
+                10000,
+                3,
+                2f));
         //Volley.getInstance(this).addToRequestQueue(jsObjRequest);
     }
 
@@ -206,8 +216,8 @@ public class BookAddActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_add);
-        bookDetailPreview = (ScrollView) findViewById(R.id.bookDetailPreview);
-        bookDetailPreview.setVisibility(ScrollView.INVISIBLE);
+        bookDetailPreview = (LinearLayout) findViewById(R.id.bookDetailPreview);
+        bookDetailPreview.setVisibility(LinearLayout.INVISIBLE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -217,15 +227,18 @@ public class BookAddActivity extends ActionBarActivity {
         find = (TextView) findViewById(R.id.find);
 
         String barcodeScanISBN = PrefUtils.getCurrentISBN(getApplicationContext());
-        if(barcodeScanISBN!=null&&!barcodeScanISBN.isEmpty()) {
-            Log.d("BookAddActivity 1",barcodeScanISBN);
+        if (barcodeScanISBN != null && !barcodeScanISBN.isEmpty()) {
+            Log.d("BookAddActivity 1", barcodeScanISBN);
             //goToBookPropose(barcodeScanISBN);
             isbn.setText(barcodeScanISBN);
 //            goToBookPropose(find);
             //find.callOnClick();
+            Log.d("BookAddActivity 2", barcodeScanISBN);
+            PrefUtils.clearCurrentISBN(getApplicationContext());
+        }else{
+            Log.d("BookAddActivity 2", "NULO");
         }
-        Log.d("BookAddActivity 2",barcodeScanISBN);
-        PrefUtils.clearCurrentISBN(getApplicationContext());
+
     }
 
     @Override

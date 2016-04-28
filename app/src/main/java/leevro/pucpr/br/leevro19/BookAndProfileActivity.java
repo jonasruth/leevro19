@@ -3,16 +3,17 @@ package leevro.pucpr.br.leevro19;
 import android.os.Bundle;
 import android.app.Activity;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.widget.TabHost;
 
 
-public class BookAndProfileActivity extends FragmentActivity {
+public class BookAndProfileActivity extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_and_profile);
-//        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // tabs
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost);

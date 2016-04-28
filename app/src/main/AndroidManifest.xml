@@ -156,7 +156,7 @@
             android:name=".BarcodeScannerActivity"
             android:label="@string/title_activity_barcode_scanner"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppThemeNoBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="leevro.pucpr.br.leevro19.MainActivity" />

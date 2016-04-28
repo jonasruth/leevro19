@@ -29,7 +29,7 @@ public class LogoutActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logout);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        //getActionBar().setDisplayHomeAsUpEnabled(true);
         user= PrefUtils.getLoggedUser(LogoutActivity.this);
         profileImage= (ImageView) findViewById(R.id.profileImage);
 
