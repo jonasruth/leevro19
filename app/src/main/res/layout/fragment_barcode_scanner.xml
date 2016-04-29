@@ -5,16 +5,16 @@
     tools:context="leevro.pucpr.br.leevro19.BarcodeScannerActivityFragment"
     tools:showIn="@layout/activity_barcode_scanner">
 
-        <leevro.pucpr.br.leevro19.customview.CameraSourcePreview
+        <leevro.pucpr.br.leevro19.custom.CameraSourcePreview
             android:id="@+id/preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <leevro.pucpr.br.leevro19.customview.GraphicOverlay
+            <leevro.pucpr.br.leevro19.custom.GraphicOverlay
                 android:id="@+id/overlay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        </leevro.pucpr.br.leevro19.customview.CameraSourcePreview>
+        </leevro.pucpr.br.leevro19.custom.CameraSourcePreview>
 
 </LinearLayout>

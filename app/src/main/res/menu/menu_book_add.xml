@@ -3,10 +3,5 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="leevro.pucpr.br.leevro19.BookAdd">
 
-    <item
-        android:id="@+id/action_favorite"
-        android:title="@string/action_confirm"
-        android:orderInCategory="1"
-        app:showAsAction="always"/>
 
 </menu>

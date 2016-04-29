@@ -1,4 +1,4 @@
-package leevro.pucpr.br.leevro19.customview;
+package leevro.pucpr.br.leevro19.custom;
 /*
  * Copyright (C) The Android Open Source Project
  *

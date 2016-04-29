@@ -1,4 +1,4 @@
-package leevro.pucpr.br.leevro19.customview;
+package leevro.pucpr.br.leevro19.custom;
 
 /*
  * Copyright (C) The Android Open Source Project
@@ -34,8 +34,6 @@ import java.io.IOException;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.reflect.Field;
-
-import leevro.pucpr.br.leevro19.custom.BarcodeTrackerFactory;
 
 public class CameraSourcePreview extends ViewGroup {
     private static final String TAG = "CameraSourcePreview";

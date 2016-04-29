@@ -41,5 +41,7 @@ public class MyApplication extends Application {
         } catch (Exception e) {
             Log.e("exception", e.toString());
         }
+
     }
+
 }

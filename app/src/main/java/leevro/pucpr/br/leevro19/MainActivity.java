@@ -89,64 +89,7 @@ public class MainActivity extends ActionBarActivity {
                 mMessageReceiver, new IntentFilter("GPSLocationUpdates"));
 
 
-//        Intent serviceIntent = new Intent();
-//        serviceIntent.setAction(".service.ServiceGPS");
         startService(new Intent(MainActivity.this, ServiceGPS.class));
-
-//        myLocation = new Location("");
-//
-//        Intent mIntent = new Intent(this, ServiceGPS.class);
-//        bindService(mIntent, mConnection, BIND_AUTO_CREATE);
-//
-//        Toast.makeText(getApplicationContext(), myLocation.getLatitude() + "/" + myLocation.getLongitude() + "/precisao:" + myLocation.getAccuracy() + "m", Toast.LENGTH_LONG).show();
-
-/*        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, new LocationListener() {
-
-            @Override
-            public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-                Toast.makeText(getApplicationContext(), "Status alterado", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onProviderEnabled(String arg0) {
-                Toast.makeText(getApplicationContext(), "Provider Habilitado", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onProviderDisabled(String arg0) {
-                Toast.makeText(getApplicationContext(), "Provider Desabilitado", Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onLocationChanged(Location location) {
-
-                myLocation = location;
-//                myLocation.setLatitude(location.getLatitude());
-//                myLocation.setLongitude(location.getLongitude());
-//                myLocation.setAccuracy(location.getAccuracy());
-//                location
-                Toast.makeText(getApplicationContext(), myLocation.getLatitude() + "/" + myLocation.getLongitude() + "/precisao:" + myLocation.getAccuracy() + "m", Toast.LENGTH_LONG).show();
-
-//                TextView latitude = (TextView) findViewById( R.id.latitude);
-//                TextView longitude = (TextView) findViewById( R.id.longitude);
-//                TextView time = (TextView) findViewById( R.id.time);
-//                TextView acuracy = (TextView) findViewById( R.id.Acuracy);
-//                TextView provider = (TextView) findViewById( R.id.provider);
-//
-//                if( location != null ){
-//                    latitude.setText( "Latitude: "+location.getLatitude() );
-//                    longitude.setText( "Longitude: "+location.getLongitude() );
-//                    acuracy.setText( "Precisão: "+location.getAccuracy()+"" );
-//
-//                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-//                    time.setText( "Data:"+sdf.format( location.getTime() ) );
-//
-//                    provider.setText( location.getProvider());
-//                }
-
-            }
-        }, null);*/
 
         loadBookListForChoice();
     }
@@ -164,8 +107,6 @@ public class MainActivity extends ActionBarActivity {
                 bookLocation.setLongitude(-49.272639);
 
                 Float distance = myLocation.distanceTo(bookLocation);
-//              Toast toast = Toast.makeText(getApplicationContext(), "distancia " + distance, Toast.LENGTH_LONG);
-//              toast.show();
 
                 Log.d("lat/lng:", myLocation.getLatitude() + "/" + myLocation.getLongitude());
 
@@ -173,51 +114,12 @@ public class MainActivity extends ActionBarActivity {
 
                 txtDistance.setText("Está a " + distanceInt + "km de você");
 
-
-//                txtDistance.setText(myLocation.toString());
-
-
-
-//                Toast.makeText(context,)
-
-//                tvLatitude.setText(String.valueOf(myLocation.getLatitude()));
-//                tvLongitude
-//                        .setText(String.valueOf(myLocation.getLongitude()));
-//                tvAccuracy.setText(String.valueOf(myLocation.getAccuracy()));
-//                tvTimestamp.setText((new Date(myLocation.getTime())
-//                        .toString()));
-//                tvProvider.setText(myLocation.getProvider());
             }
 //            tvStatus.setText(message);
 //            T
-//             Toast.makeText(context, "fooooda-se" + myLocation.toString(),Toast.LENGTH_LONG).show();
         }
     };
 
-//    ServiceConnection mConnection = new ServiceConnection() {
-//
-//        public void onServiceDisconnected(ComponentName name) {
-//            Toast.makeText(MainActivity.this, "Service is disconnected", Toast.LENGTH_SHORT).show();
-//            mBounded = false;
-//            mServer = null;
-//        }
-//
-//        public void onServiceConnected(ComponentName name, IBinder service) {
-//            Toast.makeText(MainActivity.this, "Service is connected", Toast.LENGTH_SHORT).show();
-//            mBounded = true;
-//            LocalBinder mLocalBinder = (LocalBinder) service;
-//            mServer = mLocalBinder.getServerInstance();
-//        }
-//    };
-//
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        if (mBounded) {
-//            unbindService(mConnection);
-//            mBounded = false;
-//        }
-//    }
 
     public void loadBooks(View view) {
         loadBookListForChoice();
@@ -549,9 +451,5 @@ public interface VolleyCallback {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
-
-
-//        return super.onOptionsItemSelected(item);
     }
 }

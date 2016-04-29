@@ -149,7 +149,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
-            android:text="Sinopse"
+            android:text="Descrição"
             android:textColor="@color/blue"
             android:textSize="14dp"
             android:textStyle="bold" />

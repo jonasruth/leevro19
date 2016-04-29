@@ -11,6 +11,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,7 +25,9 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -38,6 +43,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import leevro.pucpr.br.leevro19.network.CustomVolleyRequestQueue;
 import leevro.pucpr.br.leevro19.utils.AppUtils;
 import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
@@ -54,16 +60,50 @@ public class BookAddActivity extends ActionBarActivity {
     TextView bookLanguage;
     //    TextView bookPhoto;
     TextView bookEdition;
-    ImageView bookCover;
+    NetworkImageView bookCover;
     String photo;
     LinearLayout bookDetailPreview;
-
+    LinearLayout consulta;
     JSONObject livro;
+    private ImageLoader mImageLoader;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_book_add);
+        consulta = (LinearLayout) findViewById(R.id.consulta);
+        bookDetailPreview = (LinearLayout) findViewById(R.id.bookDetailPreview);
+        consulta.setVisibility(LinearLayout.VISIBLE);
+        bookDetailPreview.setVisibility(ScrollView.GONE);
+
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        isbn = (EditText) findViewById(R.id.isbn);
+        find = (TextView) findViewById(R.id.find);
+
+        String barcodeScanISBN = PrefUtils.getCurrentISBN(getApplicationContext());
+        if (barcodeScanISBN != null && !barcodeScanISBN.isEmpty()) {
+            Log.d("BookAddActivity 1", barcodeScanISBN);
+            //goToBookPropose(barcodeScanISBN);
+            isbn.setText(barcodeScanISBN);
+            goToBookPropose(barcodeScanISBN);
+            //find.callOnClick();
+            Log.d("BookAddActivity 2", barcodeScanISBN);
+            PrefUtils.clearCurrentISBN(getApplicationContext());
+        } else {
+            Log.d("BookAddActivity 2", "NULO");
+        }
+
+    }
 
     public void lerCodigoDeBarras(View view) {
         Intent intent = new Intent(BookAddActivity.this, BarcodeScannerActivity.class);
@@ -71,17 +111,26 @@ public class BookAddActivity extends ActionBarActivity {
     }
 
     public void goToBookPropose(View view) {
+//        AppUtils.esconderTecladoVirtual(this);
+        goToBookPropose(isbn.getText().toString());
+    }
 
-        AppUtils.esconderTecladoVirtual(this);
+    public void goBack(View view) {
+        getSupportActionBar().show();
+        consulta.setVisibility(LinearLayout.VISIBLE);
+        bookDetailPreview.setVisibility(LinearLayout.GONE);
+        isbn.setText(null);
+    }
 
+    private void goToBookPropose(String isbnToSearch) {
         bookTitle = (TextView) findViewById(R.id.bookTitle);
         bookAuthorName = (TextView) findViewById(R.id.bookAuthorName);
         bookGenderName = (TextView) findViewById(R.id.bookGenderName);
         bookDescription = (TextView) findViewById(R.id.bookDescription);
         bookEdition = (TextView) findViewById(R.id.bookEdition);
-        bookCover = (ImageView) findViewById(R.id.bookCover);
+        bookCover = (NetworkImageView) findViewById(R.id.bookCover);
 
-        String url = "http://96.126.115.143/leevrows/retornaUmLivro.php?isbn=" + isbn.getText();
+        String url = "http://96.126.115.143/leevrows/retornaUmLivro.php?isbn=" + isbnToSearch;
         Log.d("Retorno: ", "xxadadas");
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
@@ -95,36 +144,24 @@ public class BookAddActivity extends ActionBarActivity {
 
                             Boolean status = response.getBoolean("status");
                             if (status) {
+
+
                                 livro = response.getJSONObject("livro");
                                 bookTitle.setText(livro.getString("title"));
                                 bookAuthorName.setText(livro.getString("author_name"));
                                 bookGenderName.setText(livro.getString("gender_name"));
                                 bookDescription.setText(livro.getString("description"));
-//                            bookPhoto.setText(livro.getString("photo"));
                                 bookEdition.setText(livro.getString("edition"));
-                                bookDetailPreview.setVisibility(LinearLayout.VISIBLE);
                                 photo = livro.getString("photo");
 
-                                Thread thread = new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        URL url = null;
-                                        try {
-                                            url = new URL("http://96.126.115.143/leevrows/vbook_img/" + livro.getString("photo"));
-                                            Bitmap bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                                            bookCover.setImageBitmap(bmp);
+                                mImageLoader = CustomVolleyRequestQueue.getInstance(getApplicationContext()).getImageLoader();
+                                bookCover.setImageUrl(AppUtils.APP_PATH_VIRTUAL_BOOK_COVER_PATH + livro.getString("photo"), mImageLoader);
 
-                                        } catch (MalformedURLException e) {
-                                            e.printStackTrace();
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        } catch (Exception e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                });
+                                consulta.setVisibility(LinearLayout.GONE);
+                                bookDetailPreview.setVisibility(LinearLayout.VISIBLE);
 
-                                thread.start();
+                                getSupportActionBar().hide();
+
                             } else {
                                 Toast toast = Toast.makeText(getApplicationContext(), "Erro: Não foi possível retornar livro pesquisado.", Toast.LENGTH_SHORT);
                                 toast.show();
@@ -164,13 +201,30 @@ public class BookAddActivity extends ActionBarActivity {
     }
 
     public void addBook(View view) {
+//        AppUtils.esconderTecladoVirtual(this);
         addBook();
+        /*ImageView spaceshipImage = (ImageView) findViewById(R.id.bookCover);
+        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this, R.anim.test);
+        spaceshipImage.startAnimation(hyperspaceJumpAnimation);
+        hyperspaceJumpAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                addBook();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });*/
     }
 
     public void addBook() {
-
-        AppUtils.esconderTecladoVirtual(this);
-
         String url = "http://96.126.115.143/leevrows/adicionaUmLivro.php";
 
         Map<String, String> params = new HashMap();
@@ -192,7 +246,9 @@ public class BookAddActivity extends ActionBarActivity {
                             Boolean sucesso = status.getBoolean("success");
 
                             Intent intent = new Intent(BookAddActivity.this, BookGalleryActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
+                            finish();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -212,43 +268,15 @@ public class BookAddActivity extends ActionBarActivity {
         //Volley.getInstance(this).addToRequestQueue(jsObjRequest);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_book_add);
-        bookDetailPreview = (LinearLayout) findViewById(R.id.bookDetailPreview);
-        bookDetailPreview.setVisibility(LinearLayout.INVISIBLE);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
-        isbn = (EditText) findViewById(R.id.isbn);
-        find = (TextView) findViewById(R.id.find);
-
-        String barcodeScanISBN = PrefUtils.getCurrentISBN(getApplicationContext());
-        if (barcodeScanISBN != null && !barcodeScanISBN.isEmpty()) {
-            Log.d("BookAddActivity 1", barcodeScanISBN);
-            //goToBookPropose(barcodeScanISBN);
-            isbn.setText(barcodeScanISBN);
-//            goToBookPropose(find);
-            //find.callOnClick();
-            Log.d("BookAddActivity 2", barcodeScanISBN);
-            PrefUtils.clearCurrentISBN(getApplicationContext());
-        }else{
-            Log.d("BookAddActivity 2", "NULO");
-        }
-
-    }
-
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_book_add, menu);
+//        MenuInflater inflater = getMenuInflater();
+//        inflater.inflate(R.menu.menu_book_add, menu);
         return true;
-    }
+    }*/
 
-    @Override
+   /* @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -273,7 +301,7 @@ public class BookAddActivity extends ActionBarActivity {
         }
 
 //        return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     @Override
     public void onStart() {

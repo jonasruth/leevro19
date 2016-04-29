@@ -2,6 +2,7 @@ package leevro.pucpr.br.leevro19.service;
 
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
@@ -9,7 +10,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+
+import leevro.pucpr.br.leevro19.BookGalleryActivity;
+import leevro.pucpr.br.leevro19.MyProfile;
 //import android.widget.Toast;
 
 public class ServiceGPS extends Service {
@@ -53,8 +58,7 @@ public class ServiceGPS extends Service {
         @Override
         public void onProviderDisabled(String provider) {
             Log.e(TAG, "onProviderDisabled: " + provider);
-//                        .setAction("Action", null).show();
-//            Toast.makeText(getApplicationContext(),"onProviderDisabled: " + provider,Toast.LENGTH_SHORT).show();
+
         }
 
         @Override

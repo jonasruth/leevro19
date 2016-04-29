@@ -34,7 +34,6 @@ public class BookAdapter extends BaseAdapter {
     private final BookCollection books;
     private static LayoutInflater inflater = null;
     private AppUser targetUser;
-    private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
     public BookAdapter(Context context, BookCollection books) {
