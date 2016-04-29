@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:gravity="center_horizontal"
-                    android:text="Endereço de sua Biblioteca"
+                    android:text="Endereço de sua Estante"
                     android:textColor="@color/blue"
                     android:textSize="14dp" />
 
@@ -167,7 +167,7 @@
                     android:layout_margin="5dp"
                     android:gravity="left"
                     android:padding="5dp"
-                    android:text="Quando levar um livro da sua biblioteca para passear consigo, poderá marcá-lo como &quot;Está comigo&quot;. Assim o Leevro pode oferecê-lo a pessoas próximas de onde você for."
+                    android:text="Quando levar um livro de sua estante para passear consigo, poderá marcá-lo como &quot;Está comigo&quot;. Assim o Leevro pode oferecê-lo a pessoas próximas de onde você for."
                     android:textColor="@color/greyDark" />
 
                 <View

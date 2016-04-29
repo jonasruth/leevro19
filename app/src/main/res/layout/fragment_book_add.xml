@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
 
@@ -48,6 +48,7 @@
                 android:gravity="center_horizontal"
                 android:hint="Digite o ISBN aqui"
                 android:inputType="number"
+                android:maxLength="13"
                 android:textSize="30dp"
                 android:textStyle="bold|italic" />
 
@@ -68,13 +69,23 @@
                 android:text="Pesquisar"
                 android:textColor="@color/white"
                 android:textSize="16dp" />
+
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/blue"
+
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center_horizontal|top"
             android:orientation="vertical">
 
             <leevro.pucpr.br.leevro19.barcodescanner.CameraSourcePreview
@@ -90,36 +101,38 @@
 
             </leevro.pucpr.br.leevro19.barcodescanner.CameraSourcePreview>
 
-            <TextView
-                android:id="@+id/txtScan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"
-                android:gravity="center_horizontal"
-                android:onClick="lerCodigoDeBarras"
-                android:text="Ler código de barras do livro."
-                android:textSize="22dp" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_horizontal|top"
+                android:orientation="vertical"
+                android:visibility="visible"
+                android:id="@+id/pesquisaCodigoBarras">
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/square_button"
-                android:onClick="lerCodigoDeBarras"
-                android:padding="1dp"
-                android:src="@mipmap/ic_barcode" />
+                <TextView
+                    android:id="@+id/txtScan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_horizontal"
+                    android:onClick="lerCodigoDeBarras"
+                    android:text="Ler código de barras do livro."
+                    android:textSize="22dp" />
+
+                <ImageButton
+                    android:id="@+id/imageButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/square_button"
+                    android:onClick="lerCodigoDeBarras"
+                    android:padding="1dp"
+                    android:src="@mipmap/ic_barcode" />
+
+            </LinearLayout>
+
         </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/blue"
-
-            />
 
 
     </LinearLayout>
@@ -333,7 +346,7 @@
                     android:gravity="center_horizontal"
                     android:onClick="addBook"
                     android:padding="16dp"
-                    android:text="Salvar na minha galeria"
+                    android:text="Adicionar à Estante"
                     android:textColor="#fff"
                     android:textStyle="bold" />
             </RelativeLayout>

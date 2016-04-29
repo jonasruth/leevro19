@@ -6,6 +6,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+//import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
@@ -76,7 +77,10 @@ public class BookAddActivity extends ActionBarActivity {
     CameraSourcePreview cameraSourcePreview;
     FrameLayout frag;
 
+    //    ActionBar actionBar;
     ActionBar actionBar;
+
+    LinearLayout pesquisaCodigoBarras;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -103,7 +107,9 @@ public class BookAddActivity extends ActionBarActivity {
 //        LocalBroadcastManager.getInstance(this).registerReceiver(
 //                mMessageReceiver, new IntentFilter("ISBNScanner"));
 
-        configureBarcodeScanner();
+        pesquisaCodigoBarras = (LinearLayout) findViewById(R.id.pesquisaCodigoBarras);
+
+//        configureBarcodeScanner();
 
     }
 
@@ -116,27 +122,38 @@ public class BookAddActivity extends ActionBarActivity {
         BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay, new GraphicTracker.Callback() {
             @Override
             public void onFound(final String barcodeValue) {
-                final Handler handler = new Handler(Looper.getMainLooper());
-                handler.postDelayed(new Runnable() {
+
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+
                         try {
+                            Log.d("ISBN", barcodeValue);
                             ISBN isbnObj = new ISBN(barcodeValue.toString());
-//                            barcodeScanISBN = barcodeValue.toString();
-//                isbn.setText(barcodeScanISBN);
-                            //goToBookPropose(isbnObj.toString());
-//                            Log.d("BookAdd::onFound", isbnObj.toString());
 //                            isbn.setText(isbnObj.toString(true));
-
-
-//                            mPreview.release();
-//                            mPreview.stop();
-
+                            goToBookPropose(barcodeValue.toString());
                         } catch (InvalidStandardIDException e) {
                             Log.d("ISBN", e.getMessage());
                         }
+
                     }
-                }, 500);
+                });
+
+//                final Handler handler = new Handler(Looper.getMainLooper());
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                try {
+//                    Log.d("ISBN", barcodeValue);
+//                    ISBN isbnObj = new ISBN(barcodeValue.toString());
+////                            isbn.setText(isbnObj.toString(true));
+//                    goToBookPropose(isbnObj.toString());
+//                    return;
+//                } catch (InvalidStandardIDException e) {
+//                    Log.d("ISBN", e.getMessage());
+//                }
+//                    }
+//                }, 2000);
 
 //                PrefUtils.clearCurrentISBN(getApplicationContext());
             }
@@ -156,43 +173,28 @@ public class BookAddActivity extends ActionBarActivity {
         mCameraSource = new CameraSource.Builder(getApplicationContext(), barcodeDetector)
                 .setFacing(CameraSource.CAMERA_FACING_BACK)
                 .setRequestedPreviewSize(width, height)
-                .setRequestedFps(5.0f)
+                .setRequestedFps(30.0f)
                 .build();
     }
 
-
-
-            /*private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-                @Override
-                public void onReceive(Context context, Intent intent) {
-                    // Get extra data included in the Intent
-                    String scannedISBN = intent.getStringExtra("ISBN");
-//            String scannedISBN = (String) b.getParcelable("ISBN");
-                    if (scannedISBN != null && !scannedISBN.isEmpty()) {
-                        barcodeScanISBN = scannedISBN;
-                        Log.d("BookAddActivity 1", barcodeScanISBN);
-                        //goToBookPropose(barcodeScanISBN);
-                        isbn.setText(barcodeScanISBN);
-                        goToBookPropose(barcodeScanISBN);
-                        //find.callOnClick();
-                        Log.d("BookAddActivity 2", barcodeScanISBN);
-                        PrefUtils.clearCurrentISBN(getApplicationContext());
-                    } else {
-                        Log.d("BookAddActivity", "ISBN NULO");
-                    }
-
-                    frag.setVisibility(FrameLayout.GONE);
-
-                }
-            };*/
-
+    public void stopBarcodeScanner() {
+        Log.d("stopBarcodeScanner", "CALLED");
+        mPreview.stop();
+    }
 
     public void lerCodigoDeBarras(View view) {
-
+        configureBarcodeScanner();
+        startCameraSource();
+//        mPreview = (CameraSourcePreview) findViewById(R.id.cameraSourcePreview);
+//        mGraphicOverlay = (GraphicOverlay) findViewById(R.id.overlay);
+        mPreview.setVisibility(View.VISIBLE);
+        mGraphicOverlay.setVisibility(View.VISIBLE);
+        pesquisaCodigoBarras.setVisibility(View.GONE);
+//        configureBarcodeScanner();
     }
 
     public void goToBookPropose(View view) {
-//        AppUtils.esconderTecladoVirtual(this);
+        AppUtils.esconderTecladoVirtual(this);
         goToBookPropose(isbn.getText().toString());
     }
 
@@ -204,6 +206,12 @@ public class BookAddActivity extends ActionBarActivity {
     }
 
     private void goToBookPropose(String isbnToSearch) {
+
+        stopBarcodeScanner();
+        mPreview.setVisibility(View.GONE);
+        mGraphicOverlay.setVisibility(View.GONE);
+        pesquisaCodigoBarras.setVisibility(View.VISIBLE);
+
         bookTitle = (TextView) findViewById(R.id.bookTitle);
         bookAuthorName = (TextView) findViewById(R.id.bookAuthorName);
         bookGenderName = (TextView) findViewById(R.id.bookGenderName);
@@ -342,7 +350,7 @@ public class BookAddActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        startCameraSource(); //start
+        //startCameraSource(); //start
     }
 
     @Override
