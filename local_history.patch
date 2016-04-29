@@ -1,0 +1,297 @@
+Index: app/src/main/java/leevro/pucpr/br/leevro19/BookAddActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/leevro/pucpr/br/leevro19/BookAddActivity.java	(revision )
++++ app/src/main/java/leevro/pucpr/br/leevro19/BookAddActivity.java	(revision )
+@@ -1,11 +1,16 @@
+ package leevro.pucpr.br.leevro19;
+ 
+ import android.app.Activity;
++import android.content.BroadcastReceiver;
++import android.content.Context;
+ import android.content.Intent;
++import android.content.IntentFilter;
+ import android.graphics.Point;
++import android.location.Location;
+ import android.os.Bundle;
+ import android.os.Handler;
+ import android.os.Looper;
++import android.support.v4.content.LocalBroadcastManager;
+ import android.support.v7.app.ActionBar;
+ import android.support.v7.app.ActionBarActivity;
+ import android.support.v7.app.AppCompatActivity;
+@@ -49,12 +54,8 @@
+ import leevro.pucpr.br.leevro19.utils.AppUtils;
+ import leevro.pucpr.br.leevro19.utils.PrefUtils;
+ 
+-public class BookAddActivity extends Activity {
++public class BookAddActivity extends ActionBarActivity {
+ 
+-    CameraSourcePreview mPreview;
+-    CameraSource mCameraSource;
+-    GraphicOverlay mGraphicOverlay;
+-
+     TextView find;
+ 
+     EditText isbn;
+@@ -62,9 +63,6 @@
+     TextView bookAuthorName;
+     TextView bookGenderName;
+     TextView bookDescription;
+-    TextView bookYear;
+-    TextView bookLanguage;
+-    //    TextView bookPhoto;
+     TextView bookEdition;
+     NetworkImageView bookCover;
+     String photo;
+@@ -105,89 +103,28 @@
+ //                mMessageReceiver, new IntentFilter("ISBNScanner"));
+ 
+ 
+-    }
+-
+-    public void configureBarcodeScanner() {
+-        mPreview = (CameraSourcePreview) findViewById(R.id.cameraSourcePreview);
+-        mGraphicOverlay = (GraphicOverlay) findViewById(R.id.overlay);
+-
+-        final BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(
+-                getApplicationContext()).setBarcodeFormats(Barcode.ALL_FORMATS).build();
+-        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay, new GraphicTracker.Callback() {
+-            @Override
+-            public void onFound(final String barcodeValue) {
+-                final Handler handler = new Handler(Looper.getMainLooper());
+-                handler.postDelayed(new Runnable() {
+-                    @Override
+-                    public void run() {
+-                        try {
+-                            ISBN isbnObj = new ISBN(barcodeValue.toString());
+-//                            barcodeScanISBN = barcodeValue.toString();
+-//                isbn.setText(barcodeScanISBN);
+-                            //goToBookPropose(isbnObj.toString());
+-//                            Log.d("BookAdd::onFound", isbnObj.toString());
+-//                            isbn.setText(isbnObj.toString());
+-
+-
+-//                            mPreview.release();
+-//                            mPreview.stop();
+-
+-                        } catch (InvalidStandardIDException e) {
+-                            Log.d("ISBN", e.getMessage());
+-                        }
+-                    }
+-                }, 2000);
+-
+-//                PrefUtils.clearCurrentISBN(getApplicationContext());
+-            }
+-//                }, 2000);
+-        });
+-        barcodeDetector.setProcessor(new MultiProcessor.Builder<>(barcodeFactory).build());
+-
+-        Display display = getWindowManager().getDefaultDisplay();
+-        Point size = new Point();
+-        display.getSize(size);
+-        //Integer width = size.x;
+-        //Integer height = size.y;
+-        Integer width = size.x;
+-        Integer height = 300;
+-        Log.d("screenX x screenY", width.toString() + 'x' + height.toString());
+-
+-        mCameraSource = new CameraSource.Builder(getApplicationContext(), barcodeDetector)
+-                .setFacing(CameraSource.CAMERA_FACING_BACK)
+-                .setRequestedPreviewSize(width, height)
+-                .setRequestedFps(10.0f)
+-                .build();
+-    }
+-
+-
+-
+-            /*private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+-                @Override
+-                public void onReceive(Context context, Intent intent) {
+-                    // Get extra data included in the Intent
+-                    String scannedISBN = intent.getStringExtra("ISBN");
+-//            String scannedISBN = (String) b.getParcelable("ISBN");
+-                    if (scannedISBN != null && !scannedISBN.isEmpty()) {
+-                        barcodeScanISBN = scannedISBN;
+-                        Log.d("BookAddActivity 1", barcodeScanISBN);
+-                        //goToBookPropose(barcodeScanISBN);
+-                        isbn.setText(barcodeScanISBN);
++        barcodeScanISBN = PrefUtils.getCurrentISBN(getApplicationContext());
++        if(barcodeScanISBN!=null&&!barcodeScanISBN.isEmpty()){
+-                        goToBookPropose(barcodeScanISBN);
++            goToBookPropose(barcodeScanISBN);
+-                        //find.callOnClick();
+-                        Log.d("BookAddActivity 2", barcodeScanISBN);
+-                        PrefUtils.clearCurrentISBN(getApplicationContext());
+-                    } else {
+-                        Log.d("BookAddActivity", "ISBN NULO");
+-                    }
++        }
+ 
+-                    frag.setVisibility(FrameLayout.GONE);
+-
+-                }
++    }
+-            };*/
+ 
++//    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
++//        @Override
++//        public void onReceive(Context context, Intent intent) {
++//            // Get extra data included in the Intent
++//            barcodeScanISBN = intent.getStringExtra("isbn");
++//            if (barcodeScanISBN != null && !barcodeScanISBN.isEmpty()) {
++//                goToBookPropose(isbn);
++//            }
++//        }
++//    };
+ 
+     public void lerCodigoDeBarras(View view) {
++        Intent intent = new Intent(BookAddActivity.this, BarcodeScannerActivity.class);
++        startActivity(intent);
++        finish();
+     }
+ 
+     public void goToBookPropose(View view) {
+@@ -213,71 +150,57 @@
+         String url = "http://96.126.115.143/leevrows/retornaUmLivro.php?isbn=" + isbnToSearch;
+         Log.d("Retorno: ", "xxadadas");
+ 
+-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
++        JsonObjectRequest jsObjRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+ 
+-                    @Override
+-                    public void onResponse(JSONObject response) {
+-                        Log.d("Retorno: ", response.toString());
++            @Override
++            public void onResponse(JSONObject response) {
++                Log.d("Retorno: ", response.toString());
+ 
+-                        try {
++                try {
+ 
+-                            Boolean status = response.getBoolean("status");
+-                            if (status) {
++                    Boolean status = response.getBoolean("status");
++                    if (status) {
+ 
+ 
+-                                livro = response.getJSONObject("livro");
+-                                bookTitle.setText(livro.getString("title"));
+-                                bookAuthorName.setText(livro.getString("author_name"));
+-                                bookGenderName.setText(livro.getString("gender_name"));
+-                                bookDescription.setText(livro.getString("description"));
+-                                bookEdition.setText(livro.getString("edition"));
+-                                photo = livro.getString("photo");
++                        livro = response.getJSONObject("livro");
++                        bookTitle.setText(livro.getString("title"));
++                        bookAuthorName.setText(livro.getString("author_name"));
++                        bookGenderName.setText(livro.getString("gender_name"));
++                        bookDescription.setText(livro.getString("description"));
++                        bookEdition.setText(livro.getString("edition"));
++                        photo = livro.getString("photo");
+ 
+-                                mImageLoader = CustomVolleyRequestQueue.getInstance(getApplicationContext()).getImageLoader();
+-                                bookCover.setImageUrl(AppUtils.APP_PATH_VIRTUAL_BOOK_COVER_PATH + livro.getString("photo"), mImageLoader);
++                        mImageLoader = CustomVolleyRequestQueue.getInstance(getApplicationContext()).getImageLoader();
++                        bookCover.setImageUrl(AppUtils.APP_PATH_VIRTUAL_BOOK_COVER_PATH + livro.getString("photo"), mImageLoader);
+ 
+-                                consulta.setVisibility(LinearLayout.GONE);
+-                                bookDetailPreview.setVisibility(LinearLayout.VISIBLE);
++                        consulta.setVisibility(LinearLayout.GONE);
++                        bookDetailPreview.setVisibility(LinearLayout.VISIBLE);
+ 
+-                                getActionBar().hide();
++                        getActionBar().hide();
+ 
+-                            } else {
+-                                Toast toast = Toast.makeText(getApplicationContext(), "Erro: Não foi possível retornar livro pesquisado.", Toast.LENGTH_SHORT);
+-                                toast.show();
+-                            }
++                    } else {
++                        Toast toast = Toast.makeText(getApplicationContext(), "Erro: Não foi possível retornar livro pesquisado.", Toast.LENGTH_SHORT);
++                        toast.show();
++                    }
+ 
+-                        } catch (
+-                                JSONException e
+-                                )
+-
+-                        {
++                } catch (JSONException e){
+-                            e.printStackTrace();
+-                        }
+-                    }
++                    e.printStackTrace();
++                }
++            }
+-                }
++        }, new Response.ErrorListener() {
+ 
+-                        , new Response.ErrorListener()
+-
+-                {
+-
+-                    @Override
+-                    public void onErrorResponse(VolleyError error) {
+-                        Log.d("Erro: ", error.toString());
+-                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+-                        toast.show();
++            @Override
++            public void onErrorResponse(VolleyError error) {
++                Log.d("Erro: ", error.toString());
++                Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
++                toast.show();
+ 
+-                    }
+-                }
++            }
++        }
+ 
+-                );
++        );
+         Volley.newRequestQueue(this).add(jsObjRequest);
+ 
+-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
+-                10000,
+-                3,
+-                2f));
+-        //Volley.getInstance(this).addToRequestQueue(jsObjRequest);
+     }
+ 
+     public void addBook(View view) {
+@@ -328,32 +251,9 @@
+         //Volley.getInstance(this).addToRequestQueue(jsObjRequest);
+     }
+ 
+-
+-    private void startCameraSource() {
+-        try {
+-            mPreview.start(mCameraSource, mGraphicOverlay);
+-        } catch (IOException e) {
+-            mCameraSource.release();
+-            mCameraSource = null;
+-        }
+-    }
+-
+     @Override
+-    protected void onResume() {
+-        super.onResume();
+-        startCameraSource(); //start
+-    }
+-
+-    @Override
+-    protected void onPause() {
+-        super.onPause();
+-        mPreview.stop(); //stop
+-    }
+-
+-    @Override
+     protected void onDestroy() {
+         super.onDestroy();
+-        mCameraSource.release(); //release the resources
+ //        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+     }
+ 

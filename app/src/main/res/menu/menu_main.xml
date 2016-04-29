@@ -28,9 +28,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_barcode_scanner"
+        android:id="@+id/action_book_add"
         android:orderInCategory="10"
-        android:title="@string/action_barcode_scanner"
+        android:title="@string/action_book_add"
         app:showAsAction="never" />
 
 

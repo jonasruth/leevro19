@@ -36,4 +36,13 @@ public class AppUtils {
         inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 
+    public static boolean isISBNValid(String isbn){
+        boolean isValid = false;
+
+
+
+
+        return isValid;
+    }
+
 }

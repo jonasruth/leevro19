@@ -43,7 +43,7 @@ import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 public class MainActivity extends ActionBarActivity {
 
-    boolean mBounded;
+//    boolean mBounded;
     ServiceGPS mServer;
 
     private AppUser loggedUser;
@@ -381,8 +381,8 @@ public interface VolleyCallback {
         startActivity(intent);
     }
 
-    public void goToBarcodeScanner() {
-        Intent intent = new Intent(MainActivity.this, BarcodeScannerActivity.class);
+    public void goToBookAdd() {
+        Intent intent = new Intent(MainActivity.this, BookAddActivity.class);
         startActivity(intent);
     }
 
@@ -436,10 +436,10 @@ public interface VolleyCallback {
                 // About option clicked.
                 goToMyBookGallery();
                 return true;
-            case R.id.action_barcode_scanner:
+            case R.id.action_book_add:
                 // About option clicked.
 //                goToSettings();
-                goToBarcodeScanner();
+                goToBookAdd();
                 return true;
             case R.id.action_book_transactions:
                 // About option clicked.

@@ -3,18 +3,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="leevro.pucpr.br.leevro19.BarcodeScannerActivityFragment"
-    tools:showIn="@layout/activity_barcode_scanner">
+    tools:showIn="@layout/activity_barcode_scanner"
+    android:id="@+id/fragScannerView"
+    >
 
-        <leevro.pucpr.br.leevro19.custom.CameraSourcePreview
-            android:id="@+id/preview"
+        <leevro.pucpr.br.leevro19.barcodescanner.CameraSourcePreview
+            android:id="@+id/cameraSourcePreview"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <leevro.pucpr.br.leevro19.custom.GraphicOverlay
+            <leevro.pucpr.br.leevro19.barcodescanner.GraphicOverlay
                 android:id="@+id/overlay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        </leevro.pucpr.br.leevro19.custom.CameraSourcePreview>
+        </leevro.pucpr.br.leevro19.barcodescanner.CameraSourcePreview>
 
 </LinearLayout>

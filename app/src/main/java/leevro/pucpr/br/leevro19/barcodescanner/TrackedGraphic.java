@@ -1,4 +1,4 @@
-package leevro.pucpr.br.leevro19.custom;
+package leevro.pucpr.br.leevro19.barcodescanner;
 
 /*
  * Copyright (C) The Android Open Source Project

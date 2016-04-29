@@ -3,6 +3,7 @@
     android:id="@+id/bookAddScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -15,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -23,6 +24,71 @@
             android:layout_weight="1"
             android:gravity="center"
             android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/txtManual"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:gravity="center_horizontal"
+                android:onClick="lerCodigoDeBarras"
+                android:text="Consultar manualmente"
+                android:textSize="22dp" />
+
+            <EditText
+                android:id="@+id/isbn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:hint="Digite o ISBN aqui"
+                android:inputType="number"
+                android:textSize="30dp"
+                android:textStyle="bold|italic" />
+
+
+            <TextView
+                android:id="@+id/find"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10px"
+                android:background="@drawable/rounded_button"
+                android:gravity="center_horizontal"
+                android:onClick="goToBookPropose"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                android:text="Pesquisar"
+                android:textColor="@color/white"
+                android:textSize="16dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <leevro.pucpr.br.leevro19.barcodescanner.CameraSourcePreview
+                android:id="@+id/cameraSourcePreview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <leevro.pucpr.br.leevro19.barcodescanner.GraphicOverlay
+                    android:id="@+id/overlay"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </leevro.pucpr.br.leevro19.barcodescanner.CameraSourcePreview>
 
             <TextView
                 android:id="@+id/txtScan"
@@ -55,43 +121,6 @@
 
             />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <EditText
-                android:id="@+id/isbn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Pesquisa por ISBN"
-                android:inputType="number"
-                android:textSize="30dp"
-                android:layout_marginLeft="15dp"
-                android:layout_marginRight="15dp"
-                android:textStyle="bold|italic" />
-
-
-            <TextView
-                android:id="@+id/find"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/rounded_button"
-                android:gravity="right"
-                android:onClick="goToBookPropose"
-                android:layout_marginTop="10px"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="5dp"
-                android:text="Pesquisar"
-                android:textColor="@color/white"
-                android:textSize="22dp" />
-        </LinearLayout>
 
     </LinearLayout>
 
@@ -100,7 +129,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ScrollView
 
@@ -279,16 +308,16 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal">
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/btnCancelar"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
-                    android:gravity="center_horizontal"
                     android:background="@drawable/rounded_stroked_button_1"
+                    android:gravity="center_horizontal"
                     android:onClick="goBack"
                     android:padding="16dp"
                     android:text="Cancelar"
@@ -300,8 +329,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:gravity="center_horizontal"
                     android:background="@drawable/rounded_button"
+                    android:gravity="center_horizontal"
                     android:onClick="addBook"
                     android:padding="16dp"
                     android:text="Salvar na minha galeria"

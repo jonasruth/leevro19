@@ -1,21 +1,19 @@
 package leevro.pucpr.br.leevro19;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -29,25 +27,33 @@ import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.vision.CameraSource;
+import com.google.android.gms.vision.MultiProcessor;
+import com.google.android.gms.vision.barcode.Barcode;
+import com.google.android.gms.vision.barcode.BarcodeDetector;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import leevro.pucpr.br.leevro19.barcodescanner.BarcodeTrackerFactory;
+import leevro.pucpr.br.leevro19.barcodescanner.CameraSourcePreview;
+import leevro.pucpr.br.leevro19.barcodescanner.GraphicOverlay;
+import leevro.pucpr.br.leevro19.barcodescanner.GraphicTracker;
+import leevro.pucpr.br.leevro19.lib.ISBN;
+import leevro.pucpr.br.leevro19.lib.InvalidStandardIDException;
 import leevro.pucpr.br.leevro19.network.CustomVolleyRequestQueue;
 import leevro.pucpr.br.leevro19.utils.AppUtils;
 import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 public class BookAddActivity extends ActionBarActivity {
+
+    CameraSourcePreview mPreview;
+    CameraSource mCameraSource;
+    GraphicOverlay mGraphicOverlay;
 
     TextView find;
 
@@ -66,48 +72,123 @@ public class BookAddActivity extends ActionBarActivity {
     LinearLayout consulta;
     JSONObject livro;
     private ImageLoader mImageLoader;
+    private String barcodeScanISBN;
+    CameraSourcePreview cameraSourcePreview;
+    FrameLayout frag;
+
+    ActionBar actionBar;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
-    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_add);
+//        configureBarcodeScanner();
+
         consulta = (LinearLayout) findViewById(R.id.consulta);
         bookDetailPreview = (LinearLayout) findViewById(R.id.bookDetailPreview);
         consulta.setVisibility(LinearLayout.VISIBLE);
         bookDetailPreview.setVisibility(ScrollView.GONE);
 
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+        actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         isbn = (EditText) findViewById(R.id.isbn);
         find = (TextView) findViewById(R.id.find);
 
-        String barcodeScanISBN = PrefUtils.getCurrentISBN(getApplicationContext());
-        if (barcodeScanISBN != null && !barcodeScanISBN.isEmpty()) {
-            Log.d("BookAddActivity 1", barcodeScanISBN);
-            //goToBookPropose(barcodeScanISBN);
-            isbn.setText(barcodeScanISBN);
-            goToBookPropose(barcodeScanISBN);
-            //find.callOnClick();
-            Log.d("BookAddActivity 2", barcodeScanISBN);
-            PrefUtils.clearCurrentISBN(getApplicationContext());
-        } else {
-            Log.d("BookAddActivity 2", "NULO");
-        }
+//        LocalBroadcastManager.getInstance(this).registerReceiver(
+//                mMessageReceiver, new IntentFilter("ISBNScanner"));
+
+        configureBarcodeScanner();
 
     }
 
+    public void configureBarcodeScanner() {
+        mPreview = (CameraSourcePreview) findViewById(R.id.cameraSourcePreview);
+        mGraphicOverlay = (GraphicOverlay) findViewById(R.id.overlay);
+
+        final BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(
+                getApplicationContext()).setBarcodeFormats(Barcode.ALL_FORMATS).build();
+        BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay, new GraphicTracker.Callback() {
+            @Override
+            public void onFound(final String barcodeValue) {
+                final Handler handler = new Handler(Looper.getMainLooper());
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            ISBN isbnObj = new ISBN(barcodeValue.toString());
+//                            barcodeScanISBN = barcodeValue.toString();
+//                isbn.setText(barcodeScanISBN);
+                            //goToBookPropose(isbnObj.toString());
+//                            Log.d("BookAdd::onFound", isbnObj.toString());
+//                            isbn.setText(isbnObj.toString(true));
+
+
+//                            mPreview.release();
+//                            mPreview.stop();
+
+                        } catch (InvalidStandardIDException e) {
+                            Log.d("ISBN", e.getMessage());
+                        }
+                    }
+                }, 500);
+
+//                PrefUtils.clearCurrentISBN(getApplicationContext());
+            }
+//                }, 2000);
+        });
+        barcodeDetector.setProcessor(new MultiProcessor.Builder<>(barcodeFactory).build());
+
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        //Integer width = size.x;
+        //Integer height = size.y;
+        Integer width = size.x;
+        Integer height = 300;
+        Log.d("screenX x screenY", width.toString() + 'x' + height.toString());
+
+        mCameraSource = new CameraSource.Builder(getApplicationContext(), barcodeDetector)
+                .setFacing(CameraSource.CAMERA_FACING_BACK)
+                .setRequestedPreviewSize(width, height)
+                .setRequestedFps(5.0f)
+                .build();
+    }
+
+
+
+            /*private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    // Get extra data included in the Intent
+                    String scannedISBN = intent.getStringExtra("ISBN");
+//            String scannedISBN = (String) b.getParcelable("ISBN");
+                    if (scannedISBN != null && !scannedISBN.isEmpty()) {
+                        barcodeScanISBN = scannedISBN;
+                        Log.d("BookAddActivity 1", barcodeScanISBN);
+                        //goToBookPropose(barcodeScanISBN);
+                        isbn.setText(barcodeScanISBN);
+                        goToBookPropose(barcodeScanISBN);
+                        //find.callOnClick();
+                        Log.d("BookAddActivity 2", barcodeScanISBN);
+                        PrefUtils.clearCurrentISBN(getApplicationContext());
+                    } else {
+                        Log.d("BookAddActivity", "ISBN NULO");
+                    }
+
+                    frag.setVisibility(FrameLayout.GONE);
+
+                }
+            };*/
+
+
     public void lerCodigoDeBarras(View view) {
-        Intent intent = new Intent(BookAddActivity.this, BarcodeScannerActivity.class);
-        startActivity(intent);
+
     }
 
     public void goToBookPropose(View view) {
@@ -116,7 +197,7 @@ public class BookAddActivity extends ActionBarActivity {
     }
 
     public void goBack(View view) {
-        getSupportActionBar().show();
+        actionBar.show();
         consulta.setVisibility(LinearLayout.VISIBLE);
         bookDetailPreview.setVisibility(LinearLayout.GONE);
         isbn.setText(null);
@@ -160,7 +241,7 @@ public class BookAddActivity extends ActionBarActivity {
                                 consulta.setVisibility(LinearLayout.GONE);
                                 bookDetailPreview.setVisibility(LinearLayout.VISIBLE);
 
-                                getSupportActionBar().hide();
+                                actionBar.hide();
 
                             } else {
                                 Toast toast = Toast.makeText(getApplicationContext(), "Erro: Não foi possível retornar livro pesquisado.", Toast.LENGTH_SHORT);
@@ -201,27 +282,7 @@ public class BookAddActivity extends ActionBarActivity {
     }
 
     public void addBook(View view) {
-//        AppUtils.esconderTecladoVirtual(this);
         addBook();
-        /*ImageView spaceshipImage = (ImageView) findViewById(R.id.bookCover);
-        Animation hyperspaceJumpAnimation = AnimationUtils.loadAnimation(this, R.anim.test);
-        spaceshipImage.startAnimation(hyperspaceJumpAnimation);
-        hyperspaceJumpAnimation.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                addBook();
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });*/
     }
 
     public void addBook() {
@@ -269,77 +330,32 @@ public class BookAddActivity extends ActionBarActivity {
     }
 
 
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu_book_add, menu);
-        return true;
-    }*/
-
-   /* @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+    private void startCameraSource() {
+        try {
+            mPreview.start(mCameraSource, mGraphicOverlay);
+        } catch (IOException e) {
+            mCameraSource.release();
+            mCameraSource = null;
         }
-
-        switch (item.getItemId()) {
-            case R.id.action_favorite:
-                // About option clicked.
-                addBook();
-                return true;
-//            case R.id.action_settings:
-//                // Settings option clicked.
-//                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-
-//        return super.onOptionsItemSelected(item);
-    }*/
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "BookAdd Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://leevro.pucpr.br.leevro19/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "BookAdd Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://leevro.pucpr.br.leevro19/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
+    protected void onResume() {
+        super.onResume();
+        startCameraSource(); //start
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPreview.stop(); //stop
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCameraSource.release(); //release the resources
+//        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+    }
+
 }
