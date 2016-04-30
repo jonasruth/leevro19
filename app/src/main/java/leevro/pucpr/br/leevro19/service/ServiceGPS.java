@@ -12,35 +12,132 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import leevro.pucpr.br.leevro19.BookGalleryActivity;
 import leevro.pucpr.br.leevro19.MyProfile;
+import leevro.pucpr.br.leevro19.lib.GPSStatus;
+import leevro.pucpr.br.leevro19.utils.AppUtils;
+import leevro.pucpr.br.leevro19.utils.PrefUtils;
 //import android.widget.Toast;
 
 public class ServiceGPS extends Service {
 
     private static final String TAG = "BOOMBOOMTESTGPS";
-    private LocationManager mLocationManager = null;
-    private static final int LOCATION_INTERVAL = 1000;
+    private static final int LOCATION_INTERVAL = 5000;
     private static final float LOCATION_DISTANCE = 10f;
+
+    private LocationManager mLocationManager = null;
+    private GPSStatus gpsStatus = new GPSStatus();
 
 
     public ServiceGPS() {
     }
 
-    private static void sendMessageToActivity(Context ctx, Location l, String msg) {
+    private void checkNotifications() {
+        Map<String, String> params = new HashMap();
+        params.put("user_id", PrefUtils.getLoggedUser(getApplicationContext()).userId);
+        JSONObject parameters = new JSONObject(params);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, AppUtils.APP_URL_WS_CHECK_NOTIFICATIONS, parameters, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("checkNotifications", response.toString());
+                        JSONArray arr = null;
+                        try {
+                            arr = response.getJSONArray("notifications");
+                            if(arr.length()>0) {
+                                sendNotification(getApplicationContext(), arr.getJSONObject(0).getString("message"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Erro: ", error.toString());
+                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+                        toast.show();
+
+                    }
+                });
+        Volley.newRequestQueue(this).add(jsObjRequest);
+    }
+
+    private static void sendNotification(Context ctx, String message) {
+        Intent intent = new Intent("LeevroNotification");
+        // You can also include some extra data.
+        intent.putExtra("Message", message);
+        LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
+    }
+
+    private static void sendMessageToActivity(final Context ctx, Location l, boolean providerEnabled) {
+
+        Map<String, String> params = new HashMap();
+        params.put("user_id", PrefUtils.getLoggedUser(ctx).userId);
+        JSONObject parameters = new JSONObject(params);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.POST, AppUtils.APP_URL_WS_CHECK_NOTIFICATIONS, parameters, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("checkNotifications", response.toString());
+                        JSONArray arr = null;
+                        try {
+                            arr = response.getJSONArray("notifications");
+                            if(arr.length()>0) {
+                                for(int i=0;i<arr.length();i++) {
+                                    sendNotification(ctx, arr.getJSONObject(i).getString("message"));
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("Erro: ", error.toString());
+                        Toast toast = Toast.makeText(ctx, "erro" + error.toString(), Toast.LENGTH_SHORT);
+                        toast.show();
+
+                    }
+                });
+        Volley.newRequestQueue(ctx).add(jsObjRequest);
+
+        Log.d("MSG:GPSLocationUpdates", "provider enabled:" + providerEnabled + " - location" + l.toString());
         Intent intent = new Intent("GPSLocationUpdates");
         // You can also include some extra data.
-        intent.putExtra("Status", msg);
         Bundle b = new Bundle();
         b.putParcelable("Location", l);
         intent.putExtra("Location", b);
+        intent.putExtra("ProviderEnabled", providerEnabled);
         LocalBroadcastManager.getInstance(ctx).sendBroadcast(intent);
     }
 
 
     private class LocationListener implements android.location.LocationListener {
         Location mLastLocation;
+        boolean providerEnabled;
 
         public LocationListener(String provider) {
             Log.e(TAG, "LocationListener " + provider);
@@ -49,27 +146,32 @@ public class ServiceGPS extends Service {
 
         @Override
         public void onLocationChanged(Location location) {
+            checkNotifications();
             Log.e(TAG, "onLocationChanged: " + location);
 //            Toast.makeText(getApplicationContext(),"onLocationChanged: " + location,Toast.LENGTH_SHORT).show();
             mLastLocation.set(location);
-            sendMessageToActivity(getApplicationContext(), mLastLocation, "Coquecoisa");
+            sendMessageToActivity(getApplicationContext(), mLastLocation, providerEnabled);
         }
 
         @Override
         public void onProviderDisabled(String provider) {
             Log.e(TAG, "onProviderDisabled: " + provider);
-
+            providerEnabled = Boolean.FALSE;
+            sendMessageToActivity(getApplicationContext(), mLastLocation, providerEnabled);
         }
 
         @Override
         public void onProviderEnabled(String provider) {
             Log.e(TAG, "onProviderEnabled: " + provider);
 //            Toast.makeText(getApplicationContext(),"onProviderEnabled: " + provider,Toast.LENGTH_SHORT).show();
+            providerEnabled = Boolean.TRUE;
+            sendMessageToActivity(getApplicationContext(), mLastLocation, providerEnabled);
         }
 
         @Override
         public void onStatusChanged(String provider, int status, Bundle extras) {
             Log.e(TAG, "onStatusChanged: " + provider);
+            checkNotifications();
 //            Toast.makeText(getApplicationContext(),"onStatusChanged: " + provider,Toast.LENGTH_SHORT).show();
         }
     }

@@ -69,8 +69,8 @@ public class BookTransactionActivity extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Erro: ", error.toString());
-                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
-                        toast.show();
+//                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+//                        toast.show();
 
                     }
                 });

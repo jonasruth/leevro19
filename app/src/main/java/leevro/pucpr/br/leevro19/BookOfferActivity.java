@@ -69,8 +69,8 @@ public class BookOfferActivity extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Erro: ", error.toString());
-                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
-                        toast.show();
+//                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+//                        toast.show();
 
                     }
                 });
@@ -94,7 +94,7 @@ public class BookOfferActivity extends Activity {
 //
 //                CheckBox chk = (CheckBox) view.findViewById(R.id.chk);
 //                chk.setSelected(true);
-                Toast.makeText(getApplicationContext(),"Checkbox: "+(findViewById(R.id.chk)).isSelected(),Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(),"Checkbox: "+(findViewById(R.id.chk)).isSelected(),Toast.LENGTH_SHORT).show();
 //                String fbook_id = null;
 //                fbook_id = livros.get(position).getPhysicalBookId();
 //                goToBookDetail(view, fbook_id);

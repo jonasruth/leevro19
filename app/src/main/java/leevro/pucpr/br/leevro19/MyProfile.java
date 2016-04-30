@@ -41,9 +41,10 @@ public class MyProfile extends ActionBarActivity {
     private void preencherCamposFragment() {
         Context ctx = getApplicationContext();
         NetworkImageView profileImage = (NetworkImageView) findViewById(R.id.profileImage);
+        TextView profileName = (TextView) findViewById(R.id.txtUserName);
         mImageLoader = CustomVolleyRequestQueue.getInstance(getApplicationContext()).getImageLoader();
         profileImage.setImageUrl(AppUtils.APP_PATH_USER_PIC_PATH + loggedUser.facebookID + ".jpg", mImageLoader);
-
+        profileName.setText(loggedUser.name);
         addressViewContainer = (LinearLayout) findViewById(R.id.addressViewContainer);
         addressView = (TextView) findViewById(R.id.addressView);
         addressEditContainer = (LinearLayout) findViewById(R.id.addressEditContainer);

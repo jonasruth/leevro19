@@ -13,6 +13,10 @@ public class BookFeeder {
         Book book = new Book();
 
         try {
+
+            book.setLat(jBook.getDouble("geo_last_lat"));
+            book.setLng(jBook.getDouble("geo_last_lng"));
+
             book.setPhysicalBookId(jBook.getString("fbook_id"));
             book.setVirtualBookId(jBook.getString("vbook_id"));
             book.setOwnerUserId(jBook.getString("user_id"));

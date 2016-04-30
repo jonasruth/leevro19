@@ -25,7 +25,7 @@
     <string name="title_activity_book_and_profile">Detalhes do Livro</string>
     <string name="title_activity_book_offer">BookOfferActivity</string>
     <string name="title_activity_book_transaction">Negociações de Livros</string>
-    <string name="title_activity_my_profile">MyProfile</string>
+    <string name="title_activity_my_profile">Perfil</string>
     <string name="title_activity_barcode_scanner">BarcodeScannerActivity</string>
 
 </resources>

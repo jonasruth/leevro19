@@ -179,7 +179,9 @@ public class BookAddActivity extends ActionBarActivity {
 
     public void stopBarcodeScanner() {
         Log.d("stopBarcodeScanner", "CALLED");
-        mPreview.stop();
+        if (mPreview != null) {
+            mPreview.stop();
+        }
     }
 
     public void lerCodigoDeBarras(View view) {
@@ -207,85 +209,99 @@ public class BookAddActivity extends ActionBarActivity {
 
     private void goToBookPropose(String isbnToSearch) {
 
-        stopBarcodeScanner();
-        mPreview.setVisibility(View.GONE);
-        mGraphicOverlay.setVisibility(View.GONE);
-        pesquisaCodigoBarras.setVisibility(View.VISIBLE);
 
-        bookTitle = (TextView) findViewById(R.id.bookTitle);
-        bookAuthorName = (TextView) findViewById(R.id.bookAuthorName);
-        bookGenderName = (TextView) findViewById(R.id.bookGenderName);
-        bookDescription = (TextView) findViewById(R.id.bookDescription);
-        bookEdition = (TextView) findViewById(R.id.bookEdition);
-        bookCover = (NetworkImageView) findViewById(R.id.bookCover);
-
-        String url = "http://96.126.115.143/leevrows/retornaUmLivro.php?isbn=" + isbnToSearch;
-        Log.d("Retorno: ", "xxadadas");
-
-        JsonObjectRequest jsObjRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d("Retorno: ", response.toString());
-
-                        try {
-
-                            Boolean status = response.getBoolean("status");
-                            if (status) {
+        try {
+            new ISBN(isbnToSearch);
 
 
-                                livro = response.getJSONObject("livro");
-                                bookTitle.setText(livro.getString("title"));
-                                bookAuthorName.setText(livro.getString("author_name"));
-                                bookGenderName.setText(livro.getString("gender_name"));
-                                bookDescription.setText(livro.getString("description"));
-                                bookEdition.setText(livro.getString("edition"));
-                                photo = livro.getString("photo");
+            stopBarcodeScanner();
+            if (mPreview != null) {
+                mPreview.setVisibility(View.GONE);
+            }
+            if (mGraphicOverlay != null) {
+                mGraphicOverlay.setVisibility(View.GONE);
+            }
+            pesquisaCodigoBarras.setVisibility(View.VISIBLE);
 
-                                mImageLoader = CustomVolleyRequestQueue.getInstance(getApplicationContext()).getImageLoader();
-                                bookCover.setImageUrl(AppUtils.APP_PATH_VIRTUAL_BOOK_COVER_PATH + livro.getString("photo"), mImageLoader);
+            bookTitle = (TextView) findViewById(R.id.bookTitle);
+            bookAuthorName = (TextView) findViewById(R.id.bookAuthorName);
+            bookGenderName = (TextView) findViewById(R.id.bookGenderName);
+            bookDescription = (TextView) findViewById(R.id.bookDescription);
+            bookEdition = (TextView) findViewById(R.id.bookEdition);
+            bookCover = (NetworkImageView) findViewById(R.id.bookCover);
 
-                                consulta.setVisibility(LinearLayout.GONE);
-                                bookDetailPreview.setVisibility(LinearLayout.VISIBLE);
+            String url = "http://96.126.115.143/leevrows/retornaUmLivro.php?isbn=" + isbnToSearch;
+            Log.d("Consulta: ", "http://96.126.115.143/leevrows/retornaUmLivro.php?isbn=" + isbnToSearch);
 
-                                actionBar.hide();
+            JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
-                            } else {
-                                Toast toast = Toast.makeText(getApplicationContext(), "Erro: Não foi possível retornar livro pesquisado.", Toast.LENGTH_SHORT);
-                                toast.show();
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d("Retorno: ", response.toString());
+
+                            try {
+
+                                Boolean status = response.getBoolean("status");
+                                if (status) {
+
+
+                                    livro = response.getJSONObject("livro");
+                                    barcodeScanISBN = livro.getString("isbn");
+                                    bookTitle.setText(livro.getString("title"));
+                                    bookAuthorName.setText(livro.getString("author_name"));
+                                    bookGenderName.setText(livro.getString("gender_name"));
+                                    bookDescription.setText(livro.getString("description"));
+                                    bookEdition.setText(livro.getString("edition"));
+                                    photo = livro.getString("photo");
+
+                                    mImageLoader = CustomVolleyRequestQueue.getInstance(getApplicationContext()).getImageLoader();
+                                    bookCover.setImageUrl(AppUtils.APP_PATH_VIRTUAL_BOOK_COVER_PATH + livro.getString("photo"), mImageLoader);
+
+                                    consulta.setVisibility(LinearLayout.GONE);
+                                    bookDetailPreview.setVisibility(LinearLayout.VISIBLE);
+
+                                    actionBar.hide();
+
+                                } else {
+                                    Toast toast = Toast.makeText(getApplicationContext(), "Desculpe, não encontramos seu livro ainda... :(", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                }
+
+                            } catch (
+                                    JSONException e
+                                    )
+
+                            {
+                                e.printStackTrace();
                             }
-
-                        } catch (
-                                JSONException e
-                                )
-
-                        {
-                            e.printStackTrace();
                         }
                     }
-                }
 
-                        , new Response.ErrorListener()
+                            , new Response.ErrorListener()
 
-                {
+                    {
 
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.d("Erro: ", error.toString());
-                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
-                        toast.show();
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("Erro: ", error.toString());
+//                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+//                        toast.show();
 
+                        }
                     }
-                }
 
-                );
-        Volley.newRequestQueue(this).add(jsObjRequest);
+                    );
+            Volley.newRequestQueue(this).add(jsObjRequest);
 
-        jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
-                10000,
-                3,
-                2f));
+            jsObjRequest.setRetryPolicy(new DefaultRetryPolicy(
+                    10000,
+                    3,
+                    2f));
+        } catch (InvalidStandardIDException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "Preencha corretamente o ISBN ou utilize o leitor de código de barras", Toast.LENGTH_SHORT).show();
+        }
         //Volley.getInstance(this).addToRequestQueue(jsObjRequest);
     }
 
@@ -297,10 +313,12 @@ public class BookAddActivity extends ActionBarActivity {
         String url = "http://96.126.115.143/leevrows/adicionaUmLivro.php";
 
         Map<String, String> params = new HashMap();
-        params.put("isbn", isbn.getText().toString());
+        params.put("isbn", barcodeScanISBN);
         params.put("user_id", PrefUtils.getLoggedUser(getApplicationContext()).userId);
         params.put("photo", photo);
         JSONObject parameters = new JSONObject(params);
+
+        Log.d("addBook", parameters.toString());
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.POST, url, parameters, new Response.Listener<JSONObject>() {
@@ -313,11 +331,12 @@ public class BookAddActivity extends ActionBarActivity {
                         try {
                             JSONObject status = response.getJSONObject("status");
                             Boolean sucesso = status.getBoolean("success");
-
-                            Intent intent = new Intent(BookAddActivity.this, BookGalleryActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                            finish();
+                            if (sucesso) {
+                                Intent intent = new Intent(BookAddActivity.this, BookGalleryActivity.class);
+                                //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(intent);
+                                finish();
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -328,8 +347,8 @@ public class BookAddActivity extends ActionBarActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Erro: ", error.toString());
-                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
-                        toast.show();
+//                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+//                        toast.show();
 
                     }
                 });
@@ -356,13 +375,17 @@ public class BookAddActivity extends ActionBarActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mPreview.stop(); //stop
+        if (mPreview != null) {
+            mPreview.stop(); //stop
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mCameraSource.release(); //release the resources
+        if (mCameraSource != null) {
+            mCameraSource.release();
+        }//release the resources
 //        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
     }
 

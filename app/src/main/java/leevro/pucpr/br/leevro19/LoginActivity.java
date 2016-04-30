@@ -152,7 +152,7 @@ public class LoginActivity extends Activity {
 
                             salvarDadosUsuario();
 
-                            Toast.makeText(LoginActivity.this, "welcome " + user.name, Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Seja bem-vindo " + user.name, Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
@@ -225,8 +225,8 @@ public class LoginActivity extends Activity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Erro salvar dados: ", error.toString());
-                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
-                        toast.show();
+//                        Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+//                        toast.show();
 
                     }
                 });

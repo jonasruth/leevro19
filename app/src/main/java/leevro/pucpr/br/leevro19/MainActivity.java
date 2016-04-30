@@ -1,11 +1,17 @@
 package leevro.pucpr.br.leevro19;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.location.Location;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.ActionBarActivity;
@@ -43,7 +49,7 @@ import leevro.pucpr.br.leevro19.utils.PrefUtils;
 
 public class MainActivity extends ActionBarActivity {
 
-//    boolean mBounded;
+    //    boolean mBounded;
     ServiceGPS mServer;
 
     private AppUser loggedUser;
@@ -71,7 +77,7 @@ public class MainActivity extends ActionBarActivity {
         txtQuestion = (TextView) findViewById(R.id.question);
         txtQuestion.setText(loggedUser.firstName + ", gostaria de ler este livro?");
 
-        Toast.makeText(getApplicationContext(), PrefUtils.getLoggedUser(this).email, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), PrefUtils.getLoggedUser(this).email, Toast.LENGTH_SHORT).show();
 
         bookLoadInfo = (LinearLayout) findViewById(R.id.bookLoadInfo);
         noBooksInfo = (LinearLayout) findViewById(R.id.noBooksInfo);
@@ -85,8 +91,8 @@ public class MainActivity extends ActionBarActivity {
         noBooksInfo.setVisibility(TextView.GONE);
         choiceButtonsContainer.setVisibility(TextView.INVISIBLE);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                mMessageReceiver, new IntentFilter("GPSLocationUpdates"));
+        LocalBroadcastManager.getInstance(this).registerReceiver( mMessageReceiver, new IntentFilter("GPSLocationUpdates"));
+        LocalBroadcastManager.getInstance(this).registerReceiver( mNotificationReceiver, new IntentFilter("LeevroNotification"));
 
 
         startService(new Intent(MainActivity.this, ServiceGPS.class));
@@ -94,31 +100,125 @@ public class MainActivity extends ActionBarActivity {
         loadBookListForChoice();
     }
 
+    private BroadcastReceiver mNotificationReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intentA) {
+
+            String message = intentA.getStringExtra("Message");
+
+            // Prepare intent which is triggered if the
+            // notification is selected
+            Intent intent = new Intent(MainActivity.this, BookGalleryActivity.class);
+            PendingIntent pIntent = PendingIntent.getActivity(getApplicationContext(), (int) System.currentTimeMillis(), intent, 0);
+
+            try {
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+                r.play();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Build notification
+            // Actions are just fake
+            Notification.Builder xxxx = new Notification.Builder(getApplicationContext());
+            xxxx
+                    .setContentTitle(getResources().getString(R.string.app_name))
+                    .setContentText(message).setSmallIcon(R.mipmap.ic_launcher_dev)
+                    .setContentIntent(pIntent);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//             hide the notification after its selected
+//            xxxx.flags |= Notification.FLAG_AUTO_CANCEL;
+
+            notificationManager.notify(0, xxxx.getNotification());
+
+        }
+    };
+
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.d("MSG GPS", "CHEGOU");
+
             // Get extra data included in the Intent
-            String message = intent.getStringExtra("Status");
+            Boolean providerEnabled = intent.getBooleanExtra("ProviderEnabled", false);
             Bundle b = intent.getBundleExtra("Location");
             myLocation = (Location) b.getParcelable("Location");
+
+            Log.d("myLocation", myLocation.toString());
+
             if (myLocation != null) {
-                Location bookLocation = new Location("");
-                bookLocation.setLatitude(-25.510937);
-                bookLocation.setLongitude(-49.272639);
 
-                Float distance = myLocation.distanceTo(bookLocation);
+                Log.d("TentandoSalvarPOS", "TentandoSalvarPOS");
+                salvarPosicao();
+                if (livroAtual != null) {
+                    Location bookLocation = new Location("");
+                    bookLocation.setLatitude(livroAtual.getLat());
+                    bookLocation.setLongitude(livroAtual.getLng());
+                    if (myLocation != null) {
+                        Float distance = myLocation.distanceTo(bookLocation);
+                        Log.d("lat/lng:", myLocation.getLatitude() + "/" + myLocation.getLongitude());
+                        String distanceStr;
+                        if(distance<2000) {
+                            distanceStr = Math.round(distance) + " metros";
+                        }else{
+                            distanceStr = Math.round(distance / 1000) + " km";
+                        }
+                        txtDistance.setText("Está a " + distanceStr +" de você");
+                    } else {
+                        txtDistance.setText("");
+                    }
+                }
 
-                Log.d("lat/lng:", myLocation.getLatitude() + "/" + myLocation.getLongitude());
-
-                int distanceInt = Math.round(distance / 1000);
-
-                txtDistance.setText("Está a " + distanceInt + "km de você");
 
             }
 //            tvStatus.setText(message);
 //            T
         }
     };
+
+    public void salvarPosicao() {
+
+        Log.d("UpdateLocation:request", "1xxx");
+
+        Map<String, String> params = new HashMap();
+        params.put("user_id", loggedUser.userId);
+        params.put("geo_last_lat", String.valueOf(myLocation.getLatitude()));
+        params.put("geo_last_lng", String.valueOf(myLocation.getLongitude()));
+        JSONObject parameters = new JSONObject(params);
+
+        Log.d("UpdateLocation:request", parameters.toString());
+
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest(
+                Request.Method.POST,
+                AppUtils.APP_URL_WS_UPD_USER_LAST_LOCATION,
+                parameters, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("UpdateLocation:request", response.toString());
+//                Toast.makeText(getApplicationContext(),response.toString(),Toast.LENGTH_SHORT).show();
+                try {
+                    JSONObject status = response.getJSONObject("status");
+                    Boolean success = status.getBoolean("success");
+                    Log.d("UpdateLocation", response.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.d("UpdateLocation:except", e.getMessage());
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Erro: ", error.toString());
+                Toast toast = Toast.makeText(getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+                toast.show();
+
+            }
+        });
+        Volley.newRequestQueue(this).add(jsObjRequest);
+    }
 
 
     public void loadBooks(View view) {
@@ -192,10 +292,10 @@ public class MainActivity extends ActionBarActivity {
         Volley.newRequestQueue(this).add(jsObjRequest);
     }
 
-public interface VolleyCallback {
-    void onSuccess();
+    public interface VolleyCallback {
+        void onSuccess();
 
-}
+    }
 
     public void chooseBookYes(View view) {
         chooseBook(true);
@@ -246,6 +346,7 @@ public interface VolleyCallback {
                 });
         Volley.newRequestQueue(this).add(jsObjRequest);
     }
+
 
     private void chooseBook(Boolean choice) {
 
@@ -307,34 +408,7 @@ public interface VolleyCallback {
             return;
         }
 
-
         livroAtual = listaLivros.get(bookListIndex);
-//            myLocation = new Location("");
-//            myLocation.setLatitude(-25.398847);
-//            myLocation.setLongitude(-49.281793);
-        // rua ebenezer, 270, curitiba
-        // -25.398847, -49.281793
-
-        Location bookLocation = new Location("");
-        bookLocation.setLatitude(-25.410937);
-        bookLocation.setLongitude(-49.272639);
-        // Rua Carlos Pioli, 133, Curitiba
-        // -25.410937, -49.272639
-
-
-        if (myLocation != null) {
-            Float distance = myLocation.distanceTo(bookLocation);
-//              Toast toast = Toast.makeText(getApplicationContext(), "distancia " + distance, Toast.LENGTH_LONG);
-//              toast.show();
-
-            Log.d("lat/lng:", myLocation.getLatitude() + "/" + myLocation.getLongitude());
-
-            int distanceInt = Math.round(distance / 1000);
-
-            txtDistance.setText("Está a " + distanceInt + "km de você");
-        } else {
-            txtDistance.setText("");
-        }
 
         // Retrieves an image specified by the URL, displays it in the UI.
         ImageRequest request = new ImageRequest(AppUtils.APP_PATH_VIRTUAL_BOOK_COVER_PATH + livroAtual.getPhoto(),
@@ -441,13 +515,13 @@ public interface VolleyCallback {
 //                goToSettings();
                 goToBookAdd();
                 return true;
-            case R.id.action_book_transactions:
-                // About option clicked.
-//                goToSettings();
-                goToBookTransactions();
-                return true;
-            case R.id.action_settings:
-                return true;
+//            case R.id.action_book_transactions:
+//                // About option clicked.
+////                goToSettings();
+//                goToBookTransactions();
+//                return true;
+//            case R.id.action_settings:
+//                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

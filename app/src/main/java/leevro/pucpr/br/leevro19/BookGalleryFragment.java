@@ -88,8 +88,8 @@ public class BookGalleryFragment extends Fragment {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.d("Erro: ", error.toString());
-                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
-                        toast.show();
+//                        Toast toast = Toast.makeText(getActivity().getApplicationContext(), "erro" + error.toString(), Toast.LENGTH_SHORT);
+//                        toast.show();
 
                     }
                 });
